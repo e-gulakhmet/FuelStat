@@ -1,7 +1,7 @@
 # FuelStat
 A program that expands fuel statistics
 
-![GitHub Logo](/images/icon.png)
+![GitHub Logo](/images/logo.png)
 
 
 **Задача из книги Чарльза Уэзерелла "Этюды для программистов".**
