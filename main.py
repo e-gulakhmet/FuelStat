@@ -1,5 +1,5 @@
 import sqlite3
-
+from reportlab.pdfgen import canvas
 
 
 def main():
@@ -15,11 +15,19 @@ def main():
     # Вставляем значения в таблицу
     dbc.execute("INSERT INTO fuel VALUES (730327,'Texaco',24370,59.9,13.5,8.00)")
 
+    # Сохраняем изменения
+    db.commit()
+
+
+    # Выделяем данные из таблицы и печатаем их
     dbc.execute("SELECT * FROM fuel WHERE data == 730327")
     print(dbc.fetchone())
 
-    # Сохраняем изменения
-    db.commit()
+    # Создаем pdf файл с таблицой
+    pdf_tabel = canvas.Canvas("fuel.pdf")
+    pdf_tabel.drawString(0, 0, str(dbc.fetchone()))
+    pdf_tabel.save()
+
 
     # Отключаемся от базы данных
     db.close()
