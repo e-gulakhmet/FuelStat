@@ -18,16 +18,25 @@ def main():
     logging.basicConfig(filename="logging.log", level=logging.DEBUG, format="%(asctime)s %(name)s [%(levelname)s] : %(message)s")
     logger = logging.getLogger("MAIN")
 
-    db = database.DataBase("fuel")
+    # Создаем базу данных заправок
+    fuel = database.DataBase("fuel")
 
-    db.create_table('''data INTEGER, name TEXT,
-                 distance INTEGER, price REAL(20,1), quantity REAL(20,1),
-                 total REAL(20,2)''')
+    fuel.create_table('''id INTEGER PRIMARY KEY,
+                         name TEXT NOT NULL,
+                         price REAL NOT NULL''')
 
-    db.insert("730327,'Texaco',24370,59.9,13.5,8.00")
+    f = open("data/fuel.txt")
+    data = []
+    for line in f:
+        data.append(tuple(line.split(",")))
+    
+    print(data)
 
-    print(db.select())
+    fuel.insert_list("name, price", data)
 
+    # for row in fuel.select():
+    #     print(row)
+    print(fuel.select())
 
 
     # # Создаем pdf файл с таблицой
