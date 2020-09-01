@@ -1,2 +1,3 @@
 .vscode
 logging.log
+__pycache__
