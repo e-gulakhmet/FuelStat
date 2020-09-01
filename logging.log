@@ -1,0 +1,92 @@
+2020-09-01 10:25:17,715 MAIN [DEBUG] : Connected to database file
+2020-09-01 10:25:17,715 MAIN [DEBUG] : DataBase cursor was created
+2020-09-01 10:25:17,716 MAIN [INFO] : 
+2020-09-01 10:25:54,076 MAIN [DEBUG] : Connected to database file
+2020-09-01 10:25:54,076 MAIN [DEBUG] : DataBase cursor was created
+2020-09-01 10:25:54,077 MAIN [INFO] : 
+2020-09-01 10:26:28,898 MAIN [DEBUG] : Connected to database file
+2020-09-01 10:26:28,898 MAIN [DEBUG] : DataBase cursor was created
+2020-09-01 10:26:28,980 MAIN [INFO] : 
+2020-09-01 10:32:16,490 MAIN [INFO] : Table was created
+2020-09-01 10:33:14,924 root [ERROR] : table fuel already exists
+2020-09-01 11:00:35,541 MAIN [INFO] : Connected to database file
+2020-09-01 11:00:35,541 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:00:35,541 MAIN [INFO] : Table was created
+2020-09-01 11:00:35,541 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:01:00,882 MAIN [INFO] : Connected to database file
+2020-09-01 11:01:00,882 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:01:00,882 MAIN [INFO] : Table was created
+2020-09-01 11:01:00,882 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:01:08,597 MAIN [INFO] : Connected to database file
+2020-09-01 11:01:08,597 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:01:08,598 MAIN [INFO] : Table was created
+2020-09-01 11:01:08,598 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:01:09,647 MAIN [INFO] : Connected to database file
+2020-09-01 11:01:09,647 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:01:09,648 MAIN [INFO] : Table was created
+2020-09-01 11:01:09,648 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:01:24,367 MAIN [INFO] : Connected to database file
+2020-09-01 11:01:24,367 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:01:24,368 MAIN [ERROR] : table fuel already exists
+2020-09-01 11:01:24,368 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:01:44,751 MAIN [INFO] : Connected to database file
+2020-09-01 11:01:44,751 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:01:44,751 MAIN [ERROR] : table fuel already exists
+2020-09-01 11:01:44,752 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:21:45,414 MAIN [INFO] : Connected to database file
+2020-09-01 11:21:45,415 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:21:45,517 MAIN [INFO] : Table was created
+2020-09-01 11:21:45,517 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:22:25,970 MAIN [INFO] : Connected to database file
+2020-09-01 11:22:25,970 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:22:26,062 MAIN [INFO] : Table was created
+2020-09-01 11:22:26,063 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:32:19,249 MAIN [INFO] : Connected to database file
+2020-09-01 11:32:19,249 MAIN [INFO] : DataBase cursor was created
+2020-09-01 11:32:19,330 MAIN [INFO] : Table was created
+2020-09-01 11:32:19,331 MAIN [INFO] : Data has been added to the table
+2020-09-01 11:36:39,136 DATABASE [INFO] : Connected to database file
+2020-09-01 11:36:39,136 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:36:39,136 DATABASE [WARNING] : near "TABLEfuel": syntax error
+2020-09-01 11:36:39,136 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:36:39,136 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:38:15,043 DATABASE [INFO] : Connected to database file
+2020-09-01 11:38:15,044 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:38:15,044 DATABASE [WARNING] : near "?": syntax error
+2020-09-01 11:38:15,044 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:38:15,044 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:40:26,199 DATABASE [INFO] : Connected to database file
+2020-09-01 11:40:26,199 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:40:26,199 DATABASE [WARNING] : near "?": syntax error
+2020-09-01 11:40:26,200 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:40:26,200 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:40:59,552 DATABASE [INFO] : Connected to database file
+2020-09-01 11:40:59,552 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:40:59,552 DATABASE [WARNING] : Incorrect number of bindings supplied. The current statement uses 0, and there are 132 supplied.
+2020-09-01 11:40:59,552 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:40:59,552 DATABASE [WARNING] : no such table: fuel
+2020-09-01 11:42:13,726 DATABASE [INFO] : Connected to database file
+2020-09-01 11:42:13,726 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:42:13,821 DATABASE [INFO] : Table was created
+2020-09-01 11:42:13,821 DATABASE [WARNING] : table fuel has 6 columns but 1 values were supplied
+2020-09-01 11:42:13,821 DATABASE [INFO] : Data was selected from table
+2020-09-01 11:43:06,877 DATABASE [INFO] : Connected to database file
+2020-09-01 11:43:06,877 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:43:06,878 DATABASE [WARNING] : table fuel already exists
+2020-09-01 11:43:06,878 DATABASE [WARNING] : Incorrect number of bindings supplied. The current statement uses 0, and there are 36 supplied.
+2020-09-01 11:43:06,878 DATABASE [INFO] : Data was selected from table
+2020-09-01 11:43:16,204 DATABASE [INFO] : Connected to database file
+2020-09-01 11:43:16,204 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:43:16,204 DATABASE [WARNING] : table fuel already exists
+2020-09-01 11:43:16,205 DATABASE [INFO] : Data has been added to the table
+2020-09-01 11:43:16,205 DATABASE [INFO] : Data was selected from table
+2020-09-01 11:49:14,964 DATABASE [INFO] : Connecting to database...
+2020-09-01 11:49:14,964 DATABASE [INFO] : Connected to database file
+2020-09-01 11:49:14,964 DATABASE [INFO] : Creating cursor...
+2020-09-01 11:49:14,964 DATABASE [INFO] : DataBase cursor was created
+2020-09-01 11:49:14,964 DATABASE [INFO] : Creating table...
+2020-09-01 11:49:14,965 DATABASE [WARNING] : table fuel already exists
+2020-09-01 11:49:14,965 DATABASE [INFO] : Inserting data into the table...
+2020-09-01 11:49:14,965 DATABASE [INFO] : Data has been added to the table
+2020-09-01 11:49:14,965 DATABASE [INFO] : Selecting data from the table...
+2020-09-01 11:49:14,965 DATABASE [INFO] : Data was selected from table

@@ -1,46 +1,39 @@
-import sqlite3
-from reportlab.pdfgen import canvas
+# from reportlab.pdfgen import canvas
+import logging
+
+import database
 
 
 # TODO: Дополнить документацию
 # TODO: Добавить таблцу заправок
 # TODO: Добавить таблицу транзакций
 # TODO: Добавить параметры при запуске
-# TODO: Добавить функцию считывания данных из файлов для создания базыданных
+# TODO: Добавить функцию считывания данных из файлов для создания базы данных
 # TODO: Добавить логгирование
 
 
 
 def main():
-    # Подключаемся к базе данных
-    db = sqlite3.connect('fuel.db')
-    # Создаем курсор дл управления базой данных
-    dbc = db.cursor()
+    # Инициализируем logging
+    logging.basicConfig(filename="logging.log", level=logging.DEBUG, format="%(asctime)s %(name)s [%(levelname)s] : %(message)s")
+    logger = logging.getLogger("MAIN")
 
-    # Создаем таблицу
-    dbc.execute('''CREATE TABLE IF NOT EXISTS fuel (data INTEGER, name TEXT,
-                  distance INTEGER, price REAL(20,1), quantity REAL(20,1),
-                  total REAL(20,2))''')
-    # Вставляем значения в таблицу
-    dbc.execute("INSERT INTO fuel VALUES (730327,'Texaco',24370,59.9,13.5,8.00)")
+    db = database.DataBase("fuel")
 
-    # Сохраняем изменения
-    db.commit()
+    db.create_table('''data INTEGER, name TEXT,
+                 distance INTEGER, price REAL(20,1), quantity REAL(20,1),
+                 total REAL(20,2)''')
 
+    db.insert("730327,'Texaco',24370,59.9,13.5,8.00")
 
-    # Выделяем данные из таблицы и печатаем их
-    dbc.execute("SELECT * FROM fuel WHERE data == 730327")
-    print(dbc.fetchone())
-
-    # Создаем pdf файл с таблицой
-    pdf_tabel = canvas.Canvas("fuel.pdf")
-    pdf_tabel.drawString(0, 0, str(dbc.fetchone()))
-    pdf_tabel.save()
+    print(db.select())
 
 
-    # Отключаемся от базы данных
-    db.close()
 
+    # # Создаем pdf файл с таблицой
+    # pdf_tabel = canvas.Canvas("fuel.pdf")
+    # pdf_tabel.drawString(0, 0, str(dbc.fetchone()))
+    # pdf_tabel.save()
 
 
 
