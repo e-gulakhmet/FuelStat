@@ -2450,3 +2450,85 @@
 2020-09-02 09:27:32,233 DATABASE [INFO] : Data was added to the table
 2020-09-02 09:27:32,233 DATABASE [DEBUG] : Selecting data[*]
 2020-09-02 09:27:32,233 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:01:00,959 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:01:00,959 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:01:00,959 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:01:00,959 DATABASE [INFO] : Table fuelwas created
+2020-09-02 10:01:00,959 DATABASE [DEBUG] : Inserting listdata[[('Texaco', '59.9'), ('Mobil', '58.8'), ('Arco', '62.9'), ('Chevron', '58.8'), ('Shell', '61.6'), ('Ericson', '60.9'), ('American', '60.9'), ('DX', '53.9'), ('Conoco', '59.9'), ('Phillips', '60.9'), ('Exxon', '56.9')]] into colums[name, price]
+2020-09-02 10:01:00,959 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:01:00,960 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:01:00,960 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:01:00,960 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:01:00,960 DATABASE [INFO] : Connected to database file(trans.db)
+2020-09-02 10:01:00,960 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:01:00,960 DATABASE [INFO] : Table transwas created
+2020-09-02 10:01:00,960 DATABASE [DEBUG] : Inserting listdata[[('27/03/74', '24370', '1', '13.5'), ('05/04/74', '24434', '1', '5.5'), ('11/04/74', '24596', '1', '8.2'), ('23/04/74', '24862', '2', '12.9'), ('13/05/74', '24057', '2', '13.9'), ('11/06/74', '24239', '3', '12.5'), ('12/07/74', '24435', '1', '14.2'), ('19/07/74', '24713', '4', '12.4'), ('28/07/74', '24135', '2', '14.1'), ('07/08/74', '24384', '3', '13.1'), ('08/08/74', '24712', '4', '13.1'), ('16/08/74', '24997', '3', '13.1'), ('22/08/74', '24068', '2', '13.1'), ('22/08/74', '24362', '5', '13.1'), ('23/08/74', '24606', '5', '13.1'), ('25/08/74', '24913', '6', '13.1'), ('26/08/74', '24163', '7', '13.1'), ('26/08/74', '24487', '7', '13.1'), ('27/08/74', '24771', '8', '13.1'), ('28/08/74', '24114', '9', '13.1'), ('28/08/74', '24337', '1', '13.1'), ('28/08/74', '24661', '10', '13.1'), ('29/08/74', '24912', '4', '13.1'), ('29/08/74', '24147', '5', '13.1'), ('30/08/74', '24317', '1', '13.1'), ('31/08/74', '24643', '11', '13.1'), ('06/09/74', '24878', '5', '13.1'), ('10/09/74', '24182', '5', '13.1'), ('14/09/74', '24467', '11', '13.1'), ('18/09/74', '24711', '3', '13.1'), ('24/09/74', '24984', '3', '13.1'), ('27/09/74', '24225', '3', '13.1'), ('01/10/74', '24455', '3', '13.1')]] into colums[dtime, odometer, fuel_id, amount]
+2020-09-02 10:01:00,960 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:01:00,960 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:01:00,960 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:15:09,128 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:15:09,128 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:15:09,128 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:15:09,128 DATABASE [INFO] : Table fuelwas created
+2020-09-02 10:15:09,129 DATABASE [DEBUG] : Inserting listdata[[('Texaco', '59.9'), ('Mobil', '58.8'), ('Arco', '62.9'), ('Chevron', '58.8'), ('Shell', '61.6'), ('Ericson', '60.9'), ('American', '60.9'), ('DX', '53.9'), ('Conoco', '59.9'), ('Phillips', '60.9'), ('Exxon', '56.9')]] into colums[name, price]
+2020-09-02 10:15:09,129 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:15:09,129 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:15:09,129 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:15:09,129 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:15:09,129 DATABASE [INFO] : Connected to database file(trans.db)
+2020-09-02 10:15:09,129 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:15:09,129 DATABASE [INFO] : Table transwas created
+2020-09-02 10:15:09,129 DATABASE [DEBUG] : Inserting listdata[[('27/03/74', '24370', '1', '13.5'), ('05/04/74', '24434', '1', '5.5'), ('11/04/74', '24596', '1', '8.2'), ('23/04/74', '24862', '2', '12.9'), ('13/05/74', '24057', '2', '13.9'), ('11/06/74', '24239', '3', '12.5'), ('12/07/74', '24435', '1', '14.2'), ('19/07/74', '24713', '4', '12.4'), ('28/07/74', '24135', '2', '14.1'), ('07/08/74', '24384', '3', '13.1'), ('08/08/74', '24712', '4', '13.1'), ('16/08/74', '24997', '3', '13.1'), ('22/08/74', '24068', '2', '13.1'), ('22/08/74', '24362', '5', '13.1'), ('23/08/74', '24606', '5', '13.1'), ('25/08/74', '24913', '6', '13.1'), ('26/08/74', '24163', '7', '13.1'), ('26/08/74', '24487', '7', '13.1'), ('27/08/74', '24771', '8', '13.1'), ('28/08/74', '24114', '9', '13.1'), ('28/08/74', '24337', '1', '13.1'), ('28/08/74', '24661', '10', '13.1'), ('29/08/74', '24912', '4', '13.1'), ('29/08/74', '24147', '5', '13.1'), ('30/08/74', '24317', '1', '13.1'), ('31/08/74', '24643', '11', '13.1'), ('06/09/74', '24878', '5', '13.1'), ('10/09/74', '24182', '5', '13.1'), ('14/09/74', '24467', '11', '13.1'), ('18/09/74', '24711', '3', '13.1'), ('24/09/74', '24984', '3', '13.1'), ('27/09/74', '24225', '3', '13.1'), ('01/10/74', '24455', '3', '13.1')]] into colums[dtime, odometer, fuel_id, amount]
+2020-09-02 10:15:09,130 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:15:09,130 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:15:09,130 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:17:49,397 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:17:49,397 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:18:06,032 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:18:06,032 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:18:47,385 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:18:47,385 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:18:59,524 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:18:59,524 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:36:54,614 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:36:54,614 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:38:03,225 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:38:03,225 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:38:12,866 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:38:12,866 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:42:06,183 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:42:06,183 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:42:06,183 DATABASE [DEBUG] : Deleting table...
+2020-09-02 10:42:06,296 DATABASE [INFO] : Table was droped
+2020-09-02 10:42:06,296 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:42:06,363 DATABASE [INFO] : Table fuelwas created
+2020-09-02 10:42:06,363 DATABASE [DEBUG] : Inserting listdata[[('Texaco', '59.9'), ('Mobil', '58.8'), ('Arco', '62.9'), ('Chevron', '58.8'), ('Shell', '61.6'), ('Ericson', '60.9'), ('American', '60.9'), ('DX', '53.9'), ('Conoco', '59.9'), ('Phillips', '60.9'), ('Exxon', '56.9')]] into colums[name, price]
+2020-09-02 10:42:06,364 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:42:06,364 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:42:06,364 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:42:06,364 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:42:06,364 DATABASE [INFO] : Connected to database file(trans.db)
+2020-09-02 10:42:06,364 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:42:06,365 DATABASE [INFO] : Table transwas created
+2020-09-02 10:42:06,365 DATABASE [DEBUG] : Inserting listdata[[('27/03/74', '24370', '1', '13.5'), ('05/04/74', '24434', '1', '5.5'), ('11/04/74', '24596', '1', '8.2'), ('23/04/74', '24862', '2', '12.9'), ('13/05/74', '24057', '2', '13.9'), ('11/06/74', '24239', '3', '12.5'), ('12/07/74', '24435', '1', '14.2'), ('19/07/74', '24713', '4', '12.4'), ('28/07/74', '24135', '2', '14.1'), ('07/08/74', '24384', '3', '13.1'), ('08/08/74', '24712', '4', '13.1'), ('16/08/74', '24997', '3', '13.1'), ('22/08/74', '24068', '2', '13.1'), ('22/08/74', '24362', '5', '13.1'), ('23/08/74', '24606', '5', '13.1'), ('25/08/74', '24913', '6', '13.1'), ('26/08/74', '24163', '7', '13.1'), ('26/08/74', '24487', '7', '13.1'), ('27/08/74', '24771', '8', '13.1'), ('28/08/74', '24114', '9', '13.1'), ('28/08/74', '24337', '1', '13.1'), ('28/08/74', '24661', '10', '13.1'), ('29/08/74', '24912', '4', '13.1'), ('29/08/74', '24147', '5', '13.1'), ('30/08/74', '24317', '1', '13.1'), ('31/08/74', '24643', '11', '13.1'), ('06/09/74', '24878', '5', '13.1'), ('10/09/74', '24182', '5', '13.1'), ('14/09/74', '24467', '11', '13.1'), ('18/09/74', '24711', '3', '13.1'), ('24/09/74', '24984', '3', '13.1'), ('27/09/74', '24225', '3', '13.1'), ('01/10/74', '24455', '3', '13.1')]] into colums[dtime, odometer, fuel_id, amount]
+2020-09-02 10:42:06,365 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:42:06,365 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:42:06,365 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:42:22,151 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:42:22,151 DATABASE [INFO] : Connected to database file(fuel.db)
+2020-09-02 10:42:22,151 DATABASE [DEBUG] : Deleting table...
+2020-09-02 10:42:22,212 DATABASE [INFO] : Table was droped
+2020-09-02 10:42:22,212 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:42:22,253 DATABASE [INFO] : Table fuelwas created
+2020-09-02 10:42:22,254 DATABASE [DEBUG] : Inserting listdata[[('Texaco', '59.9'), ('Mobil', '58.8'), ('Arco', '62.9'), ('Chevron', '58.8'), ('Shell', '61.6'), ('Ericson', '60.9'), ('American', '60.9'), ('DX', '53.9'), ('Conoco', '59.9'), ('Phillips', '60.9'), ('Exxon', '56.9')]] into colums[name, price]
+2020-09-02 10:42:22,254 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:42:22,254 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:42:22,254 DATABASE [INFO] : Data was selected from table
+2020-09-02 10:42:22,255 DATABASE [DEBUG] : Connecting to database...
+2020-09-02 10:42:22,255 DATABASE [INFO] : Connected to database file(trans.db)
+2020-09-02 10:42:22,255 DATABASE [DEBUG] : Creating table...
+2020-09-02 10:42:22,255 DATABASE [INFO] : Table transwas created
+2020-09-02 10:42:22,256 DATABASE [DEBUG] : Inserting listdata[[('27/03/74', '24370', '1', '13.5'), ('05/04/74', '24434', '1', '5.5'), ('11/04/74', '24596', '1', '8.2'), ('23/04/74', '24862', '2', '12.9'), ('13/05/74', '24057', '2', '13.9'), ('11/06/74', '24239', '3', '12.5'), ('12/07/74', '24435', '1', '14.2'), ('19/07/74', '24713', '4', '12.4'), ('28/07/74', '24135', '2', '14.1'), ('07/08/74', '24384', '3', '13.1'), ('08/08/74', '24712', '4', '13.1'), ('16/08/74', '24997', '3', '13.1'), ('22/08/74', '24068', '2', '13.1'), ('22/08/74', '24362', '5', '13.1'), ('23/08/74', '24606', '5', '13.1'), ('25/08/74', '24913', '6', '13.1'), ('26/08/74', '24163', '7', '13.1'), ('26/08/74', '24487', '7', '13.1'), ('27/08/74', '24771', '8', '13.1'), ('28/08/74', '24114', '9', '13.1'), ('28/08/74', '24337', '1', '13.1'), ('28/08/74', '24661', '10', '13.1'), ('29/08/74', '24912', '4', '13.1'), ('29/08/74', '24147', '5', '13.1'), ('30/08/74', '24317', '1', '13.1'), ('31/08/74', '24643', '11', '13.1'), ('06/09/74', '24878', '5', '13.1'), ('10/09/74', '24182', '5', '13.1'), ('14/09/74', '24467', '11', '13.1'), ('18/09/74', '24711', '3', '13.1'), ('24/09/74', '24984', '3', '13.1'), ('27/09/74', '24225', '3', '13.1'), ('01/10/74', '24455', '3', '13.1')]] into colums[dtime, odometer, fuel_id, amount]
+2020-09-02 10:42:22,256 DATABASE [INFO] : Data was added to the table
+2020-09-02 10:42:22,256 DATABASE [DEBUG] : Selecting data[*]
+2020-09-02 10:42:22,256 DATABASE [INFO] : Data was selected from table

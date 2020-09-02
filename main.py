@@ -1,19 +1,27 @@
 # from reportlab.pdfgen import canvas
 import logging
+import argparse
 
 import database
 
 
 # TODO: Дополнить документацию
-# TODO: Добавить таблцу заправок
-# TODO: Добавить таблицу транзакций
 # TODO: Добавить параметры при запуске
 
 
 
 def main():
-    # Инициализируем logging
-    logging.basicConfig(filename="logging.log", level=logging.DEBUG, format="%(asctime)s %(name)s [%(levelname)s] : %(message)s")
+    parser = argparse.ArgumentParser(prog="fuel_stat",
+                                     description="""Creating statistics 
+                                                    based on generated tables""")
+
+    parser.add_argument("--recreate", action="store_true")
+    args = parser.parse_args()
+
+
+    logging.basicConfig(filename="logging.log",
+                        level=logging.DEBUG,
+                        format="%(asctime)s %(name)s [%(levelname)s] : %(message)s")
     logger = logging.getLogger("MAIN")
 
     # Создаем базу данных заправок
@@ -21,7 +29,7 @@ def main():
 
     fuel.create_table('''id INTEGER PRIMARY KEY,
                          name TEXT NOT NULL,
-                         price INTEGER NOT NULL''')
+                         price INTEGER NOT NULL''', args.recreate)
 
     # for s in fuels:
     #     gas = s.split(", ")

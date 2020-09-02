@@ -16,7 +16,14 @@ class DataBase():
         except sqlite3.Error as e:
             self.logger.error(e)
 
-    def create_table(self, colums_name): # Создать таблицу
+    def create_table(self, colums_name, re_create=False): # Создать таблицу
+        if re_create:
+            self.logger.debug("Deleting table...")
+            try:
+                self.db.execute("DROP TABLE IF EXISTS " + self.database_name)
+                self.logger.info("Table was droped")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
         self.logger.debug("Creating table...")
         try:
             self.db.execute("CREATE TABLE IF NOT EXISTS " + self.database_name + " (" + colums_name + ")")
@@ -66,5 +73,21 @@ class DataBase():
                 c = self.db.execute("SELECT " + data + " FROM " + self.database_name + " WHERE " + condition)
             self.logger.info("Data was selected from table")
             return c
+        except sqlite3.Error as e:
+            self.logger.warning(e)
+    
+    def commit(self):
+        self.logger.debug("Commiting database")
+        try:
+            self.db.commit()
+            self.logger.info("Database was commited")
+        except sqlite3.Error as e:
+            self.logger.warning(e)
+
+    def disconnect(self):
+        self.logger.debug("Disconnecting from the database")
+        try:
+            self.db.close()
+            self.logger.info("Disconnected from the database")
         except sqlite3.Error as e:
             self.logger.warning(e)
