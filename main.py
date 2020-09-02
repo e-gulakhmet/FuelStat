@@ -7,6 +7,7 @@ import database
 
 # TODO: Дополнить документацию
 # TODO: Добавить параметры при запуске
+# TODO: Сделать объединение баз данных
 
 
 
@@ -15,7 +16,8 @@ def main():
                                      description="""Creating statistics 
                                                     based on generated tables""")
 
-    parser.add_argument("--recreate", action="store_true")
+    parser.add_argument("--recreate", action="store_true",
+                        help="re-create all data base")
     args = parser.parse_args()
 
 
@@ -41,9 +43,8 @@ def main():
         print(row)
     print("\n")
 
-    # print(fuel.select())
 
-
+    # Создаем базу данных транзакций
     trans = database.DataBase("trans")
     trans.create_table("""id INTEGER PRIMARY KEY,
                           dtime TEXT DEFAULT CURRENT_TIMESTAMP,
@@ -55,6 +56,11 @@ def main():
 
     for row in trans.select():
         print(row)
+
+
+    # Объединяем базы данных
+    general = database.DataBase("general"):
+    general.create_table("""dtime, name, odometr,  """)
 
 
     # # Создаем pdf файл с таблицой
