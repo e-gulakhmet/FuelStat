@@ -8,8 +8,6 @@ import database
 # TODO: Добавить таблцу заправок
 # TODO: Добавить таблицу транзакций
 # TODO: Добавить параметры при запуске
-# TODO: Добавить функцию считывания данных из файлов для создания базы данных
-# TODO: Добавить логгирование
 
 
 
@@ -25,28 +23,53 @@ def main():
                          name TEXT NOT NULL,
                          price INTEGER NOT NULL''')
 
-    fuel_txt = open("data/fuel.txt", 'r')
-    f = fuel_txt.read() 
-    fuels = f.split("\n")
     # for s in fuels:
     #     gas = s.split(", ")
     #     fuel.insert("name, price", "'" + gas[0] + "', " + gas[1])
 
-    data = []
-    for s in fuels:
-        data.append(tuple(s.split(", ")))
-    fuel.insert_list("name, price", data)
+    fuel.insert_list("name, price", txt_to_list("data/fuel.txt"))
 
     for row in fuel.select():
         print(row)
+    print("\n")
 
     # print(fuel.select())
+
+
+    trans = database.DataBase("trans")
+    trans.create_table("""id INTEGER PRIMARY KEY,
+                          dtime TEXT DEFAULT CURRENT_TIMESTAMP,
+                          odometer TEXT NOT NULL,
+                          fuel_id TEXT NOT NULL,
+                          amount TEXT NOT NULL,
+                          FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
+    trans.insert_list("dtime, odometer, fuel_id, amount", txt_to_list("data/trans.txt"))
+
+    for row in trans.select():
+        print(row)
 
 
     # # Создаем pdf файл с таблицой
     # pdf_tabel = canvas.Canvas("fuel.pdf")
     # pdf_tabel.drawString(0, 0, str(dbc.fetchone()))
     # pdf_tabel.save()
+
+
+
+def txt_to_list(file_path): # Открыть и преобразовать текстовый файл
+    # На вход получаем путь к текстовому полю
+    # На выходе получаем список со строками
+    file_txt = open(file_path, 'r').read()
+    lines = file_txt.split("\n")
+    # for s in fuels:
+    #     gas = s.split(", ")
+    #     fuel.insert("name, price", "'" + gas[0] + "', " + gas[1])
+
+    data = []
+    for line in lines:
+        data.append(tuple(line.split(", ")))
+    return data
+
 
 
 
