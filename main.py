@@ -7,6 +7,7 @@ import database
 
 # TODO: Дополнить документацию
 # TODO: Добавить параметры при запуске
+# TODO: Сделать объединение баз данных
 
 
 
@@ -15,7 +16,8 @@ def main():
                                      description="""Creating statistics 
                                                     based on generated tables""")
 
-    parser.add_argument("--recreate", action="store_true")
+    parser.add_argument("--recreate", action="store_true",
+                        help="re-create all data base")
     args = parser.parse_args()
 
 
