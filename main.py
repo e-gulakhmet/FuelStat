@@ -25,40 +25,39 @@ def main():
     logger = logging.getLogger("MAIN")
 
     # Создаем базу данных заправок
-    fuel = database.DataBase("fuel")
+    db = database.DataBase("data/database.db")
 
-    fuel.create_table('''id INTEGER PRIMARY KEY,
-                         name TEXT NOT NULL,
-                         price INTEGER NOT NULL''', args.recreate)
+    db.create_table("fuel",
+                    '''id INTEGER PRIMARY KEY,
+                       name TEXT NOT NULL,
+                       price INTEGER NOT NULL''',
+                    args.recreate)
 
-    # for s in fuels:
+    # for s in dbs:
     #     gas = s.split(", ")
-    #     fuel.insert("name, price", "'" + gas[0] + "', " + gas[1])
+    #     db.insert("name, price", "'" + gas[0] + "', " + gas[1])
 
-    fuel.insert_list("name, price", txt_to_list("data/fuel.txt"))
+    db.insert_list("fuel", "name, price", txt_to_list("data/fuel.txt"))
 
-    for row in fuel.select():
+    for row in db.select("fuel"):
         print(row)
     print("\n")
 
-    # print(fuel.select())
 
-
-    trans = database.DataBase("trans")
-    trans.create_table("""id INTEGER PRIMARY KEY,
+    db.create_table("trans", """id INTEGER PRIMARY KEY,
                           dtime TEXT DEFAULT CURRENT_TIMESTAMP,
                           odometer TEXT NOT NULL,
-                          fuel_id TEXT NOT NULL,
+                          db_id TEXT NOT NULL,
                           amount TEXT NOT NULL,
-                          FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
-    trans.insert_list("dtime, odometer, fuel_id, amount", txt_to_list("data/trans.txt"))
+                          FOREIGN KEY (db_id) REFERENCES db(id)""")
+    db.insert_list("trans", "dtime, odometer, db_id, amount", txt_to_list("data/trans.txt"))
 
-    for row in trans.select():
+    for row in db.select("trans"):
         print(row)
 
 
     # # Создаем pdf файл с таблицой
-    # pdf_tabel = canvas.Canvas("fuel.pdf")
+    # pdf_tabel = canvas.Canvas("db.pdf")
     # pdf_tabel.drawString(0, 0, str(dbc.fetchone()))
     # pdf_tabel.save()
 
@@ -69,9 +68,9 @@ def txt_to_list(file_path): # Открыть и преобразовать те�
     # На выходе получаем список со строками
     file_txt = open(file_path, 'r').read()
     lines = file_txt.split("\n")
-    # for s in fuels:
+    # for s in dbs:
     #     gas = s.split(", ")
-    #     fuel.insert("name, price", "'" + gas[0] + "', " + gas[1])
+    #     db.insert("name, price", "'" + gas[0] + "', " + gas[1])
 
     data = []
     for line in lines:
