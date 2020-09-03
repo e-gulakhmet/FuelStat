@@ -8,7 +8,6 @@ import database
 # TODO: Дополнить документацию
 # TODO: Добавить параметры при запуске
 # TODO: Задокументировать txt файлы
-# TODO: Сделать объединение баз данных
 
 
 
@@ -47,17 +46,29 @@ def main():
     print("\n")
 
 
-    db.create_table("trans", """id INTEGER PRIMARY KEY,
-                          dtime TEXT DEFAULT CURRENT_TIMESTAMP,
-                          odometer TEXT NOT NULL,
-                          db_id TEXT NOT NULL,
-                          amount TEXT NOT NULL,
-                          FOREIGN KEY (db_id) REFERENCES db(id)""")
-    db.insert_list("trans", "dtime, odometer, db_id, amount", txt_to_list("data/trans.txt"))
+    db.create_table("trans",
+                    """id INTEGER PRIMARY KEY,
+                       dtime TEXT DEFAULT CURRENT_TIMESTAMP,
+                       odometer INTEGER NOT NULL,
+                       fuel_id INTEGER NOT NULL,
+                       amount INTEGER NOT NULL,
+                       FOREIGN KEY (fuel_id) REFERENCES fuel(id)""",
+                    args.recreate)
+
+    db.insert_list("trans", "dtime, odometer, fuel_id, amount", txt_to_list("data/trans.txt"))
 
     for row in db.select("trans"):
         print(row)
+    print("\n")
 
+    # Объединяем таблицы
+    c = db.select("trans t, fuel f",
+                  "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price AS cost",
+                  "t.fuel_id = f.id")
+
+    for row in c:
+        print(row)
+    print("\n")
 
     # # Создаем pdf файл с таблицой
     # pdf_tabel = canvas.Canvas("db.pdf")
@@ -71,13 +82,17 @@ def txt_to_list(file_path): # Открыть и преобразовать те�
     # На выходе получаем список со строками
     file_txt = open(file_path, 'r').read()
     lines = file_txt.split("\n")
-    # for s in dbs:
-    #     gas = s.split(", ")
-    #     db.insert("name, price", "'" + gas[0] + "', " + gas[1])
 
     data = []
     for line in lines:
-        data.append(tuple(line.split(", ")))
+        lst = []
+        for t in line.split(", "):
+            try:
+                lst.append(int(t))
+            except ValueError:
+                lst.append(t)
+                continue
+        data.append(tuple(lst))
     return data
 
 
