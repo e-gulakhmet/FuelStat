@@ -20,7 +20,7 @@ def main():
                         help="re-create all data base")
     args = parser.parse_args()
 
-
+# TODO: Переконвертировать данные из TEXT в INTEGER
     logging.basicConfig(filename="logging.log",
                         level=logging.DEBUG,
                         format="%(asctime)s %(name)s [%(levelname)s] : %(message)s")
