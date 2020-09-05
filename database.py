@@ -3,6 +3,12 @@ import logging
 
 
 
+# TODO: Добавить статус подключения к файлу
+# TODO: Добавить удаления файла бызы данных
+# TODO: Добавить точку входа для пересоздания файла
+
+
+
 class DataBase():
     def __init__(self, database_file):
         self.logger = logging.getLogger("DATABASE")

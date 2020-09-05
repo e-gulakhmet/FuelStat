@@ -4,9 +4,11 @@ import argparse
 
 import database
 
-
 # TODO: Дополнить документацию
-# TODO: Задокументировать txt файлы
+# TODO: Задокументировать код
+# TODO: Добавить csv
+# TODO: Добавить with open
+# TODO: Переделать функцию создания базы данных
 
 
 
