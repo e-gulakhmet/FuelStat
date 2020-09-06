@@ -10,7 +10,24 @@ import logging
 
 
 class DataBase():
+    """
+    Класс создания и настройки базы данных.
+
+    """
+
+
     def __init__(self, database_file):
+        """
+        Инициализация базы данных.
+        Подлкючаемся к базе данных.
+
+        Parameters
+        ----------
+        database_file : str
+            Путь к файлу базы данных
+
+        """
+
         self.logger = logging.getLogger("DATABASE")
 
         # Подключаемся к базе данных
@@ -22,6 +39,22 @@ class DataBase():
             self.logger.error(e)
 
     def create_table(self, table_name, colums_name, re_create=False): # Создать таблицу
+        """
+        Создает таблицу исходя из указанной информации.
+
+        Parameters:
+        -----------
+        table_name : str
+            Название которое нужно установить для таблицы.
+        colums_name : str
+            Назваения столбцов таблицы.
+            Указываются через запятую.
+            Например: father TEXT, mother TEXT, childcount INT
+        re_create : bool
+            Если данный флаг активен, база данных пересоздатся.
+            В итоге будет пустая база данных, без таблиц.
+        """
+
         if re_create:
             self.logger.debug("Deleting table...")
             try:
@@ -38,6 +71,32 @@ class DataBase():
     
 
     def insert(self, table_name, colums=None, data=None): # Вставить значения в таблицу
+        """
+        Вставляет данные в созданную таблицу.
+
+        Parameters
+        ----------
+        table_name : str
+            Имя таблицы в которую нужно вставить данные.
+        colums : str
+            Имена столбцов в таблицу,
+            в которые нужно будет вставить данные.
+            Записываются через запятую.
+            Например: father, mother, childcount.
+            Если ничего не указывать, то данные
+            присвоятся всем столбцам, взависимости от 
+            последовательности переданных данных.
+        data : str, int
+            Данные, которые вставляются в таблицу.
+            Записываются в порядке столбцов в таблице,
+            либо в порядке столбцов, которые мы указали.
+            Указываются черех запятую.
+            Например, если столбцы равны:
+                father, mother, child count
+            То данные должны быть переданны в таком виде:
+                Jon, Marry, 8
+        """
+        
         try:
             if colums is None:
                 self.logger.debug("Inserting into [" + table_name + "] listdata[" + data + "]")
