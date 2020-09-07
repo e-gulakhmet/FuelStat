@@ -7,8 +7,6 @@ import database
 # TODO: Дополнить документацию
 # TODO: Задокументировать код
 # TODO: Добавить csv
-# TODO: Добавить with open
-# TODO: Переделать функцию создания базы данных
 
 
 
@@ -31,7 +29,7 @@ def main():
 
     # Создаем базу данных заправок
     db = database.DataBase("data/database.db", args.recreate)
-    
+
     # Создаем таблицу запрвавок
     db.create_table("fuel",
                     '''id INTEGER PRIMARY KEY,

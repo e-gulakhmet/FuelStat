@@ -3,9 +3,6 @@ import logging
 import os
 
 
-
-# TODO: Добавить статус подключения к файлу
-
 # TODO: Добавить точку входа для пересоздания файла
 
 
@@ -34,15 +31,23 @@ class DataBase():
 
         self.logger = logging.getLogger("DATABASE")
 
+        self.connected = False
+
         # Удаляем файл базу данных
         self.logger.info("Deleting table...")
         if re_create:
-            os.remove(database_file)
+            try:
+                os.remove(database_file)
+                self.logger.info("Database was deleted")
+            except FileNotFoundError:
+                self.logger.info("Database not found")
+
 
         # Подключаемся к базе данных
+        self.logger.debug("Connecting to database...")
         try:
-            self.logger.debug("Connecting to database...")
             self.db = sqlite3.connect(database_file)
+            self.connected = True
             self.logger.info("Connected to database file(" + database_file)
         except sqlite3.Error as e:
             self.logger.error(e)
@@ -65,13 +70,15 @@ class DataBase():
             Если флаг активен, то данные из этого файла будут
             сразу загружены в таблицу
         """
-
-        self.logger.debug("Creating table...")
-        try:
-            self.db.execute("CREATE TABLE IF NOT EXISTS " + table_name + " (" + colums_name + ")")
-            self.logger.info("Table " + table_name + "was created")
-        except sqlite3.Error as e:
-            self.logger.warning(e)
+        if self.connected is True:
+            self.logger.debug("Creating table...")
+            try:
+                self.db.execute("CREATE TABLE IF NOT EXISTS " + table_name + " (" + colums_name + ")")
+                self.logger.info("Table " + table_name + "was created")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")
     
 
     def insert_file(self, table_name, colums=None, file_path=None):
@@ -94,21 +101,24 @@ class DataBase():
             Путь к файлу, в котором содержаться данные
             для таблицы
         """
-        self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
-        data = []
-        with open(file_path, 'r') as txt_file:
-            for line in txt_file.read().split("\n"):
-                lst = []
-                for t in line.split(", "):
-                    try:
-                        lst.append(int(t))
-                    except ValueError:
-                        lst.append(t)
-                        continue
-                data.append(tuple(lst))
-        self.logger.debug("File was opened")
-        
-        self.insert_list(table_name, colums, data)
+        if self.connected:
+            self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
+            data = []
+            with open(file_path, 'r') as txt_file:
+                for line in txt_file.read().split("\n"):
+                    lst = []
+                    for t in line.split(", "):
+                        try:
+                            lst.append(int(t))
+                        except ValueError:
+                            lst.append(t)
+                            continue
+                    data.append(tuple(lst))
+            self.logger.debug("File was opened")
+            
+            self.insert_list(table_name, colums, data)
+        else:
+            self.logger.warning("Not connected to database")
 
 
     def insert(self, table_name, colums=None, data=None): # Вставить значения в таблицу
@@ -137,17 +147,20 @@ class DataBase():
             То данные должны быть переданны в таком виде:
                 Jon, Marry, 8
         """
+        if self.connected:
+            try:
+                if colums is None:
+                    self.logger.debug("Inserting into [" + table_name + "] listdata[" + data + "]")
+                    self.db.execute("INSERT INTO " + table_name + " VALUES (" + data + ")")
+                else:
+                    self.logger.debug("Inserting listdata[" + data + "] into colums[" + colums + ']')
+                    self.db.execute("INSERT INTO " + table_name + "(" + colums + ") VALUES (" + data + ")")
+                self.logger.info("Data was added to the table[" + table_name + "]")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")
 
-        try:
-            if colums is None:
-                self.logger.debug("Inserting into [" + table_name + "] listdata[" + data + "]")
-                self.db.execute("INSERT INTO " + table_name + " VALUES (" + data + ")")
-            else:
-                self.logger.debug("Inserting listdata[" + data + "] into colums[" + colums + ']')
-                self.db.execute("INSERT INTO " + table_name + "(" + colums + ") VALUES (" + data + ")")
-            self.logger.info("Data was added to the table[" + table_name + "]")
-        except sqlite3.Error as e:
-            self.logger.warning(e)
     
     def insert_list(self, table_name, colums=None, data=None): # Вставить списки со значениями в таблицу
         """
@@ -183,23 +196,25 @@ class DataBase():
             >>> a = [("Jon", "Marry", 8), ("Alex", "Lora", 1)]
             >>> insert_list("table", "father, mother, childcount", a)
         """
-
-        try:
-            s = ""
-            for r in range(0, len(data[0])):
-                if r < len(data[0]) - 1:
-                    s += "?,"
+        if self.connected:
+            try:
+                s = ""
+                for r in range(0, len(data[0])):
+                    if r < len(data[0]) - 1:
+                        s += "?,"
+                    else:
+                        s += "?"
+                if colums is None:
+                    self.logger.debug("Inserting into [" + table_name + "] listdata[" + str(data) + "]")
+                    self.db.execute("INSERT INTO " + table_name + " VALUES (" + s + ')', data)
                 else:
-                    s += "?"
-            if colums is None:
-                self.logger.debug("Inserting into [" + table_name + "] listdata[" + str(data) + "]")
-                self.db.execute("INSERT INTO " + table_name + " VALUES (" + s + ')', data)
-            else:
-                self.logger.debug("Inserting into [" + table_name + "] listdata [" + str(data) + "] into colums[" + colums + ']')
-                self.db.executemany("INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")", data)
-            self.logger.info("Data was added to the table[" + table_name + "]")
-        except sqlite3.Error as e:
-            self.logger.warning(e)
+                    self.logger.debug("Inserting into [" + table_name + "] listdata [" + str(data) + "] into colums[" + colums + ']')
+                    self.db.executemany("INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")", data)
+                self.logger.info("Data was added to the table[" + table_name + "]")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")
 
 
     def select(self, table_name, data='*', condition=None): # Выделить данные из таблицы
@@ -236,30 +251,40 @@ class DataBase():
             "Jon"
             "Alex"
         """
-        try:
-            if condition is None:
-                self.logger.debug("Selecting data[" + data + "] from [" + table_name + "]")
-                c = self.db.execute("SELECT " + data + " FROM " + table_name)
-            else:
-                self.logger.debug("Selecting data[" + data + "] with condition[" + condition + "]from the table...")                
-                c = self.db.execute("SELECT " + data + " FROM " + table_name + " WHERE " + condition)
-            self.logger.info("Data was selected from table[" + table_name + "]")
-            return c
-        except sqlite3.Error as e:
-            self.logger.warning(e)
+        if self.connected:
+            try:
+                if condition is None:
+                    self.logger.debug("Selecting data[" + data + "] from [" + table_name + "]")
+                    c = self.db.execute("SELECT " + data + " FROM " + table_name)
+                else:
+                    self.logger.debug("Selecting data[" + data + "] with condition[" + condition + "]from the table...")                
+                    c = self.db.execute("SELECT " + data + " FROM " + table_name + " WHERE " + condition)
+                self.logger.info("Data was selected from table[" + table_name + "]")
+                return c
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")
     
     def commit(self):
-        self.logger.debug("Commiting database")
-        try:
-            self.db.commit()
-            self.logger.info("Database was commited")
-        except sqlite3.Error as e:
-            self.logger.warning(e)
+        if self.connected:
+            self.logger.debug("Commiting database")
+            try:
+                self.db.commit()
+                self.logger.info("Database was commited")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")
 
     def disconnect(self):
-        self.logger.debug("Disconnecting from the database")
-        try:
-            self.db.close()
-            self.logger.info("Disconnected from the database")
-        except sqlite3.Error as e:
-            self.logger.warning(e)
+        if self.connected:
+            self.logger.debug("Disconnecting from the database")
+            try:
+                self.db.close()
+                self.connected = False
+                self.logger.info("Disconnected from the database")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")       
