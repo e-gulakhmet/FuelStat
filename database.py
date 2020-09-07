@@ -1,10 +1,11 @@
 import sqlite3
 import logging
+import os
 
 
 
 # TODO: Добавить статус подключения к файлу
-# TODO: Добавить удаления файла бызы данных
+
 # TODO: Добавить точку входа для пересоздания файла
 
 
@@ -16,7 +17,7 @@ class DataBase():
     """
 
 
-    def __init__(self, database_file):
+    def __init__(self, database_file, re_create=False):
         """
         Инициализация базы данных.
         Подлкючаемся к базе данных.
@@ -25,10 +26,18 @@ class DataBase():
         ----------
         database_file : str
             Путь к файлу базы данных
+        re_create : bool
+            Если данный флаг активен, база данных пересоздатся.
+            В итоге будет пустая база данных, без таблиц.
 
         """
 
         self.logger = logging.getLogger("DATABASE")
+
+        # Удаляем файл базу данных
+        self.logger.info("Deleting table...")
+        if re_create:
+            os.remove(database_file)
 
         # Подключаемся к базе данных
         try:
@@ -38,9 +47,11 @@ class DataBase():
         except sqlite3.Error as e:
             self.logger.error(e)
 
-    def create_table(self, table_name, colums_name, re_create=False): # Создать таблицу
+    def create_table(self, table_name, colums_name): # Создать таблицу
         """
         Создает таблицу исходя из указанной информации.
+        Если при вызове передан txt file, то программа
+        заполнит таблицу данными этого файла.
 
         Parameters
         -----------
@@ -50,18 +61,11 @@ class DataBase():
             Назваения столбцов таблицы.
             Указываются через запятую.
             Например: father TEXT, mother TEXT, childcount INT
-        re_create : bool
-            Если данный флаг активен, база данных пересоздатся.
-            В итоге будет пустая база данных, без таблиц.
+        txt_file_path : str
+            Если флаг активен, то данные из этого файла будут
+            сразу загружены в таблицу
         """
 
-        if re_create:
-            self.logger.debug("Deleting table...")
-            try:
-                self.db.execute("DROP TABLE IF EXISTS " + table_name)
-                self.logger.info("Table was droped")
-            except sqlite3.Error as e:
-                self.logger.warning(e)
         self.logger.debug("Creating table...")
         try:
             self.db.execute("CREATE TABLE IF NOT EXISTS " + table_name + " (" + colums_name + ")")
@@ -69,6 +73,43 @@ class DataBase():
         except sqlite3.Error as e:
             self.logger.warning(e)
     
+
+    def insert_file(self, table_name, colums=None, file_path=None):
+        """
+        Вставляет данные из файла в созданную таблицу
+
+        Parameters
+        ----------
+        table_name : str
+            Имя таблицы в которую нужно вставить данные.
+        colums : str
+            Имена столбцов в таблицу,
+            в которые нужно будет вставить данные.
+            Записываются через запятую.
+            Например: father, mother, childcount.
+            Если ничего не указывать, то данные
+            присвоятся всем столбцам, взависимости от 
+            последовательности переданных данных.
+        file_path : str
+            Путь к файлу, в котором содержаться данные
+            для таблицы
+        """
+        self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
+        data = []
+        with open(file_path, 'r') as txt_file:
+            for line in txt_file.read().split("\n"):
+                lst = []
+                for t in line.split(", "):
+                    try:
+                        lst.append(int(t))
+                    except ValueError:
+                        lst.append(t)
+                        continue
+                data.append(tuple(lst))
+        self.logger.debug("File was opened")
+        
+        self.insert_list(table_name, colums, data)
+
 
     def insert(self, table_name, colums=None, data=None): # Вставить значения в таблицу
         """
