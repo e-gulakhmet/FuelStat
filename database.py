@@ -1,6 +1,7 @@
 import sqlite3
 import logging
 import os
+import csv
 
 
 # TODO: Добавить точку входа для пересоздания файла
@@ -104,10 +105,10 @@ class DataBase():
         if self.connected:
             self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
             data = []
-            with open(file_path, 'r') as txt_file:
-                for line in txt_file.read().split("\n"):
+            with open(file_path, newline="\n") as csv_file:
+                for row in csv.reader(csv_file, delimiter=","):
                     lst = []
-                    for t in line.split(", "):
+                    for t in row:
                         try:
                             lst.append(int(t))
                         except ValueError:

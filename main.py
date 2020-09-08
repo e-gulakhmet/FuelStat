@@ -6,7 +6,6 @@ import database
 
 # TODO: Дополнить документацию
 # TODO: Задокументировать код
-# TODO: Добавить csv
 
 
 
@@ -36,7 +35,7 @@ def main():
                        name TEXT NOT NULL,
                        price INTEGER NOT NULL''')
     # Вставляем данные из текстового файла в таблицу
-    db.insert_file("fuel", "name, price", "data/fuel.txt")
+    db.insert_file("fuel", "name, price", "data/fuel.csv")
 
     for row in db.select("fuel"):
         print(row)
@@ -52,7 +51,7 @@ def main():
                        FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
 
     # Вставляем данные из текстового файла в таблицу
-    db.insert_file("trans", "dtime, odometer, fuel_id, amount", "data/trans.txt")
+    db.insert_file("trans", "dtime, odometer, fuel_id, amount", "data/trans.csv")
 
     for row in db.select("trans"):
         print(row)
