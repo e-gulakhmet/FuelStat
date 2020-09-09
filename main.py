@@ -16,7 +16,11 @@ def main():
                                      description="""Creating statistics 
                                                     based on generated tables""")
     parser.add_argument("-r", "--recreate", action="store_true",
-                        help="re-create all data base")
+                        help="re-create data base")
+    parser.add_argument("-p", "--paste", action="store_true",
+                        help="paste data from files to tables")
+    parser.add_argument("--report", action="store_true",
+                        help="generates a report on fuel use")
     parser.add_argument("--log", action="store", default="info",
                         help="enable logging")
     args = parser.parse_args()
