@@ -60,4 +60,9 @@ A program that expands fuel statistics
 Отчет формируется за определенную дату или за диапозон дат.
 
 Для формирования отчета нужно запустить программу:
-    python3 main.py --report
+
+    python3 main.py --report start finish gas_name
+
+start -- Дата с которой начнется отчет отчет.
+finish -- Дата до которой формируется отчет.
+gas_name -- Название заправки, по которой будет сформирован отчет.

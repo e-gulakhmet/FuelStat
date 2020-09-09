@@ -201,12 +201,13 @@ class DataBase():
                         s += "?,"
                     else:
                         s += "?"
-                if colums in None:
-                    command = "INSERT INTO " + table_name + " VALUES (" + s + ')', data
+                command = ""
+                if colums is None:
+                    command = "INSERT INTO " + table_name + " VALUES (" + s + ')'
                 else:
-                    command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")", data
-                self.logger.debug(command)
-                self.db.executemany(command)
+                    command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")"
+                self.logger.debug(command, data)
+                self.db.executemany(command, data)
                 self.logger.info("Data was added to the table[" + table_name + "]")
             except sqlite3.Error as e:
                 self.logger.warning(e)
