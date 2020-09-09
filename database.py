@@ -103,19 +103,19 @@ class DataBase():
             для таблицы
         """
         if self.connected:
-            # self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
             data = []
             with open(file_path, newline="\n") as csv_file:
                 for row in csv.reader(csv_file, delimiter=","):
                     lst = []
                     for t in row:
                         try:
-                            lst.append(int(t))
-                        except ValueError:
                             lst.append(t)
+                        except ValueError:
+                            lst.append(int(t))
                             continue
                     data.append(tuple(lst))
             self.logger.debug("File was opened")
+            print(data)
             
             self.insert_list(table_name, colums, data)
         else:
@@ -206,7 +206,7 @@ class DataBase():
                     command = "INSERT INTO " + table_name + " VALUES (" + s + ')'
                 else:
                     command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")"
-                self.logger.debug(command, data)
+                self.logger.debug(command)
                 self.db.executemany(command, data)
                 self.logger.info("Data was added to the table[" + table_name + "]")
             except sqlite3.Error as e:

@@ -39,31 +39,29 @@ def main():
     if args.recreate:
         # Создаем таблицу запрвавок
         db.create_table("fuel",
-                        '''id INTEGER PRIMARY KEY,
-                        name TEXT NOT NULL,
-                        price INTEGER NOT NULL''')
+                        """name TEXT PRIMARY KEY,
+                           price INTEGER NOT NULL""")
 
         # Создаем таблицу транзакций
         db.create_table("trans",
-                        """id INTEGER PRIMARY KEY,
-                        dtime TEXT DEFAULT CURRENT_TIMESTAMP,
-                        odometer INTEGER NOT NULL,
-                        fuel_id INTEGER NOT NULL,
-                        amount INTEGER NOT NULL,
-                        FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
+                        """dtime TEXT PRIMARY KEY DEFAULT CURRENT_TIMESTAMP,
+                           odometer INTEGER NOT NULL,
+                           fuel_name TEXT NOT NULL,
+                           amount REAL NOT NULL,
+                           FOREIGN KEY (fuel_name) REFERENCES fuel(name)""")
 
     if args.paste:
         # Вставляем данные из текстового файла в таблицу
         db.insert_file("fuel", "name, price", "data/fuel.csv")
         # Вставляем данные из текстового файла в таблицу
-        db.insert_file("trans", "dtime, odometer, fuel_id, amount", "data/trans.csv")
+        db.insert_file("trans", "dtime, odometer, fuel_name, amount", "data/trans.csv")
 
     if args.report is not None:
         print(args.report)
         # Объединяем данные из таблиц
         c = db.select("trans t, fuel f",
                       "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price AS cost",
-                      "t.fuel_id = f.id")
+                      "t.fuel_name = f.name")
         for row in c:
             print(row)
         print("\n")
