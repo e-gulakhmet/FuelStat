@@ -103,7 +103,7 @@ class DataBase():
             для таблицы
         """
         if self.connected:
-            self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
+            # self.logger.debug("Inserting data into [" + table_name + "] from " + file_path)
             data = []
             with open(file_path, newline="\n") as csv_file:
                 for row in csv.reader(csv_file, delimiter=","):
@@ -150,12 +150,13 @@ class DataBase():
         """
         if self.connected:
             try:
+                command = ""
                 if colums is None:
-                    self.logger.debug("Inserting into [" + table_name + "] listdata[" + data + "]")
-                    self.db.execute("INSERT INTO " + table_name + " VALUES (" + data + ")")
+                    command = "INSERT INTO " + table_name + " VALUES (" + data + ")"
                 else:
-                    self.logger.debug("Inserting listdata[" + data + "] into colums[" + colums + ']')
-                    self.db.execute("INSERT INTO " + table_name + "(" + colums + ") VALUES (" + data + ")")
+                    command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + data + ")"
+                self.logger.debug(command)
+                self.db.execute(command)
                 self.logger.info("Data was added to the table[" + table_name + "]")
             except sqlite3.Error as e:
                 self.logger.warning(e)
@@ -191,11 +192,6 @@ class DataBase():
             при этом мы хотим сразу заполнить сразу несколько строк
             То данные должны быть переданны в таком виде:
                 [("Jon", "Marry", 8), ("Alex", "Lora", 1)]
-
-        Exemples
-        --------
-            >>> a = [("Jon", "Marry", 8), ("Alex", "Lora", 1)]
-            >>> insert_list("table", "father, mother, childcount", a)
         """
         if self.connected:
             try:
@@ -205,12 +201,12 @@ class DataBase():
                         s += "?,"
                     else:
                         s += "?"
-                if colums is None:
-                    self.logger.debug("Inserting into [" + table_name + "] listdata[" + str(data) + "]")
-                    self.db.execute("INSERT INTO " + table_name + " VALUES (" + s + ')', data)
+                if colums in None:
+                    command = "INSERT INTO " + table_name + " VALUES (" + s + ')', data
                 else:
-                    self.logger.debug("Inserting into [" + table_name + "] listdata [" + str(data) + "] into colums[" + colums + ']')
-                    self.db.executemany("INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")", data)
+                    command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")", data
+                self.logger.debug(command)
+                self.db.executemany(command)
                 self.logger.info("Data was added to the table[" + table_name + "]")
             except sqlite3.Error as e:
                 self.logger.warning(e)
@@ -255,11 +251,11 @@ class DataBase():
         if self.connected:
             try:
                 if condition is None:
-                    self.logger.debug("Selecting data[" + data + "] from [" + table_name + "]")
-                    c = self.db.execute("SELECT " + data + " FROM " + table_name)
+                    command = "SELECT " + data + " FROM " + table_name
                 else:
-                    self.logger.debug("Selecting data[" + data + "] with condition[" + condition + "]from the table...")                
-                    c = self.db.execute("SELECT " + data + " FROM " + table_name + " WHERE " + condition)
+                    command = "SELECT " + data + " FROM " + table_name + " WHERE " + condition
+                self.logger.debug(command)
+                c = self.db.execute(command)
                 self.logger.info("Data was selected from table[" + table_name + "]")
                 return c
             except sqlite3.Error as e:

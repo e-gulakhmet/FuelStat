@@ -5,7 +5,6 @@ import argparse
 import database
 
 # TODO: Дополнить документацию
-# TODO: Задокументировать код
 
 
 
