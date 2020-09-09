@@ -6,7 +6,6 @@ import database
 
 
 
-# TODO: Добавить зависимость названия заправки между таблицами
 # TODO: Добавить проверку на повторение данных о заправках
 # TODO: Изменить дату в trans год/месяц/день
 
@@ -57,7 +56,6 @@ def main():
         db.insert_file("trans", "dtime, odometer, fuel_name, amount", "data/trans.csv")
 
     if args.report is not None:
-        print(args.report)
         # Объединяем данные из таблиц
         c = db.select("trans t, fuel f",
                       "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price AS cost",
