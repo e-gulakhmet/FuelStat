@@ -6,7 +6,6 @@ import database
 
 
 
-# TODO: Изменить дату в trans год/месяц/день
 # TODO: Изменить ключи для запуска report
 # TODO: Добавить подстановку номера заправки в trans при вставке данных в эту таблицу
 
@@ -20,10 +19,16 @@ def main():
                         help="re-create data base")
     parser.add_argument("-p", "--paste", action="store_true",
                         help="paste data from files to tables")
-    parser.add_argument("--report", action="store", default=None, nargs=3,
-                        help="generates a report on fuel use")
     parser.add_argument("--log", action="store", default="info",
                         help="enable logging")
+    parser.add_argument("--report", action="store_true", default=None,
+                        help="generates a report on fuel use")
+    parser.add_argument("-s", action="store", default=None,
+                        help="set the start date for the report")
+    parser.add_argument("-e", action="store", default=None,
+                        help="set the end date for the report")
+    parser.add_argument("-f", action="store", default=None,
+                        help="set the name of the report file")
     args = parser.parse_args()
 
 
