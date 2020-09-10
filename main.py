@@ -54,9 +54,14 @@ def main():
 
     if args.paste:
         # Вставляем данные из текстового файла в таблицу
-        db.insert_file("fuel", "name, price", "data/fuel.csv")
+        db.insert_list("fuel", "name, price", db.csv_to_list("data/fuel.csv"))
         # Вставляем данные из текстового файла в таблицу
-        db.insert_file("trans", "dtime, odometer, fuel_id, amount", "data/trans.csv")
+        for data in db.csv_to_list("data/trans.csv"):
+            # print(data[2])
+            fuel_id = db.select("fuel", "id", "name = '" + data[2] + "'").fetchone()
+            db.insert("trans", "dtime, odometer, fuel_id, amount",
+                      data[0] + ", " + data[1] + ", " + str(fuel_id[0]) + ", " + data[3])
+
 
     if args.report is not None:
         # Объединяем данные из таблиц

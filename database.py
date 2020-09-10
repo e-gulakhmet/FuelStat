@@ -79,43 +79,43 @@ class DataBase():
             self.logger.warning("Not connected to database")
     
 
-    def insert_file(self, table_name, colums=None, file_path=None):
-        """
-        Вставляет данные из файла в созданную таблицу
+    # def insert_file(self, table_name, colums=None, file_path=None):
+    #     """
+    #     Вставляет данные из файла в созданную таблицу
 
-        Parameters
-        ----------
-        table_name : str
-            Имя таблицы в которую нужно вставить данные.
-        colums : str
-            Имена столбцов в таблицу,
-            в которые нужно будет вставить данные.
-            Записываются через запятую.
-            Например: father, mother, childcount.
-            Если ничего не указывать, то данные
-            присвоятся всем столбцам, взависимости от 
-            последовательности переданных данных.
-        file_path : str
-            Путь к файлу, в котором содержаться данные
-            для таблицы
-        """
-        if self.connected:
-            data = []
-            with open(file_path, newline="\n") as csv_file:
-                for row in csv.reader(csv_file, delimiter=","):
-                    lst = []
-                    for t in row:
-                        try:
-                            lst.append(t)
-                        except ValueError:
-                            lst.append(int(t))
-                            continue
-                    data.append(tuple(lst))
-            self.logger.debug("File was opened")
+    #     Parameters
+    #     ----------
+    #     table_name : str
+    #         Имя таблицы в которую нужно вставить данные.
+    #     colums : str
+    #         Имена столбцов в таблицу,
+    #         в которые нужно будет вставить данные.
+    #         Записываются через запятую.
+    #         Например: father, mother, childcount.
+    #         Если ничего не указывать, то данные
+    #         присвоятся всем столбцам, взависимости от 
+    #         последовательности переданных данных.
+    #     file_path : str
+    #         Путь к файлу, в котором содержаться данные
+    #         для таблицы
+    #     """
+    #     if self.connected:
+    #         data = []
+    #         with open(file_path, newline="\n") as csv_file:
+    #             for row in csv.reader(csv_file, delimiter=","):
+    #                 lst = []
+    #                 for t in row:
+    #                     try:
+    #                         lst.append(t)
+    #                     except ValueError:
+    #                         lst.append(int(t))
+    #                         continue
+    #                 data.append(tuple(lst))
+    #         self.logger.debug("File was opened")
 
-            self.insert_list(table_name, colums, data)
-        else:
-            self.logger.warning("Not connected to database")
+    #         self.insert_list(table_name, colums, data)
+    #     else:
+    #         self.logger.warning("Not connected to database")
 
 
     def insert(self, table_name, colums=None, data=None): # Вставить значения в таблицу
@@ -260,6 +260,7 @@ class DataBase():
         else:
             self.logger.warning("Not connected to database")
     
+
     def commit(self):
         if self.connected:
             self.logger.debug("Commiting database")
@@ -271,6 +272,7 @@ class DataBase():
         else:
             self.logger.warning("Not connected to database")
 
+
     def disconnect(self):
         if self.connected:
             self.logger.debug("Disconnecting from the database")
@@ -281,4 +283,23 @@ class DataBase():
             except sqlite3.Error as e:
                 self.logger.warning(e)
         else:
-            self.logger.warning("Not connected to database")       
+            self.logger.warning("Not connected to database")
+        
+    
+    def csv_to_list(self, file_path):
+        if self.connected:
+            self.logger.debug("Converting csv file to list")
+            data = []
+            with open(file_path, newline="\n") as csv_file:
+                for row in csv.reader(csv_file, delimiter=","):
+                    lst = []
+                    for t in row:
+                        try:
+                            lst.append(t)
+                        except ValueError:
+                            lst.append(int(t))
+                            continue
+                    data.append(tuple(lst))
+            self.logger.info("File was converted")
+
+            return data
