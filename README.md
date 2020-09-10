@@ -49,10 +49,11 @@ A program that expands fuel statistics
 
 3. Файл fuel.csv имеет следующую структуру(Название заправки, цена)
 
-4. Файл trans.csv имеет следующую структуру(Дата, расстояние пройденное автомобилем, название заправки, количество галлонов)
+4. Файл trans.csv имеет следующую структуру(дата:YY/MM/DD,расстояние пройденное автомобилем:int,название заправки:str,количество галлонов:int)
 
 5. Запустить программу:
-    python3 main.py --paste
+
+    python3 main.py --load
 
 ## Формирование отчета
 
@@ -61,8 +62,4 @@ A program that expands fuel statistics
 
 Для формирования отчета нужно запустить программу:
 
-    python3 main.py --report start finish gas_name
-
-start -- Дата с которой начнется отчет отчет.
-finish -- Дата до которой формируется отчет.
-gas_name -- Название заправки, по которой будет сформирован отчет.
+    python3 main.py --report -s start_data -e end_data -f filename

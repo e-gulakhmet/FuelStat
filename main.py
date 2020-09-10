@@ -6,8 +6,9 @@ import database
 
 
 
-# TODO: Добавить проверку на повторение данных о заправках
 # TODO: Изменить дату в trans год/месяц/день
+# TODO: Изменить ключи для запуска report
+# TODO: Добавить подстановку номера заправки в trans при вставке данных в эту таблицу
 
 
 
@@ -38,28 +39,30 @@ def main():
     if args.recreate:
         # Создаем таблицу запрвавок
         db.create_table("fuel",
-                        """name TEXT PRIMARY KEY,
+                        """id INTEGER PRIMARY KEY,
+                           name TEXT NOT NULL UNIQUE,
                            price INTEGER NOT NULL""")
 
         # Создаем таблицу транзакций
         db.create_table("trans",
-                        """dtime TEXT PRIMARY KEY DEFAULT CURRENT_TIMESTAMP,
+                        """id INTEGER PRIMARY KEY,
+                           dtime TEXT DEFAULT CURRENT_TIMESTAMP,
                            odometer INTEGER NOT NULL,
-                           fuel_name TEXT NOT NULL,
-                           amount REAL NOT NULL,
-                           FOREIGN KEY (fuel_name) REFERENCES fuel(name)""")
+                           fuel_id INTEGER NOT NULL,
+                           amount INTEGER NOT NULL,
+                           FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
 
     if args.paste:
         # Вставляем данные из текстового файла в таблицу
         db.insert_file("fuel", "name, price", "data/fuel.csv")
         # Вставляем данные из текстового файла в таблицу
-        db.insert_file("trans", "dtime, odometer, fuel_name, amount", "data/trans.csv")
+        db.insert_file("trans", "dtime, odometer, fuel_id, amount", "data/trans.csv")
 
     if args.report is not None:
         # Объединяем данные из таблиц
         c = db.select("trans t, fuel f",
                       "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price AS cost",
-                      "t.fuel_name = f.name")
+                      "t.fuel_id = f.id")
         for row in c:
             print(row)
         print("\n")

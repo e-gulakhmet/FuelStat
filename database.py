@@ -79,7 +79,7 @@ class DataBase():
             self.logger.warning("Not connected to database")
     
 
-    def insert_file(self, table_name, colums=None, file_path=None, check=None):
+    def insert_file(self, table_name, colums=None, file_path=None):
         """
         Вставляет данные из файла в созданную таблицу
 
@@ -98,9 +98,6 @@ class DataBase():
         file_path : str
             Путь к файлу, в котором содержаться данные
             для таблицы
-        check_objects : [str, str]
-            Проверка на повторение одного элемента из вставляемых данных и
-            одного элемента из таблицы
         """
         if self.connected:
             data = []
@@ -116,12 +113,12 @@ class DataBase():
                     data.append(tuple(lst))
             self.logger.debug("File was opened")
 
-            self.insert_list(table_name, colums, data, check)
+            self.insert_list(table_name, colums, data)
         else:
             self.logger.warning("Not connected to database")
 
 
-    def insert(self, table_name, colums=None, data=None, check=None): # Вставить значения в таблицу
+    def insert(self, table_name, colums=None, data=None): # Вставить значения в таблицу
         """
         Вставляет данные в созданную таблицу.
 
@@ -146,9 +143,6 @@ class DataBase():
                 father, mother, child count
             То данные должны быть переданны в таком виде:
                 Jon, Marry, 8
-        check_objects : [str, str]
-            Проверка на повторение одного элемента из вставляемых данных и
-            одного элемента из таблицы
         """
         if self.connected:
             try:
@@ -166,7 +160,7 @@ class DataBase():
             self.logger.warning("Not connected to database")
 
     
-    def insert_list(self, table_name, colums=None, data=None, check_objects=None): # Вставить списки со значениями в таблицу
+    def insert_list(self, table_name, colums=None, data=None): # Вставить списки со значениями в таблицу
         """
         Вставляет список с данными в созданную таблицу.
         Нужно для того, чтобы вствить сразу несолько строк
@@ -194,20 +188,9 @@ class DataBase():
             при этом мы хотим сразу заполнить сразу несколько строк
             То данные должны быть переданны в таком виде:
                 [("Jon", "Marry", 8), ("Alex", "Lora", 1)]
-        check_objects : [str, str]
-            Проверка на повторение одного элемента из вставляемых данных и
-            одного элемента из таблицы
         """
         if self.connected:
             try:
-                # Если проверка включена
-                if check_objects is not None:
-                    # Получаем данные из таблицы
-                    # Проверяем каждый из низ на повторение
-                    for row in self.select(table_name, check_objects[1]):
-                        # Если совпали, то выходим из функции
-                        if check_objects[0] == row:
-                            return
                 s = ""
                 for r in range(0, len(data[0])):
                     if r < len(data[0]) - 1:
