@@ -202,7 +202,7 @@ class DataBase():
                     command = "INSERT INTO " + table_name + " VALUES (" + s + ')'
                 else:
                     command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")"
-                self.logger.debug(command)
+                self.logger.debug(command + " data: " + str(data))
                 self.db.executemany(command, data)
                 self.logger.info("Data was added to the table[" + table_name + "]")
             except sqlite3.Error as e:
@@ -295,9 +295,9 @@ class DataBase():
                     lst = []
                     for t in row:
                         try:
-                            lst.append(t)
-                        except ValueError:
                             lst.append(int(t))
+                        except ValueError:
+                            lst.append(t)
                             continue
                     data.append(tuple(lst))
             self.logger.info("File was converted")
