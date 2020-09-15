@@ -6,12 +6,9 @@ import database
 
 
 
-# TODO: Обновить таблицу транзакций
 # TODO: Собрать генератор исходных значений
-# TODO: Добавить параметр названия заправок
 # TODO: Добавить проверку таблиц в базе данных на последовательность данных пробега
 # TODO: Добавить проверку даты транзакции
-# TODO: Сделать заглушку для репорта
 
 
 
@@ -19,19 +16,21 @@ def main():
     parser = argparse.ArgumentParser(prog="fuel_stat",
                                      description="""Creating statistics 
                                                     based on generated tables""")
-    parser.add_argument("-r", "--recreate", action="store_true",
+    parser.add_argument("--recreate", action="store_true",
                         help="re-create data base")
     parser.add_argument("-l", "--load", action="store_true",
                         help="paste data from files to tables")
     parser.add_argument("--log", action="store", default="info",
                         help="enable logging")
-    parser.add_argument("--report", action="store_true", default=None,
+    parser.add_argument("-r", "--report", action="store_true", default=None,
                         help="generates a report on fuel use")
     parser.add_argument("-s", "--startdata", action="store", default=None,
                         help="set the start date for the report")
     parser.add_argument("-e", "--enddata", action="store", default=None,
                         help="set the end date for the report")
-    parser.add_argument("-f", "--filename", action="store", default=None,
+    parser.add_argument("-f", "--filename", action="store", default="report",
+                        help="set the name of the report file")
+    parser.add_argument("-g", "--gasname", action="append", default=None,
                         help="set the name of the report file")
     args = parser.parse_args()
 
@@ -53,7 +52,7 @@ def main():
         # Создаем таблицу транзакций
         db.create_table("trans",
                         """id INTEGER PRIMARY KEY,
-                           dtime DATATIME DEFAULT CURRENT_TIMESTAMP,
+                           dtime TEXT DEFAULT CURRENT_TIMESTAMP,
                            odometer INTEGER NOT NULL,
                            fuel_id INTEGER NOT NULL,
                            amount INTEGER NOT NULL,
@@ -77,10 +76,18 @@ def main():
 
 
     if args.report is not None:
+        print("Report parameters: " + str(args.startdata) + " " + str(args.enddata) +
+              " " + str(args.filename) + " " + str(args.gasname))
         # Объединяем данные из таблиц
+
+
         c = db.select("trans t, fuel f",
-                      "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price AS cost",
-                      "t.fuel_id = f.id")
+                      "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price / 100 AS cost",
+                      "t.fuel_id = f.id" +
+                      " AND DATE(t.dtime) > '" + str(args.startdata) + "'" +
+                      " AND t.dtime <= '" + str(args.enddata) + "'" +
+                      " AND f.name in " + str(tuple(args.gasname)) +
+                      " ORDER BY t.dtime")
         for row in c:
             print(row)
         print("\n")
