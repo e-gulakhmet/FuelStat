@@ -78,9 +78,8 @@ def main():
     if args.report is not None:
         print("Report parameters: " + str(args.startdata) + " " + str(args.enddata) +
               " " + str(args.filename) + " " + str(args.gasname))
+
         # Объединяем данные из таблиц
-
-
         c = db.select("trans t, fuel f",
                       "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price / 100 AS cost",
                       "t.fuel_id = f.id" +
@@ -88,6 +87,7 @@ def main():
                       " AND t.dtime <= '" + str(args.enddata) + "'" +
                       " AND f.name in " + str(tuple(args.gasname)) +
                       " ORDER BY t.dtime")
+
         for row in c:
             print(row)
         print("\n")

@@ -147,10 +147,11 @@ class DataBase():
         if self.connected:
             try:
                 command = ""
-                if colums is None:
-                    command = "INSERT INTO " + table_name + " VALUES (" + data + ")"
-                else:
-                    command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + data + ")"
+                clms_command = ""
+                if colums:
+                    clms_command = "(" + colums + ")"
+                command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + data + ")"
+
                 self.logger.debug(command)
                 self.db.execute(command)
                 self.logger.info("Data was added to the table[" + table_name + "]")
@@ -160,7 +161,7 @@ class DataBase():
             self.logger.warning("Not connected to database")
 
     
-    def insert_list(self, table_name, colums=None, data=None): # Вставить списки со значениями в таблицу
+    def insert_list(self, table_name, colums=None, data=None, check=None): # Вставить списки со значениями в таблицу
         """
         Вставляет список с данными в созданную таблицу.
         Нужно для того, чтобы вствить сразу несолько строк
@@ -192,16 +193,16 @@ class DataBase():
         if self.connected:
             try:
                 s = ""
+                clms_command = ""
                 for r in range(0, len(data[0])):
                     if r < len(data[0]) - 1:
                         s += "?,"
                     else:
                         s += "?"
-                command = ""
-                if colums is None:
-                    command = "INSERT INTO " + table_name + " VALUES (" + s + ')'
-                else:
-                    command = "INSERT INTO " + table_name + "(" + colums + ") VALUES (" + s + ")"
+                if colums:
+                    clms_command = "(" + colums + ")"
+                command = "INSERT INTO " + table_name + clms_command + " VALUES (" + s + ")"
+
                 self.logger.debug(command + " data: " + str(data))
                 self.db.executemany(command, data)
                 self.logger.info("Data was added to the table[" + table_name + "]")
