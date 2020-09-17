@@ -161,7 +161,7 @@ class DataBase():
             self.logger.warning("Not connected to database")
 
     
-    def insert_list(self, table_name, colums=None, data=None, check=None): # Вставить списки со значениями в таблицу
+    def insert_list(self, table_name, colums=None, data=None): # Вставить списки со значениями в таблицу
         """
         Вставляет список с данными в созданную таблицу.
         Нужно для того, чтобы вствить сразу несолько строк
