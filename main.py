@@ -3,10 +3,10 @@ import logging
 import argparse
 
 import database
+import reportgen
 
 
 
-# TODO: Собрать генератор исходных значений
 # TODO: Добавить проверку таблиц в базе данных на последовательность данных пробега
 # TODO: Добавить проверку даты транзакции
 
@@ -31,7 +31,7 @@ def main():
     parser.add_argument("-f", "--filename", action="store", default="report",
                         help="set the name of the report file")
     parser.add_argument("-g", "--gasname", action="append", default=None,
-                        help="set the name of the report file")
+                        help="set gas names for the report")
     args = parser.parse_args()
 
     logging.basicConfig(filename="logging.log",
@@ -74,41 +74,21 @@ def main():
             data.append(tuple([row[0], row[1], fuel_id[0], row[3]]))
         db.insert_list("trans", "dtime, odometer, fuel_id, amount", data)
 
-
-    if args.report is not None:
-        print("Report parameters: " + str(args.startdata) + " " + str(args.enddata) +
-              " " + str(args.filename) + " " + str(args.gasname))
-
-        # Объединяем данные из таблиц
-        c = db.select("trans t, fuel f",
-                      "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price / 100 AS cost",
-                      "t.fuel_id = f.id" +
-                      " AND DATE(t.dtime) >= '" + str(args.startdata) + "'" +
-                      " AND t.dtime <= '" + str(args.enddata) + "'" +
-                      " AND f.name in " + str(tuple(args.gasname)) +
-                      " ORDER BY t.dtime")
-
-        for row in c:
-            print(row)
-        print("\n")
-
-
-    for row in db.select("fuel"):
-        print(row)
-    print("\n")
-
-    for row in db.select("trans"):
-        print(row)
-    print("\n")
-
-
     db.commit()
     db.disconnect()
 
-    # # Создаем pdf файл с таблицой
-    # pdf_tabel = canvas.Canvas("db.pdf")
-    # pdf_tabel.drawString(0, 0, str(dbc.fetchone()))
-    # pdf_tabel.save()
+    if args.report is True:
+        reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
+
+
+    # for row in db.select("fuel"):
+    #     print(row)
+    # print("\n")
+
+    # for row in db.select("trans"):
+    #     print(row)
+    # print("\n")
+
 
 
 if __name__ == "__main__":
