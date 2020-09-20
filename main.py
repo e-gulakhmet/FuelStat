@@ -83,7 +83,7 @@ def main():
         c = db.select("trans t, fuel f",
                       "t.dtime, f.name, f.price, t.odometer, t.amount, t.amount * f.price / 100 AS cost",
                       "t.fuel_id = f.id" +
-                      " AND DATE(t.dtime) > '" + str(args.startdata) + "'" +
+                      " AND DATE(t.dtime) >= '" + str(args.startdata) + "'" +
                       " AND t.dtime <= '" + str(args.enddata) + "'" +
                       " AND f.name in " + str(tuple(args.gasname)) +
                       " ORDER BY t.dtime")

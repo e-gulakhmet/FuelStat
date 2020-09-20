@@ -31,8 +31,17 @@ def main():
         # Увеличиваем пройденное расстояение
         odometer += random.randint(50, 600)
         name = gas_name[random.randint(0, len(gas_name) - 1)]
-        amount = random.uniform(0, 15)
-        lst.append({"dtime": str(y) + '-' + str(m) + '-' + str(d),
+        amount = "%.1f" % random.uniform(0, 15)
+        # Ставим нули перед значением месяца и дня, если они меньше 10
+        # Для получения вида: YYYY-MM-DD
+        str_d = str(d)
+        str_m = str(m)
+        if d < 10:
+            str_d = '0' + str(d)
+        if m < 10:
+            str_m = '0' + str(m)
+        
+        lst.append({"dtime": str(y) + '-' + str_m + '-' + str_d,
                     "odometer": odometer,
                     "name": name,
                     "amount": amount})
