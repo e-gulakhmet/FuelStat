@@ -23,9 +23,28 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     condition += " ORDER BY t.dtime"
     # Объединяем данные из таблиц
     c = db.select("trans t, trans tt, fuel f",
-                  """t.id, t.dtime, f.name, f.price, t.odometer,
-                     tt.odometer, t.amount, (t.odometer - tt.odometer) / t.amount AS cons,
-                     t.amount * f.price / 100 AS cost""",
+                  # Данные, получаемые из таблицы:
+                  # id, дата, название заправки,
+                  # расстояние пройденное до текущего дня,
+                  # расстояние проеденное до предыдущего дня,
+                  # цена галлона,
+                  # количество галлонов,
+                  # цена заправки,
+                  # пробег между заправками,
+                  # пробег на одном галлоне,
+                  # стоимость пробега в одну милю,
+                  # стоимость одного дня
+                  """t.id, t.dtime, f.name,
+                     t.odometer,
+                     tt.odometer,
+                     f.price,
+                     t.amount,
+                     t.amount * f.price / 100,
+                     t.odometer - tt.odometer,
+                     (t.odometer - tt.odometer) / t.amount,
+                     t.amount / (t.odometer - tt.odometer),
+                     t.amount / (t.odometer - tt.odometer)
+                     """,
                   condition)
     logger.info("Report data was selected from database")
     
