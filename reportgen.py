@@ -1,5 +1,6 @@
 import logging
 import database
+from reportlab.pdfgen import canvas
 
 
 
@@ -47,7 +48,13 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                      """,
                   condition)
     logger.info("Report data was selected from database")
-    
+
     for row in c:
         print(row)
     print("\n")
+
+    # Создаем pdf файл
+
+    c = canvas.Canvas("data/" + file_name + ".pdf")
+    c.drawString(100, 750, "Welcome to Reportlab!")
+    c.save()
