@@ -57,4 +57,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
 
     c = canvas.Canvas("data/" + file_name + ".pdf")
     c.drawString(100, 750, "Welcome to Reportlab!")
+    c.setLineWidth(10)
+    c.setStrokeColorRGB(0.2, 0.5, 0.3)
+    c.setFillColorRGB(1, 0, 1)
+    c.line(100, 700, 200, 10)
     c.save()
