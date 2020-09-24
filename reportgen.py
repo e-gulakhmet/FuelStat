@@ -1,6 +1,8 @@
 import logging
 import database
 from reportlab.pdfgen import canvas
+from reportlab.lib.units import mm
+from reportlab.lib.pagesizes import A4 
 
 
 
@@ -54,9 +56,10 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     print("\n")
 
     # Создаем pdf файл
-
-    c = canvas.Canvas("data/" + file_name + ".pdf")
-    c.drawString(100, 750, "Welcome to Reportlab!")
+    w, h = A4
+    print(w / mm, h / mm)
+    c = canvas.Canvas("data/" + file_name + ".pdf", A4)
+    c.drawString(82 * mm, h - 8.4 * mm, "FuelStat Report")
     c.setLineWidth(10)
     c.setStrokeColorRGB(0.2, 0.5, 0.3)
     c.setFillColorRGB(1, 0, 1)
