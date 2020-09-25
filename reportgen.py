@@ -56,12 +56,26 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     print("\n")
 
     # Создаем pdf файл
-    w, h = A4
-    print(w / mm, h / mm)
-    c = canvas.Canvas("data/" + file_name + ".pdf", A4)
-    c.drawString(82 * mm, h - 8.4 * mm, "FuelStat Report")
-    c.setLineWidth(10)
-    c.setStrokeColorRGB(0.2, 0.5, 0.3)
-    c.setFillColorRGB(1, 0, 1)
-    c.line(100, 700, 200, 10)
-    c.save()
+    w, h = A4 # Размер листа
+    pdf = canvas.Canvas("data/" + file_name + ".pdf", A4)
+
+    # Рисуем заголовок
+    pdf.drawString(82 * mm, h - 8.4 * mm, "FuelStat Report")
+    
+    # Рисуем параметры полученной таблицы
+    pdf.drawString(8 * mm, h - 29 * mm, "Start Date: " + start_date)
+    pdf.drawString(55 * mm, h - 29 * mm, "End Date: " + end_date)
+    # Создаем строку с названями заправки
+    gs = str(gas_names[0])
+    if gas_names in None:
+        gs = "All"
+    else:
+        for n in gas_names:
+            gs += ", " + str(n)
+    # Выводим созданную строку
+    pdf.drawString(55 * mm, h - 29 * mm, "Gas Stations: " + gs)
+
+    pdf.setLineWidth(2.5 * mm)
+    pdf.line(8 * mm, h - 35 * mm, 200 * mm, h - 35 * mm)
+
+    pdf.save()
