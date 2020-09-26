@@ -19,7 +19,7 @@ def main():
     name = "Texaco"
     amount = 13.1
     data = {"dtime": "2000-00-00", "odometer": 4000, "name": "Texaco", "amount": 13.1}
-    for i in range(0, 20):
+    for i in range(0, 40):
         # Создаем строку с датой тразакции
         d += random.randint(0, 5)
         if (d > 31):
@@ -46,7 +46,7 @@ def main():
                     "name": name,
                     "amount": amount})
 
-    with open('trans.csv', 'w', newline='') as csvfile:
+    with open('data/trans.csv', 'w', newline='') as csvfile:
         # Задаем столбцы, в которые будем заносить данные
         fieldnames = ["dtime", "odometer", "name", "amount"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)

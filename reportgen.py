@@ -2,7 +2,9 @@ import logging
 import database
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import mm
-from reportlab.lib.pagesizes import A4 
+from reportlab.lib import colors
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import Table, TableStyle
 
 
 
@@ -33,9 +35,9 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                   # цена галлона,
                   # количество галлонов,
                   # цена заправки,
-                  # пробег между заправками,
                   # пробег на одном галлоне,
-                  # стоимость пробега в одну милю,
+                  # стоимость одной милю,
+                  # пробег между заправками,
                   # стоимость одного дня
                   """t.id, t.dtime, f.name,
                      t.odometer,
@@ -45,14 +47,23 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                      t.amount * f.price / 100,
                      t.odometer - tt.odometer,
                      (t.odometer - tt.odometer) / t.amount,
-                     t.amount / (t.odometer - tt.odometer),
                      t.amount / (t.odometer - tt.odometer)
                      """,
                   condition)
     logger.info("Report data was selected from database")
 
+    # Создаем список с данными, которые вставим в таблицу
+    data = [["DATE", "GAS", "ODOMETER", "GALLON PRICE",
+             "GALLONS", "COST", "MPG", "MILE PRICE"]]
     for row in c:
+        lst = []
+        for e in row:
+            if type(e) is float:
+                e = "%.1f" % e
+            lst.append(e)
+        data.append(lst)
         print(row)
+        
     print("\n")
 
     # Создаем pdf файл
@@ -79,6 +90,16 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     pdf.setLineWidth(1 * mm)
     pdf.line(8 * mm, h - 35 * mm, 200 * mm, h - 35 * mm)
 
-    
+    # Создаем таблицу
+    t = Table(data)
+    t_w, t_h = t.wrap(0, 0)
+    t.wrapOn(pdf, w, h)
+    t.setStyle(TableStyle([
+        ("BACKGROUND", (0, 0), (-1, 0), colors.blue),
+        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+        ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+    ]))
+    # Выводим таблицу
+    t.drawOn(pdf, 9 * mm, h - 42 * mm - t_h)
 
     pdf.save()
