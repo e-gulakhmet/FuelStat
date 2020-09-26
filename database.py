@@ -46,7 +46,7 @@ class DataBase():
         try:
             self.db = sqlite3.connect(database_file)
             self.connected = True
-            self.logger.info("Connected to database file(" + database_file)
+            self.logger.info("Connected to database file(" + database_file + ')')
         except sqlite3.Error as e:
             self.logger.error(e)
 
@@ -79,43 +79,36 @@ class DataBase():
             self.logger.warning("Not connected to database")
     
 
-    # def insert_file(self, table_name, colums=None, file_path=None):
-    #     """
-    #     Вставляет данные из файла в созданную таблицу
+    def create_view(self, view_name, table_name, data='*', condition=None): # Создать таблицу
+        """
+        Создает вид таблицы(объект созданный на основе другой таблицы)
+        исходя из указанной информации.
 
-    #     Parameters
-    #     ----------
-    #     table_name : str
-    #         Имя таблицы в которую нужно вставить данные.
-    #     colums : str
-    #         Имена столбцов в таблицу,
-    #         в которые нужно будет вставить данные.
-    #         Записываются через запятую.
-    #         Например: father, mother, childcount.
-    #         Если ничего не указывать, то данные
-    #         присвоятся всем столбцам, взависимости от 
-    #         последовательности переданных данных.
-    #     file_path : str
-    #         Путь к файлу, в котором содержаться данные
-    #         для таблицы
-    #     """
-    #     if self.connected:
-    #         data = []
-    #         with open(file_path, newline="\n") as csv_file:
-    #             for row in csv.reader(csv_file, delimiter=","):
-    #                 lst = []
-    #                 for t in row:
-    #                     try:
-    #                         lst.append(t)
-    #                     except ValueError:
-    #                         lst.append(int(t))
-    #                         continue
-    #                 data.append(tuple(lst))
-    #         self.logger.debug("File was opened")
-
-    #         self.insert_list(table_name, colums, data)
-    #     else:
-    #         self.logger.warning("Not connected to database")
+        Parameters
+        -----------
+        view_name : str
+            Название которое нужно установить для вида таблица.
+        data : str
+            Данные, которые нужно вставить из таблицы
+            Указываются через запятую.
+            Например: father, mother, childcount
+        table_name : str
+            Название таблицы из которой, на основе которых будет
+            создан вид таблицы
+        """
+        if self.connected is True:
+            self.logger.debug("Creating view...")
+            command = "CREATE VIEW " + view_name + " AS SELECT " + data + " FROM " + table_name
+            if condition is not None:
+                command += " WHERE " + condition
+            try:
+                self.logger.debug(command)
+                self.db.execute(command)
+                self.logger.info("View " + view_name + " was created")
+            except sqlite3.Error as e:
+                self.logger.warning(e)
+        else:
+            self.logger.warning("Not connected to database")
 
 
     def insert(self, table_name, colums=None, data=None): # Вставить значения в таблицу
