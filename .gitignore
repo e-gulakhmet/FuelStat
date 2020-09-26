@@ -134,3 +134,4 @@ dmypy.json
 __pycache__/
 logging.log
 
+data/report.pdf

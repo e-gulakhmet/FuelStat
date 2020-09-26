@@ -64,18 +64,21 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     
     # Рисуем параметры полученной таблицы
     pdf.drawString(8 * mm, h - 29 * mm, "Start Date: " + start_date)
-    pdf.drawString(55 * mm, h - 29 * mm, "End Date: " + end_date)
+    pdf.drawString(60 * mm, h - 29 * mm, "End Date: " + end_date)
+    gs = ""
     # Создаем строку с названями заправки
-    gs = str(gas_names[0])
-    if gas_names in None:
+    if gas_names is None:
         gs = "All"
     else:
+        gs = str(gas_names[0])
         for n in gas_names:
             gs += ", " + str(n)
     # Выводим созданную строку
-    pdf.drawString(55 * mm, h - 29 * mm, "Gas Stations: " + gs)
+    pdf.drawString(110 * mm, h - 29 * mm, "Gas Stations: " + gs)
 
-    pdf.setLineWidth(2.5 * mm)
+    pdf.setLineWidth(1 * mm)
     pdf.line(8 * mm, h - 35 * mm, 200 * mm, h - 35 * mm)
+
+    
 
     pdf.save()
