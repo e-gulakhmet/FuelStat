@@ -7,11 +7,6 @@ import reportgen
 
 
 
-# TODO: Добавить проверку таблиц в базе данных на последовательность данных пробега
-# TODO: Добавить проверку даты транзакции
-
-
-
 def main():
     parser = argparse.ArgumentParser(prog="fuel_stat",
                                      description="""Creating statistics 

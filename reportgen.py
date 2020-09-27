@@ -8,6 +8,14 @@ from reportlab.platypus import Table, TableStyle
 
 
 
+# TODO: Сделать переход на следующую страницу, если данных слишком много
+# TODO: Добавить в таблицу данные о цене одного дня и пробеге между заправками
+# TODO: Добавить статистику по выгодности заправок
+# TODO: Добавить информацию о самой часто используемой заправке
+# TODO: Добавить информацию о среднем расходе
+
+
+
 def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     logger = logging.getLogger("REPORT")  
     logger.debug("Report parameters: start_date[" + str(start_date) + ']' +
@@ -41,38 +49,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                    """t.fuel_id = f.id 
                       AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
                       ORDER BY t.dtime""")
-
-                #   """CREATE VIEW v_trans AS
-                #      SELECT
-                #         t.id, t.dtime, f.name,
-                #         t.odometer as сur_odo,
-                #         tt.odometer as last_odo,
-                #         f.price,
-                #         t.amount,
-                #         t.amount * f.price / 100 as cost,
-                #         (t.odometer - tt.odometer) / t.amount as mpg,
-                #         t.amount / (t.odometer - tt.odometer )
-                #      FROM 
-                #         trans t, trans tt, fuel f
-                #      WHERE
-                #         t.fuel_id = f.id 
-                #         AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)""")
-
-
-    # c = db.select("trans t, trans tt, fuel f",
-    #               """t.id, t.dtime, f.name,
-    #                  t.odometer,
-    #                  tt.odometer,
-    #                  f.price,
-    #                  t.amount,
-    #                  t.amount * f.price / 100,
-    #                  t.odometer - tt.odometer,
-    #                  (t.odometer - tt.odometer) / t.amount,
-    #                  t.amount / (t.odometer - tt.odometer)
-    #                  """,
-    #               condition)
-
-
 
     logger.info("Report data was selected from database")
 
@@ -113,6 +89,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     pdf.line(8 * mm, h - 35 * mm, 200 * mm, h - 35 * mm)
 
     # Создаем таблицу
+    # Получаем данные из базы данных
     table_data = table_data_to_list(db.select("v_trans", 
                                               """dtime, name,
                                                  odometer, gallon_price,
@@ -120,8 +97,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  mile_price""",
                                               condition))
     table_data.insert(0, 
-                     ["DATE", "GAS", "ODOMETER", "GALLON PRICE",
-                      "GALLONS", "COST", "MPG", "MILE PRICE"])
+                      ["DATE", "GAS", "ODOMETER", "GALLON PRICE",
+                       "GALLONS", "COST", "MPG", "MILE PRICE"])
     t = Table(table_data)
     t_w, t_h = t.wrap(0, 0)
     t.wrapOn(pdf, w, h)
@@ -133,7 +110,10 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Выводим таблицу
     t.drawOn(pdf, 9 * mm, h - 42 * mm - t_h)
 
+    pdf.showPage()
+
     pdf.save()
+    logger.info("Report was saved")
 
 
 def table_data_to_list(data):

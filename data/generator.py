@@ -19,7 +19,7 @@ def main():
     name = "Texaco"
     amount = 13.1
     data = {"dtime": "2000-00-00", "odometer": 4000, "name": "Texaco", "amount": 13.1}
-    for i in range(0, 40):
+    for i in range(0, 60):
         # Создаем строку с датой тразакции
         d += random.randint(0, 5)
         if (d > 31):
