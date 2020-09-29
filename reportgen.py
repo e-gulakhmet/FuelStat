@@ -97,8 +97,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  mile_price""",
                                               condition))
     table_data.insert(0, 
-                      ["DATE", "GAS", "ODOMETER", "GALLON PRICE",
-                       "GALLONS", "COST", "MPG", "MILE PRICE"])
+                      ["DATE", "GAS", "ODOMETER", "GALLON \n PRICE",
+                       "GALLONS", "COST", "MPG", "MILE \n PRICE"])
     t = Table(table_data)
     t_w, t_h = t.wrap(0, 0)
     t.wrapOn(pdf, w, h)
@@ -111,6 +111,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     t.drawOn(pdf, 9 * mm, h - 42 * mm - t_h)
 
     pdf.showPage()
+
+    pdf.drawString(0, 0, "Hello")
 
     pdf.save()
     logger.info("Report was saved")
