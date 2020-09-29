@@ -99,6 +99,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     table_data.insert(0, 
                       ["DATE", "GAS", "ODOMETER", "GALLON \n PRICE",
                        "GALLONS", "COST", "MPG", "MILE \n PRICE"])
+    # Проверяем, если данные слишком много,
+    # то переносим оставшиеся данные на следующую страницу
     t = Table(table_data)
     t_w, t_h = t.wrap(0, 0)
     t.wrapOn(pdf, w, h)
