@@ -1,11 +1,12 @@
 import logging
 import database
-from reportlab.pdfgen import canvas
+# from reportlab.pdfgen import canvas
+from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph
-from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Frame, PageTemplate
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 
 # TODO: Добавить в таблицу данные о цене одного дня и пробеге между заправками
@@ -66,12 +67,49 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     w, h = A4 # Размер листа
 
     # Cоздаем документ, в котором будут содержать полученные данные
-    doc = SimpleDocTemplate("data/" + file_name + ".pdf", pagesize=A4)
+    doc = SimpleDocTemplate("data/" + file_name + ".pdf",
+                            pagesize=A4,
+                            topMargin=5 * mm,
+                            bottomMargin=5 * mm,
+                            leftMargin=10 * mm,
+                            rightMargin=10 * mm,
+                            showBoundary=0)
     elements = [] # Список, который будет содержать все элементы документа
     styles = getSampleStyleSheet()
+    # Создаем нужные нам стили
+    s_header = styles["Heading1"]
+    s_header.alignment = TA_CENTER
 
-    p = Paragraph("FuelStat", styles["Heading1"])
-    elements.append(p)
+    s_param = styles["Normal"]
+    s_param.fontSize = 12
+    s_param.spaceAfter = 10
+
+    # Рисование на документе
+    # frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
+    #               id='normal')
+    # template = PageTemplate(id='test', frames=frame, onPage=footer)
+    # doc.addPageTemplates([template])
+
+    # Название документа
+    elements.append(Paragraph("FuelStatReport", s_header))
+    elements.append(Spacer(0, 20))
+    
+    # Параметры отчета
+    elements.append(Paragraph("Start Date: " + start_date, s_param))
+    elements.append(Paragraph("End Date: " + end_date, s_param))
+    # parameters = "Start Date: " + start_date + "    End Date: " + end_date
+    gs = ""
+    # Создаем строку с названями заправки
+    if gas_names is None:
+        gs = "All"
+    else:
+        gs = str(gas_names[0])
+        for n in gas_names:
+            gs += ", " + str(n)
+    # # Выводим созданную строку
+    # parameters += "    Gas Stations: " + gs
+    elements.append(Paragraph("Gas Stations: " + gs, s_param))
+    elements.append(Spacer(0, 20))
 
     # Получаем данные из базы данных
     table_data = table_data_to_list(db.select("v_trans", 
@@ -80,12 +118,12 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  amount, cost, mpg,
                                                  mile_price""",
                                               condition))
-    table_data.insert(0, 
+    table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER", "GALLON \n PRICE",
                        "GALLONS", "COST", "MPG", "MILE \n PRICE"])
 
     # Создаем таблицу
-    t = Table(table_data, repeatRows=1)
+    t = Table(table_data, repeatRows=True)
     t.setStyle(TableStyle([
                           ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
                           ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
@@ -160,3 +198,17 @@ def table_data_to_list(data):
             lst.append(e)
         c.append(lst)
     return c
+
+
+
+# def footer(canvas, doc): # Функция позволяющая рисовать на документе
+#     styles = getSampleStyleSheet()
+#     canvas.saveState()
+#     # P = Paragraph("FuelStat", styles["Heading1"])
+
+#     # w, h = P.wrap(doc.width, doc.bottomMargin)
+#     # P.drawOn(canvas, doc.leftMargin, h)
+
+#     # .drawString(8 * mm, h - 29 * mm, "Start Date: " + start_date)
+#     # pdf.drawString(60 * mm, h - 29 * mm, "End Date: " + end_date)
+#     # canvas.restoreState()
