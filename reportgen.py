@@ -4,8 +4,9 @@ import database
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.lib import colors
+from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Frame, PageTemplate
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Frame, PageTemplate, Flowable
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 
@@ -13,6 +14,21 @@ from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 # TODO: Добавить статистику по выгодности заправок
 # TODO: Добавить информацию о самой часто используемой заправке
 # TODO: Добавить информацию о среднем расходе
+
+
+
+class MyLine(Flowable):
+    """
+    Custom line for DocTemplate
+    """
+
+    def __init__(self, width, height):
+        super().__init__()
+        self.width = width
+        self.height = height
+    
+    def draw(self):
+        self.canv.line(0, self.height, self.width, self.height)
 
 
 
@@ -95,8 +111,10 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     elements.append(Spacer(0, 20))
     
     # Параметры отчета
-    elements.append(Paragraph("Start Date: " + start_date, s_param))
-    elements.append(Paragraph("End Date: " + end_date, s_param))
+    param_info = "Start Date: " + start_date 
+    param_info += "&nbsp;&nbsp;&nbsp;&nbsp; End Date: " + end_date
+    # elements.append(Paragraph("Start Date: " + start_date, s_param))
+    # elements.append(Paragraph("End Date: " + end_date, s_param))
     # parameters = "Start Date: " + start_date + "    End Date: " + end_date
     gs = ""
     # Создаем строку с названями заправки
@@ -108,7 +126,12 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
             gs += ", " + str(n)
     # # Выводим созданную строку
     # parameters += "    Gas Stations: " + gs
-    elements.append(Paragraph("Gas Stations: " + gs, s_param))
+    param_info += "&nbsp;&nbsp;&nbsp;&nbsp; Gas Stations: " + gs
+    # elements.append(Paragraph("Gas Stations: " + gs, s_param))
+    elements.append(Paragraph(param_info, s_param))
+
+    # Рисуем линию после параметров отчета
+    elements.append(MyLine(doc.width, 0))
     elements.append(Spacer(0, 20))
 
     # Получаем данные из базы данных
