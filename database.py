@@ -79,7 +79,7 @@ class DataBase():
             self.logger.warning("Not connected to database")
     
 
-    def create_view(self, view_name, table_name, data='*', condition=None): # Создать таблицу
+    def create_view(self, view_name, table_name, data='*', condition=None, re_create=False): # Создать таблицу
         """
         Создает вид таблицы(объект созданный на основе другой таблицы)
         исходя из указанной информации.
@@ -88,15 +88,24 @@ class DataBase():
         -----------
         view_name : str
             Название которое нужно установить для вида таблица.
+        table_name : str
+            Название таблицы из которой, на основе которых будет
+            создан вид таблицы
         data : str
             Данные, которые нужно вставить из таблицы
             Указываются через запятую.
             Например: father, mother, childcount
-        table_name : str
-            Название таблицы из которой, на основе которых будет
-            создан вид таблицы
+        condition : str
+            Условие, по которому будут подбираться данные.
+            Например: childcount > 1.
+        re_create : bool
+            Пересоздание таблицы
         """
         if self.connected is True:
+            if re_create is True:
+                self.logger.debug("Deleting view...")
+                self.db.execute("DROP VIEW IF EXISTS " + view_name)
+                self.logger.info("View was deleted")
             self.logger.debug("Creating view...")
             command = "CREATE VIEW " + view_name + " AS SELECT " + data + " FROM " + table_name
             if condition is not None:

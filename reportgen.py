@@ -10,7 +10,7 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 
 
-# TODO: Добавить в таблицу данные о цене одного дня и пробеге между заправками
+# TODO: Добавить в таблицу данные о цене одного дня
 # TODO: Добавить статистику по выгодности заправок
 # TODO: Добавить информацию о самой часто используемой заправке
 # TODO: Добавить информацию о среднем расходе
@@ -29,6 +29,7 @@ class MyLine(Flowable):
     
     def draw(self):
         self.canv.line(0, self.height, self.width, self.height)
+
 
 
 
@@ -57,6 +58,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                    """t.id, t.dtime, f.name,
                       t.odometer,
                       tt.odometer as last_odometer,
+                      t.odometer - tt.odometer as mbs,
                       f.price as gallon_price,
                       t.amount,
                       t.amount * f.price / 100 as cost,
@@ -64,7 +66,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                       t.amount * f.price / (t.odometer - tt.odometer) as mile_price""",
                    """t.fuel_id = f.id 
                       AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
-                      ORDER BY t.dtime""")
+                      ORDER BY t.dtime""",
+                   True)
 
 
     # Получаем данные для таблицы из базы дыннах
@@ -95,7 +98,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Создаем нужные нам стили
     s_header = styles["Heading1"]
     s_header.alignment = TA_CENTER
-
     s_param = styles["Normal"]
     s_param.fontSize = 12
     s_param.spaceAfter = 10
@@ -137,78 +139,33 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Получаем данные из базы данных
     table_data = table_data_to_list(db.select("v_trans", 
                                               """dtime, name,
-                                                 odometer, gallon_price,
+                                                 odometer, mbs, gallon_price,
                                                  amount, cost, mpg,
                                                  mile_price""",
                                               condition))
     table_data.insert(0,
-                      ["DATE", "GAS", "ODOMETER", "GALLON \n PRICE",
+                      ["DATE", "GAS", "ODOMETER",
+                       "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
                        "GALLONS", "COST", "MPG", "MILE \n PRICE"])
 
     # Создаем таблицу
-    t = Table(table_data, repeatRows=True)
-    t.setStyle(TableStyle([
-                          ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                          ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                          ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                          ]))
-    
-    elements.append(t)
-    
+    main_table = Table(table_data, repeatRows=True)
+    main_table.setStyle(TableStyle([
+                                   ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                   ]))
+    elements.append(main_table)
+
+    # Формируем таблицу
+    # Пробег между заправками:
+    # Если это первая заправка, то сохраняем название и пробег
+    # переходим к следующей
+    # Если название заправки одинаковое, переходим к следующей
+
+
+   
     doc.build(elements)
-
-    # pdf = canvas.Canvas("data/" + file_name + ".pdf", A4)
-
-    # # Рисуем заголовок
-    # pdf.drawString(82 * mm, h - 8.4 * mm, "FuelStat Report")
-    
-    # # Рисуем параметры полученной таблицы
-    # pdf.drawString(8 * mm, h - 29 * mm, "Start Date: " + start_date)
-    # pdf.drawString(60 * mm, h - 29 * mm, "End Date: " + end_date)
-    # gs = ""
-    # # Создаем строку с названями заправки
-    # if gas_names is None:
-    #     gs = "All"
-    # else:
-    #     gs = str(gas_names[0])
-    #     for n in gas_names:
-    #         gs += ", " + str(n)
-    # # Выводим созданную строку
-    # pdf.drawString(110 * mm, h - 29 * mm, "Gas Stations: " + gs)
-
-    # pdf.setLineWidth(1 * mm)
-    # pdf.line(8 * mm, h - 35 * mm, 200 * mm, h - 35 * mm)
-
-    # # Создаем таблицу
-    # # Получаем данные из базы данных
-    # table_data = table_data_to_list(db.select("v_trans", 
-    #                                           """dtime, name,
-    #                                              odometer, gallon_price,
-    #                                              amount, cost, mpg,
-    #                                              mile_price""",
-    #                                           condition))
-    # table_data.insert(0, 
-    #                   ["DATE", "GAS", "ODOMETER", "GALLON \n PRICE",
-    #                    "GALLONS", "COST", "MPG", "MILE \n PRICE"])
-    # # Проверяем, если данные слишком много,
-    # # то переносим оставшиеся данные на следующую страницу
-    # t = Table(table_data, repeatRows=1)
-    # t_w, t_h = t.wrap(0, 0)
-    # t.wrapOn(pdf, w, h)
-    # t.setStyle(TableStyle([
-    #     ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-    #     ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-    #     ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-    # ]))
-    # # Выводим таблицу
-    # t.drawOn(pdf, 9 * mm, h - 42 * mm - t_h)
-
-    # pdf.showPage()
-
-    # pdf.drawString(0, 0, "Hello")
-
-    # pdf.save()
-    # logger.info("Report was saved")
 
 
 def table_data_to_list(data):
@@ -221,7 +178,6 @@ def table_data_to_list(data):
             lst.append(e)
         c.append(lst)
     return c
-
 
 
 # def footer(canvas, doc): # Функция позволяющая рисовать на документе

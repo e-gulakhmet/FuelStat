@@ -76,15 +76,5 @@ def main():
         reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 
 
-    # for row in db.select("fuel"):
-    #     print(row)
-    # print("\n")
-
-    # for row in db.select("trans"):
-    #     print(row)
-    # print("\n")
-
-
-
 if __name__ == "__main__":
     main()
