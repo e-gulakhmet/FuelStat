@@ -4,16 +4,16 @@ import database
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.lib import colors
-from reportlab.graphics.shapes import Drawing
 from reportlab.lib.pagesizes import A4
-from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Frame, PageTemplate, Flowable
-from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Flowable
+from reportlab.lib.styles import getSampleStyleSheet
 
 
 # TODO: Добавить в таблицу данные о цене одного дня
 # TODO: Добавить статистику по выгодности заправок
 # TODO: Добавить информацию о самой часто используемой заправке
 # TODO: Добавить информацию о среднем расходе
+# TODO: Сделать перенос таблицы(маленькая) в правую сторону
 
 
 
@@ -41,6 +41,16 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                  ", file_name[" + str(file_name) + ']')
     
     db = database.DataBase("data/database.db")
+
+    # Создаем строку условия для select
+    condition = "t.fuel_id = f.id AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)"
+    if start_date is not None:
+        condition += " AND t.dtime >= '" + str(start_date) + "'"
+    if end_date is not None:
+        condition += " AND t.dtime <= '" + str(end_date) + "'"
+    if gas_names is not None:
+        condition += " AND f.name in " + str(tuple(gas_names))
+    condition += " ORDER BY t.dtime"
     
     # Данные, получаемые из таблицы:
     # id, дата, название заправки,
@@ -64,23 +74,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                       t.amount * f.price / 100 as cost,
                       (t.odometer - tt.odometer) / t.amount as mpg,
                       t.amount * f.price / (t.odometer - tt.odometer) as mile_price""",
-                   """t.fuel_id = f.id 
-                      AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
-                      ORDER BY t.dtime""",
+                   condition,
                    True)
-
-
-    # Получаем данные для таблицы из базы дыннах
-    # Создаем строку условия для select
-    condition = ""
-    if start_date is not None:
-        condition = "dtime >= '" + str(start_date) + "'"
-    else:
-        condition = "dtime >= '1000-00-00'"
-    if end_date is not None:
-        condition += " AND dtime <= '" + str(end_date) + "'"
-    if gas_names is not None:
-        condition += " AND name in " + str(tuple(gas_names))
 
     # Создаем pdf файл
     w, h = A4 # Размер листа
@@ -141,8 +136,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                               """dtime, name,
                                                  odometer, mbs, gallon_price,
                                                  amount, cost, mpg,
-                                                 mile_price""",
-                                              condition))
+                                                 mile_price"""))
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
                        "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
@@ -158,10 +152,33 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     elements.append(main_table)
 
     # Формируем таблицу
-    # Пробег между заправками:
-    # Если это первая заправка, то сохраняем название и пробег
+    # Цена одного дня:
+    # Проверяем дату заправки
+    data = table_data_to_list(db.select("v_trans", "dtime, cost"))
+    table_data.clear()
+    cost = 0
+    date = data[0][0]
+    for day in data:
+        if day[0] == date or day[0] == data[0][0]:
+            cost += float(day[1])
+            continue
+        else:
+            table_data.append([date, cost])
+            date = day[0]
+            cost = float(day[1])
+    # table_data.insert()
+    days_table = Table(table_data, repeatRows=True)
+    days_table.setStyle(TableStyle([
+                                   ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                   ]))
+    elements.append(days_table)
+    # Сохраняем дату и добавляем к сумме цену заправки
     # переходим к следующей
-    # Если название заправки одинаковое, переходим к следующей
+    # Если числа разные, то сохраняем дату и сумму в список
+    # затем обнуляем ее 
+    # Иначе добавляем цену заправки к сумме и переходим к следующей заправке
 
 
    
