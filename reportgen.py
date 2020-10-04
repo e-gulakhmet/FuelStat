@@ -91,11 +91,13 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     elements = [] # Список, который будет содержать все элементы документа
     styles = getSampleStyleSheet()
     # Создаем нужные нам стили
-    s_header = styles["Heading1"]
-    s_header.alignment = TA_CENTER
+    s_header_1 = styles["Heading1"]
+    s_header_1.alignment = TA_CENTER
     s_param = styles["Normal"]
     s_param.fontSize = 12
     s_param.spaceAfter = 10
+    s_header_2 = styles["Heading1"]
+    s_header_2.alignment = TA_CENTER
 
     # Рисование на документе
     # frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
@@ -104,7 +106,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # doc.addPageTemplates([template])
 
     # Название документа
-    elements.append(Paragraph("FuelStatReport", s_header))
+    elements.append(Paragraph("FuelStatReport", s_header_1))
     elements.append(Spacer(0, 20))
     
     # Параметры отчета
@@ -130,7 +132,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Рисуем линию после параметров отчета
     elements.append(MyLine(doc.width, 0))
     elements.append(Spacer(0, 20))
-
+    elements.append(Paragraph("Information about gas stations", s_header_2))
     # Получаем данные из базы данных
     table_data = table_data_to_list(db.select("v_trans", 
                                               """dtime, name,
@@ -150,8 +152,10 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
                                    ]))
     elements.append(main_table)
+    elements.append(Spacer(0, 20))
 
     # Формируем таблицу
+    elements.append(Paragraph("Information about gas stations", s_header_2))
     # Цена одного дня:
     # Проверяем дату заправки
     data = table_data_to_list(db.select("v_trans", "dtime, cost"))
@@ -166,19 +170,36 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
             table_data.append([date, cost])
             date = day[0]
             cost = float(day[1])
-    days_table1 = Table(table_data[:int((len(data) - 1) / 2)], repeatRows=True)
+    days_table1 = Table(table_data[:int((len(data) - 1) / 4)], repeatRows=True)
     days_table1.setStyle(TableStyle([
-                                   ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                   ]))
-    days_table2 = Table(table_data[int((len(data) - 1) / 2):], repeatRows=True)
+                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                    ]))
+    days_table2 = Table(table_data[int((len(data) - 1) / 4):2 * int((len(data) - 1) / 4)], repeatRows=True)
     days_table2.setStyle(TableStyle([
-                                   ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                   ]))
-    days_table = Table([[days_table1, days_table2]])
+                                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                    ]))
+    days_table3 = Table(table_data[2 * int((len(data) - 1) / 4):3 * int((len(data) - 1) / 4)], repeatRows=True)
+    days_table3.setStyle(TableStyle([
+                                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                    ]))
+    days_table4 = Table(table_data[3 * int((len(data) - 1) / 4):], repeatRows=True)
+    days_table4.setStyle(TableStyle([
+                                    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+                                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
+                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                    ]))
+
+    days_table = Table([[days_table1, days_table2, days_table3, days_table4]])
                                    
     elements.append(days_table)
     # Сохраняем дату и добавляем к сумме цену заправки
@@ -198,7 +219,7 @@ def table_data_to_list(data):
         lst = []
         for e in row:
             if type(e) is float:
-                e = "%.1f" % e
+                e = round(e, 2)
             lst.append(e)
         c.append(lst)
     return c
