@@ -166,13 +166,20 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
             table_data.append([date, cost])
             date = day[0]
             cost = float(day[1])
-    # table_data.insert()
-    days_table = Table(table_data, repeatRows=True)
-    days_table.setStyle(TableStyle([
+    days_table1 = Table(table_data[:int((len(data) - 1) / 2)], repeatRows=True)
+    days_table1.setStyle(TableStyle([
                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
                                    ]))
+    days_table2 = Table(table_data[int((len(data) - 1) / 2):], repeatRows=True)
+    days_table2.setStyle(TableStyle([
+                                   ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
+                                   ]))
+    days_table = Table([[days_table1, days_table2]])
+                                   
     elements.append(days_table)
     # Сохраняем дату и добавляем к сумме цену заправки
     # переходим к следующей
