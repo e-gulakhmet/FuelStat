@@ -99,12 +99,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     s_header_2 = styles["Heading1"]
     s_header_2.alignment = TA_CENTER
 
-    # Рисование на документе
-    # frame = Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height,
-    #               id='normal')
-    # template = PageTemplate(id='test', frames=frame, onPage=footer)
-    # doc.addPageTemplates([template])
-
     # Название документа
     elements.append(Paragraph("FuelStatReport", s_header_1))
     elements.append(Spacer(0, 20))
@@ -112,9 +106,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Параметры отчета
     param_info = "Start Date: " + start_date 
     param_info += "&nbsp;&nbsp;&nbsp;&nbsp; End Date: " + end_date
-    # elements.append(Paragraph("Start Date: " + start_date, s_param))
-    # elements.append(Paragraph("End Date: " + end_date, s_param))
-    # parameters = "Start Date: " + start_date + "    End Date: " + end_date
     gs = ""
     # Создаем строку с названями заправки
     if gas_names is None:
@@ -139,69 +130,48 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  odometer, mbs, gallon_price,
                                                  amount, cost, mpg,
                                                  mile_price"""))
+
+
+    # Добваление цены одного дня в таблицу:
+    # Проверяем дату заправки
+    merge_rows = []
+    merging = False
+    cost = 0
+    for i in range(len(table_data)):
+        if table_data[i][0] == table_data[0][0]:
+            cost += float(table_data[i][6])
+        elif table_data[i][0] == table_data[i - 1][0]:
+            cost += float(table_data[i][6])
+            if merging is False:
+                merge_rows.append([i, ])
+                merging = True
+        else:
+            if len(merge_rows) != 0 and merging is True:
+                table_data[merge_rows[len(merge_rows) - 1][0] - 1].append(cost)
+                merge_rows[len(merge_rows) - 1].append(i)
+                merging = False
+            else:
+                table_data[i - 1].append(cost)
+            cost = float(table_data[i][6])
+    print(merge_rows)
+
+
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
                        "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
-                       "GALLONS", "COST", "MPG", "MILE \n PRICE"])
+                       "GALLONS", "COST", "MPG", "MILE \n PRICE", "DAY \n PRICE"])
 
     # Создаем таблицу
     main_table = Table(table_data, repeatRows=True)
-    main_table.setStyle(TableStyle([
-                                   ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                   ]))
+    table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
+    for row in merge_rows:
+        table_style.append(("SPAN", (9, row[0]), (9, row[1])))
+
+    main_table.setStyle(TableStyle(table_style))
     elements.append(main_table)
     elements.append(Spacer(0, 20))
-
-    # Формируем таблицу
-    elements.append(Paragraph("Information about gas stations", s_header_2))
-    # Цена одного дня:
-    # Проверяем дату заправки
-    data = table_data_to_list(db.select("v_trans", "dtime, cost"))
-    table_data.clear()
-    cost = 0
-    date = data[0][0]
-    for day in data:
-        if day[0] == date or day[0] == data[0][0]:
-            cost += float(day[1])
-            continue
-        else:
-            table_data.append([date, cost])
-            date = day[0]
-            cost = float(day[1])
-    days_table1 = Table(table_data[:int((len(data) - 1) / 4)], repeatRows=True)
-    days_table1.setStyle(TableStyle([
-                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                    ]))
-    days_table2 = Table(table_data[int((len(data) - 1) / 4):2 * int((len(data) - 1) / 4)], repeatRows=True)
-    days_table2.setStyle(TableStyle([
-                                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                    ]))
-    days_table3 = Table(table_data[2 * int((len(data) - 1) / 4):3 * int((len(data) - 1) / 4)], repeatRows=True)
-    days_table3.setStyle(TableStyle([
-                                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                    ]))
-    days_table4 = Table(table_data[3 * int((len(data) - 1) / 4):], repeatRows=True)
-    days_table4.setStyle(TableStyle([
-                                    ('VALIGN', (0, 0), (-1, -1), 'TOP'),
-                                    ('ALIGN', (0, 0), (-1, -1), 'LEFT'),
-                                    ("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)
-                                    ]))
-
-    days_table = Table([[days_table1, days_table2, days_table3, days_table4]])
-                                   
-    elements.append(days_table)
     # Сохраняем дату и добавляем к сумме цену заправки
     # переходим к следующей
     # Если числа разные, то сохраняем дату и сумму в список
@@ -223,16 +193,3 @@ def table_data_to_list(data):
             lst.append(e)
         c.append(lst)
     return c
-
-
-# def footer(canvas, doc): # Функция позволяющая рисовать на документе
-#     styles = getSampleStyleSheet()
-#     canvas.saveState()
-#     # P = Paragraph("FuelStat", styles["Heading1"])
-
-#     # w, h = P.wrap(doc.width, doc.bottomMargin)
-#     # P.drawOn(canvas, doc.leftMargin, h)
-
-#     # .drawString(8 * mm, h - 29 * mm, "Start Date: " + start_date)
-#     # pdf.drawString(60 * mm, h - 29 * mm, "End Date: " + end_date)
-#     # canvas.restoreState()
