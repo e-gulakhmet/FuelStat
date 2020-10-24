@@ -131,24 +131,38 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  amount, cost, mpg,
                                                  mile_price"""))
 
+    table_data.insert(0,
+                      ["DATE", "GAS", "ODOMETER",
+                       "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
+                       "GALLONS", "COST", "MPG", "MILE \n PRICE", "DAY \n PRICE"])
 
     # Добваление цены одного дня в таблицу:
     # Проверяем дату заправки
     merge_rows = []
     merging = False
     cost = 0
-    for i in range(len(table_data)):
-        if table_data[i][0] == table_data[0][0]:
+    for i in range(1, len(table_data)):
+        # Если дата текущей равна дате первой заправки
+        # или дата текущей заправки равна дате предыдущей заправки
+        if table_data[i][0] == table_data[1][0] or table_data[i][0] == table_data[i - 1][0]:
+            # Добавляем цену заправки к сумме
             cost += float(table_data[i][6])
-        elif table_data[i][0] == table_data[i - 1][0]:
-            cost += float(table_data[i][6])
+            if table_data[i][0] == table_data[len(table_data) - 1][0]:
+                
             if merging is False:
-                merge_rows.append([i, ])
+                if table_data[i][0] == table_data[1][0]:
+                    merge_rows.append([i, ])
+                else:
+                    merge_rows.append([i - 1, ])
                 merging = True
         else:
             if len(merge_rows) != 0 and merging is True:
-                table_data[merge_rows[len(merge_rows) - 1][0] - 1].append(cost)
-                merge_rows[len(merge_rows) - 1].append(i)
+                if table_data[i][0] == table_data[len(table_data) - 1][0]:
+                    table_data[merge_rows[len(merge_rows) - 1][0]].append(cost + table_data[i][6])
+                    merge_rows[len(merge_rows) - 1].append(i)
+                else:
+                    table_data[merge_rows[len(merge_rows) - 1][0]].append(cost)
+                    merge_rows[len(merge_rows) - 1].append(i - 1)
                 merging = False
             else:
                 table_data[i - 1].append(cost)
@@ -156,10 +170,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     print(merge_rows)
 
 
-    table_data.insert(0,
-                      ["DATE", "GAS", "ODOMETER",
-                       "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
-                       "GALLONS", "COST", "MPG", "MILE \n PRICE", "DAY \n PRICE"])
 
     # Создаем таблицу
     main_table = Table(table_data, repeatRows=True)
@@ -172,14 +182,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     main_table.setStyle(TableStyle(table_style))
     elements.append(main_table)
     elements.append(Spacer(0, 20))
-    # Сохраняем дату и добавляем к сумме цену заправки
-    # переходим к следующей
-    # Если числа разные, то сохраняем дату и сумму в список
-    # затем обнуляем ее 
-    # Иначе добавляем цену заправки к сумме и переходим к следующей заправке
 
-
-   
     doc.build(elements)
 
 
