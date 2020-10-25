@@ -129,7 +129,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                               """dtime, name,
                                                  odometer, mbs, gallon_price,
                                                  amount, cost, mpg,
-                                                 mile_price"""))
+                                                 mile_price
+                                                 """))
 
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
@@ -137,10 +138,10 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                        "GALLONS", "COST", "MPG", "MILE \n PRICE", "DAY \n PRICE"])
 
 
-    # Условия для получиния информации из вьюшки:
+    # Условия для получения информации из вьюшки:
     # Если дата текущей заправки равна дате предыдущей заправки,
     # то прибавляем ее цену к сумме.
-    # Если даты разные, то сохраняем сумму, затем
+    # Если даты разные, то сохраняем сумму в предыдущую заправку, затем
     # сумму приравниваем к цене текущей запраки.
 
 
