@@ -13,7 +13,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 # TODO: Добавить статистику по выгодности заправок
 # TODO: Добавить информацию о самой часто используемой заправке
 # TODO: Добавить информацию о среднем расходе
-# TODO: Сделать перенос таблицы(маленькая) в правую сторону
+# TODO: Сделать значения в ячейки цены дня сумму цен заправок этого дня
 
 
 
@@ -43,7 +43,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     db = database.DataBase("data/database.db")
 
     # Создаем строку условия для select
-    condition = "t.fuel_id = f.id AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)"
+    condition = """t.fuel_id = f.id AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
+                   AND nt.id = (SELECT MIN(id) FROM trans WHERE id > t.id)"""
     if start_date is not None:
         condition += " AND t.dtime >= '" + str(start_date) + "'"
     if end_date is not None:
@@ -64,8 +65,10 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # пробег между заправками,
     # стоимость одного дня
     db.create_view("v_trans",
-                   "trans t, trans tt, fuel f",
-                   """t.id, t.dtime, f.name,
+                   "trans t, trans tt, trans nt, fuel f",
+                   """t.id, t.dtime,
+                      nt.dtime as next_dtime,
+                      f.name,
                       t.odometer,
                       tt.odometer as last_odometer,
                       t.odometer - tt.odometer as mbs,
@@ -73,7 +76,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                       t.amount,
                       t.amount * f.price / 100 as cost,
                       (t.odometer - tt.odometer) / t.amount as mpg,
-                      t.amount * f.price / (t.odometer - tt.odometer) as mile_price""",
+                      t.amount * f.price / (t.odometer - tt.odometer) as mile_price
+                      """,
                    condition,
                    True)
 
@@ -124,12 +128,21 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     elements.append(MyLine(doc.width, 0))
     elements.append(Spacer(0, 20))
     elements.append(Paragraph("Information about gas stations", s_header_2))
+
     # Получаем данные из базы данных
+    # Условия получения информации из вьюшки для цены дня:
+    # Если дата текущей заправки равна дате предыдущей заправки,
+    # то прибавляем ее цену к сумме.
+    # Если даты разные, то сохраняем сумму в предыдущую заправку, затем
+    # сумму приравниваем к цене текущей запраки.
     table_data = table_data_to_list(db.select("v_trans", 
                                               """dtime, name,
                                                  odometer, mbs, gallon_price,
                                                  amount, cost, mpg,
-                                                 mile_price
+                                                 mile_price,
+                                                 CASE next_dtime = dtime
+                                                    WHEN FALSE THEN cost
+                                                END
                                                  """))
 
     table_data.insert(0,
@@ -138,60 +151,63 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                        "GALLONS", "COST", "MPG", "MILE \n PRICE", "DAY \n PRICE"])
 
 
-    # Условия для получения информации из вьюшки:
-    # Если дата текущей заправки равна дате предыдущей заправки,
-    # то прибавляем ее цену к сумме.
-    # Если даты разные, то сохраняем сумму в предыдущую заправку, затем
-    # сумму приравниваем к цене текущей запраки.
+
 
 
     # После получения данных из вьюшки нужно создать список,
     # в котором будут хранится строки,
     # которые нужно объединить объединить в таблице.
     # Элемент списка будет выглядить вот так: [s_cell, e_cell]
-
+    merge_rows = []
+    merging = False
     # В списке, который мы получили от базы данны, проверяем:
-    # Если ячейка цены дня пустая, то проверяем:
-    # Если фложок объединения активен, ничего не делаем.
-    # Если флажок объединения не активен, записываем
-    # текущую строку, как начальную для объединения и
-    # активируем флажок объединения.
-    # Если ячейка цены дня не пустая и
-    # флажок объединения активен, то указываем текущую ячейку,
-    # как конечную для объединения.
+    for i in range(1, len(table_data)):
+        # Если ячейка цены дня пустая и флажок объединения не активен:
+        if table_data[i][9] is None and merging is False:
+            # Записываем текущую строку, как начальную для объединения и
+            # активируем флажок объединения.
+            merge_rows.append([i, ])
+            merging = True
+        # Если ячейка цены дня не пустая и флажок объединения активен,
+        elif table_data[i][9] is not None and merging is True:
+            # то указываем текущую ячейку, как конечную для объединения и
+            # выключаем флажок объединения.
+            table_data[merge_rows[len(merge_rows) - 1][0]][9] = table_data[i][9]
+            merge_rows[len(merge_rows) - 1].append(i)
+            merging = False
 
-
+    print(merge_rows)
 
     # Добваление цены одного дня в таблицу:
     # Проверяем дату заправки
-    merge_rows = []
-    merging = False
-    cost = 0
-    for i in range(1, len(table_data)):
-        # Если дата текущей равна дате первой заправки
-        # или дата текущей заправки равна дате предыдущей заправки
-        if table_data[i][0] == table_data[1][0] or table_data[i][0] == table_data[i - 1][0]:
-            # Добавляем цену заправки к сумме
-            cost += float(table_data[i][6])             
-            if merging is False:
-                if table_data[i][0] == table_data[1][0]:
-                    merge_rows.append([i, ])
-                else:
-                    merge_rows.append([i - 1, ])
-                merging = True
-        else:
-            if len(merge_rows) != 0 and merging is True:
-                if table_data[i][0] == table_data[len(table_data) - 1][0]:
-                    table_data[merge_rows[len(merge_rows) - 1][0]].append(cost + table_data[i][6])
-                    merge_rows[len(merge_rows) - 1].append(i)
-                else:
-                    table_data[merge_rows[len(merge_rows) - 1][0]].append(cost)
-                    merge_rows[len(merge_rows) - 1].append(i - 1)
-                merging = False
-            else:
-                table_data[i - 1].append(cost)
-            cost = float(table_data[i][6])
-    print(merge_rows)
+    # merge_rows = []
+    # merging = False
+    # cost = 0
+    # for i in range(1, len(table_data)):
+    #     # Если дата текущей равна дате первой заправки
+    #     # или дата текущей заправки равна дате предыдущей заправки
+    #     if table_data[i][0] == table_data[1][0] or table_data[i][0] == table_data[i - 1][0]:
+    #         # Добавляем цену заправки к сумме
+    #         cost += float(table_data[i][6])             
+    #         if merging is False:
+    #             if table_data[i][0] == table_data[1][0]:
+    #                 merge_rows.append([i, ])
+    #             else:
+    #                 merge_rows.append([i - 1, ])
+    #             merging = True
+    #     else:
+    #         if len(merge_rows) != 0 and merging is True:
+    #             if table_data[i][0] == table_data[len(table_data) - 1][0]:
+    #                 table_data[merge_rows[len(merge_rows) - 1][0]].append(cost + table_data[i][6])
+    #                 merge_rows[len(merge_rows) - 1].append(i)
+    #             else:
+    #                 table_data[merge_rows[len(merge_rows) - 1][0]].append(cost)
+    #                 merge_rows[len(merge_rows) - 1].append(i - 1)
+    #             merging = False
+    #         else:
+    #             table_data[i - 1].append(cost)
+    #         cost = float(table_data[i][6])
+    # print(merge_rows)
 
 
 
