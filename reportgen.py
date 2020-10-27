@@ -140,16 +140,13 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  CASE next_dtime = dtime
                                                     WHEN FALSE
                                                         THEN (SELECT SUM(cost) FROM v_trans GROUP BY dtime)
-                                                END
+                                                 END
                                                  """))
 
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
                        "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
                        "GALLONS", "COST", "MPG", "MILE \n PRICE", "DAY \n PRICE"])
-
-
-
 
 
     # После получения данных из вьюшки нужно создать список,
