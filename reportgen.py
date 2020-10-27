@@ -9,11 +9,8 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 
 
-# TODO: Добавить в таблицу данные о цене одного дня
-# TODO: Добавить статистику по выгодности заправок
-# TODO: Добавить информацию о самой часто используемой заправке
-# TODO: Добавить информацию о среднем расходе
-# TODO: Сделать значения в ячейки цены дня сумму цен заправок этого дня
+# TODO: Добавить статистику
+# TODO: Добавить значения в ячейки цены дня, сумму цен заправок этого дня
 
 
 
@@ -68,6 +65,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                    "trans t, trans tt, trans nt, fuel f",
                    """t.id, t.dtime,
                       nt.dtime as next_dtime,
+                      tt.dtime as prev_dtime,
                       f.name,
                       t.odometer,
                       tt.odometer as last_odometer,
@@ -127,7 +125,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Рисуем линию после параметров отчета
     elements.append(MyLine(doc.width, 0))
     elements.append(Spacer(0, 20))
-    elements.append(Paragraph("Information about gas stations", s_header_2))
 
     # Получаем данные из базы данных
     # Условия получения информации из вьюшки для цены дня:
@@ -141,7 +138,8 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                  amount, cost, mpg,
                                                  mile_price,
                                                  CASE next_dtime = dtime
-                                                    WHEN FALSE THEN cost
+                                                    WHEN FALSE
+                                                        THEN (SELECT SUM(cost) FROM v_trans GROUP BY dtime)
                                                 END
                                                  """))
 
