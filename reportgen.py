@@ -11,6 +11,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 # TODO: Добавить статистику
 # TODO: Добавить значения в ячейки цены дня, сумму цен заправок этого дня
+# TODO: Добавить функцию создания условия для получения базы данных
 
 
 
@@ -29,7 +30,6 @@ class MyLine(Flowable):
 
 
 
-
 def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     logger = logging.getLogger("REPORT")  
     logger.debug("Report parameters: start_date[" + str(start_date) + ']' +
@@ -40,10 +40,9 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     db = database.DataBase("data/database.db")
 
     # Создаем строку условия для select
-    condition = """t.fuel_id = f.id AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
-                   AND nt.id = (SELECT MIN(id) FROM trans WHERE id > t.id)"""
+    condition = ""
     if start_date is not None:
-        condition += " AND t.dtime >= '" + str(start_date) + "'"
+        condition += "t.dtime >= '" + str(start_date) + "'"
     if end_date is not None:
         condition += " AND t.dtime <= '" + str(end_date) + "'"
     if gas_names is not None:
@@ -132,14 +131,14 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # то прибавляем ее цену к сумме.
     # Если даты разные, то сохраняем сумму в предыдущую заправку, затем
     # сумму приравниваем к цене текущей запраки.
-    table_data = table_data_to_list(db.select("v_trans", 
+    table_data = table_data_to_list(db.select("v_trans vv", 
                                               """dtime, name,
                                                  odometer, mbs, gallon_price,
                                                  amount, cost, mpg,
                                                  mile_price,
                                                  CASE next_dtime = dtime
                                                     WHEN FALSE
-                                                        THEN (SELECT SUM(cost) FROM v_trans GROUP BY dtime)
+                                                        THEN (SELECT SUM(v.cost) FROM v_trans v WHERE v.dtime = vv.dtime GROUP BY v.dtime)
                                                  END
                                                  """))
 

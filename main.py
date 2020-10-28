@@ -39,19 +39,8 @@ def main():
 
     if args.recreate:
         # Создаем таблицу запрвавок
-        db.create_table("fuel",
-                        """id INTEGER PRIMARY KEY,
-                           name TEXT NOT NULL UNIQUE,
-                           price INTEGER NOT NULL""")
+        recreate(db)
 
-        # Создаем таблицу транзакций
-        db.create_table("trans",
-                        """id INTEGER PRIMARY KEY,
-                           dtime TEXT DEFAULT CURRENT_TIMESTAMP,
-                           odometer INTEGER NOT NULL,
-                           fuel_id INTEGER NOT NULL,
-                           amount INTEGER NOT NULL,
-                           FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
 
     if args.load:
         # Вставляем данные из текстового файла в таблицу
@@ -74,6 +63,42 @@ def main():
 
     if args.report is True:
         reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
+
+
+def recreate(self, database):
+    database.create_table("fuel",
+                    """id INTEGER PRIMARY KEY,
+                    name TEXT NOT NULL UNIQUE,
+                    price INTEGER NOT NULL""")
+
+    # Создаем таблицу транзакций
+    database.create_table("trans",
+                    """id INTEGER PRIMARY KEY,
+                    dtime TEXT DEFAULT CURRENT_TIMESTAMP,
+                    odometer INTEGER NOT NULL,
+                    fuel_id INTEGER NOT NULL,
+                    amount INTEGER NOT NULL,
+                    FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
+
+    database.create_view("v_trans",
+                         "trans t, trans tt, trans nt, fuel f",
+                         """t.id, t.dtime,
+                            nt.dtime as next_dtime,
+                            tt.dtime as prev_dtime,
+                            f.name,
+                            t.odometer,
+                            tt.odometer as last_odometer,
+                            t.odometer - tt.odometer as mbs,
+                            f.price as gallon_price,
+                            t.amount,
+                            t.amount * f.price / 100 as cost,
+                            (t.odometer - tt.odometer) / t.amount as mpg,
+                            t.amount * f.price / (t.odometer - tt.odometer) as mile_price
+                         """,
+                         """t.fuel_id = f.id AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
+                            AND nt.id = (SELECT MIN(id) FROM trans WHERE id > t.id)
+                         """,
+                         True)
 
 
 if __name__ == "__main__":
