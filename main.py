@@ -65,7 +65,7 @@ def main():
         reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 
 
-def recreate(self, database):
+def recreate(database):
     database.create_table("fuel",
                     """id INTEGER PRIMARY KEY,
                     name TEXT NOT NULL UNIQUE,
@@ -80,6 +80,17 @@ def recreate(self, database):
                     amount INTEGER NOT NULL,
                     FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
 
+    # Данные, получаемые из таблицы:
+    # id, дата, название заправки,
+    # расстояние пройденное до текущего дня,
+    # расстояние проеденное до предыдущего дня,
+    # цена галлона,
+    # количество галлонов,
+    # цена заправки,
+    # пробег на одном галлоне,
+    # стоимость одной милю,
+    # пробег между заправками,
+    # стоимость одного дня
     database.create_view("v_trans",
                          "trans t, trans tt, trans nt, fuel f",
                          """t.id, t.dtime,

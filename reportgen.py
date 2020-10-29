@@ -10,8 +10,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 
 # TODO: Добавить статистику
-# TODO: Добавить значения в ячейки цены дня, сумму цен заправок этого дня
-# TODO: Добавить функцию создания условия для получения базы данных
+# TODO: Сделать логгирование
 
 
 
@@ -42,41 +41,15 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # Создаем строку условия для select
     condition = ""
     if start_date is not None:
-        condition += "t.dtime >= '" + str(start_date) + "'"
+        condition = upd_condition(condition, "dtime >= '" + str(start_date) + "'")
     if end_date is not None:
-        condition += " AND t.dtime <= '" + str(end_date) + "'"
+        condition = upd_condition(condition, "dtime <= '" + str(end_date) + "'")
     if gas_names is not None:
-        condition += " AND f.name in " + str(tuple(gas_names))
-    condition += " ORDER BY t.dtime"
+        condition = upd_condition(condition, "name in " + str(tuple(gas_names)))
+    condition += " ORDER BY dtime"
+
+    print(condition)
     
-    # Данные, получаемые из таблицы:
-    # id, дата, название заправки,
-    # расстояние пройденное до текущего дня,
-    # расстояние проеденное до предыдущего дня,
-    # цена галлона,
-    # количество галлонов,
-    # цена заправки,
-    # пробег на одном галлоне,
-    # стоимость одной милю,
-    # пробег между заправками,
-    # стоимость одного дня
-    db.create_view("v_trans",
-                   "trans t, trans tt, trans nt, fuel f",
-                   """t.id, t.dtime,
-                      nt.dtime as next_dtime,
-                      tt.dtime as prev_dtime,
-                      f.name,
-                      t.odometer,
-                      tt.odometer as last_odometer,
-                      t.odometer - tt.odometer as mbs,
-                      f.price as gallon_price,
-                      t.amount,
-                      t.amount * f.price / 100 as cost,
-                      (t.odometer - tt.odometer) / t.amount as mpg,
-                      t.amount * f.price / (t.odometer - tt.odometer) as mile_price
-                      """,
-                   condition,
-                   True)
 
     # Создаем pdf файл
     w, h = A4 # Размер листа
@@ -140,7 +113,9 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                     WHEN FALSE
                                                         THEN (SELECT SUM(v.cost) FROM v_trans v WHERE v.dtime = vv.dtime GROUP BY v.dtime)
                                                  END
-                                                 """))
+                                              """,
+                                              condition))
+
 
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
@@ -172,38 +147,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
 
     print(merge_rows)
 
-    # Добваление цены одного дня в таблицу:
-    # Проверяем дату заправки
-    # merge_rows = []
-    # merging = False
-    # cost = 0
-    # for i in range(1, len(table_data)):
-    #     # Если дата текущей равна дате первой заправки
-    #     # или дата текущей заправки равна дате предыдущей заправки
-    #     if table_data[i][0] == table_data[1][0] or table_data[i][0] == table_data[i - 1][0]:
-    #         # Добавляем цену заправки к сумме
-    #         cost += float(table_data[i][6])             
-    #         if merging is False:
-    #             if table_data[i][0] == table_data[1][0]:
-    #                 merge_rows.append([i, ])
-    #             else:
-    #                 merge_rows.append([i - 1, ])
-    #             merging = True
-    #     else:
-    #         if len(merge_rows) != 0 and merging is True:
-    #             if table_data[i][0] == table_data[len(table_data) - 1][0]:
-    #                 table_data[merge_rows[len(merge_rows) - 1][0]].append(cost + table_data[i][6])
-    #                 merge_rows[len(merge_rows) - 1].append(i)
-    #             else:
-    #                 table_data[merge_rows[len(merge_rows) - 1][0]].append(cost)
-    #                 merge_rows[len(merge_rows) - 1].append(i - 1)
-    #             merging = False
-    #         else:
-    #             table_data[i - 1].append(cost)
-    #         cost = float(table_data[i][6])
-    # print(merge_rows)
-
-
 
     # Создаем таблицу
     main_table = Table(table_data, repeatRows=True)
@@ -230,3 +173,12 @@ def table_data_to_list(data):
             lst.append(e)
         c.append(lst)
     return c
+
+
+def upd_condition(source, addition):    
+    if source == "":
+        source = addition
+    else:
+        source += " AND " + addition
+
+    return source
