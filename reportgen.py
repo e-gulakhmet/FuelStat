@@ -39,6 +39,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     db = database.DataBase("data/database.db")
 
     # Создаем строку условия для select
+    logger.debug("Creating data base condition")
     condition = ""
     if start_date is not None:
         condition = upd_condition(condition, "dtime >= '" + str(start_date) + "'")
@@ -47,14 +48,14 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     if gas_names is not None:
         condition = upd_condition(condition, "name in " + str(tuple(gas_names)))
     condition += " ORDER BY dtime"
-
-    print(condition)
-    
+    logger.debug("Conditions is + " + condition)
+    logger.info("Condition was created")
 
     # Создаем pdf файл
     w, h = A4 # Размер листа
 
     # Cоздаем документ, в котором будут содержать полученные данные
+    logger.debug("Creating DocTemplate")
     doc = SimpleDocTemplate("data/" + file_name + ".pdf",
                             pagesize=A4,
                             topMargin=5 * mm,
@@ -62,6 +63,9 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                             leftMargin=10 * mm,
                             rightMargin=10 * mm,
                             showBoundary=0)
+    logger.info("DocTemplate was created")
+
+    logger.info("Creating document's elements")
     elements = [] # Список, который будет содержать все элементы документа
     styles = getSampleStyleSheet()
     # Создаем нужные нам стили
@@ -91,7 +95,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # # Выводим созданную строку
     # parameters += "    Gas Stations: " + gs
     param_info += "&nbsp;&nbsp;&nbsp;&nbsp; Gas Stations: " + gs
-    # elements.append(Paragraph("Gas Stations: " + gs, s_param))
     elements.append(Paragraph(param_info, s_param))
 
     # Рисуем линию после параметров отчета
@@ -116,7 +119,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                               """,
                                               condition))
 
-
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
                        "MILIAGE \n BEETWEEN", "GALLON \n PRICE",
@@ -130,6 +132,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     merge_rows = []
     merging = False
     # В списке, который мы получили от базы данны, проверяем:
+    logger.debug("Creating merging rows list for document's table")
     for i in range(1, len(table_data)):
         # Если ячейка цены дня пустая и флажок объединения не активен:
         if table_data[i][9] is None and merging is False:
@@ -144,19 +147,23 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
             table_data[merge_rows[len(merge_rows) - 1][0]][9] = table_data[i][9]
             merge_rows[len(merge_rows) - 1].append(i)
             merging = False
-
-    print(merge_rows)
+    logger.debug("Merging rows is " + merge_rows)
+    logger.info("Merging rows list was created")
 
 
     # Создаем таблицу
-    main_table = Table(table_data, repeatRows=True)
-    table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
-    for row in merge_rows:
-        table_style.append(("SPAN", (9, row[0]), (9, row[1])))
-
-    main_table.setStyle(TableStyle(table_style))
+    logger.debug("Creating document's table")
+    try:
+        main_table = Table(table_data, repeatRows=True)
+        table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
+        for row in merge_rows:
+            table_style.append(("SPAN", (9, row[0]), (9, row[1])))
+        main_table.setStyle(TableStyle(table_style))
+    except ValueError:
+        logger.warning("Table data is empty or unsupported")
+    logger.info("Document's table was created")
     elements.append(main_table)
     elements.append(Spacer(0, 20))
 
