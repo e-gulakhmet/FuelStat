@@ -10,7 +10,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 
 # TODO: Добавить статистику
-# TODO: Сделать логгирование
 
 
 
@@ -47,7 +46,6 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
         condition = upd_condition(condition, "dtime <= '" + str(end_date) + "'")
     if gas_names is not None:
         condition = upd_condition(condition, "name in " + str(tuple(gas_names)))
-    condition += " ORDER BY dtime"
     logger.debug("Conditions is + " + condition)
     logger.info("Condition was created")
 
@@ -117,7 +115,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
                                                         THEN (SELECT SUM(v.cost) FROM v_trans v WHERE v.dtime = vv.dtime GROUP BY v.dtime)
                                                  END
                                               """,
-                                              condition))
+                                              condition + " ORDER BY dtime"))
 
     table_data.insert(0,
                       ["DATE", "GAS", "ODOMETER",
@@ -147,7 +145,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
             table_data[merge_rows[len(merge_rows) - 1][0]][9] = table_data[i][9]
             merge_rows[len(merge_rows) - 1].append(i)
             merging = False
-    logger.debug("Merging rows is " + merge_rows)
+    logger.debug("Merging rows is " + str(merge_rows))
     logger.info("Merging rows list was created")
 
 
@@ -156,16 +154,38 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     try:
         main_table = Table(table_data, repeatRows=True)
         table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                    ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                    ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
         for row in merge_rows:
             table_style.append(("SPAN", (9, row[0]), (9, row[1])))
         main_table.setStyle(TableStyle(table_style))
-    except ValueError:
-        logger.warning("Table data is empty or unsupported")
+    except IndexError:
+        logger.error("Table data is empty or unsupported")
     logger.info("Document's table was created")
     elements.append(main_table)
     elements.append(Spacer(0, 20))
+
+    # Получаем данные по статистике из вьюшки
+    # - Общее пройденное расстояние(мили).
+    # - Общая стомость заправок(доллары).
+    # - Средний расход топлива(галлоны).
+    # - Средний пробег(мили).
+    # - Средняя цена одной заправки(доллары).
+    # - Средний пробег на одном галлоне(мили).
+    # - Средняя цена одной мили(доллары).
+    # - Самая часто посещаемая вами заправка.
+    # - Самая выгодная заправка и информация о ней.
+    # - Количество долларов, которые можно было сэкономить,
+    #   если заправляться только на самой выгодной заправке.
+    table_data = table_data_to_list(db.select("v_trans",
+                                              """
+                                                MAX(odometer) - MIN(odometer),
+                                                SUM(cost),
+                                                SUM(amount) / (MAX(odometer) - MIN(odometer)) * 60
+                                              """,
+                                              condition))
+    print(table_data)
+
 
     doc.build(elements)
 
