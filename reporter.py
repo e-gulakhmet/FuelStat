@@ -74,7 +74,7 @@ class Reporter():
             self.condition = self.upd_condition(self.condition, "dtime <= '" + str(self.end_date) + "'")
         if self.gas_names is not None:
             self.condition = self.upd_condition(self.condition, "name in " + str(tuple(self.gas_names)))
-        self.logger.debug("Conditions is + " + condition)
+        self.logger.debug("Conditions is " + condition)
         self.logger.info("Condition was created")
 
         # Cоздаем документ, в котором будут содержать полученные данные
@@ -130,16 +130,14 @@ class Reporter():
         self.elements.append(Spacer(0, 20))
 
 
-
     
-    def create_report(self, main_info=True, short_stat=True, full_stat=True):
+    def create_report(self, main_info=True, stat=True):
         if main_info is True:
             self.elements.extend(self.gen_main_info())
-        if short_stat is True:
-            self.elements.extend(self.gen_short_stat())
-        if full_stat is True:
-            self.elements.extend(self.gen_full_stat())
+        if stat is True:
+            self.elements.extend(self.gen_stat())
         self.doc.build(self.elements)
+
 
 
     def gen_main_info(self):
@@ -245,21 +243,24 @@ class Reporter():
 
 
 
-    def gen_short_stat(self):
+    def gen_stat(self):
         """
-        Генерирует элементы для краткой статистике в отчете. \n
-        Генерирует таблицу, которую заполняет данными. \n
-        Данные:
+        Генерирует элементы для статистике в отчете. \n
+        Данные таблицы с краткой статистикой:
         - Общее пройденное расстояние(мили).
         - Среднее расстояние между заправками(мили).
         - Средняя цена галлона(центы).
         - Среднее количество галлонов.
         - Средняя цена одной заправки(доллары).
+        - Общая цена всех заправок(доллары).
         - Средний пробег на одном галлоне(мили).
         - Средняя цена одной мили(доллары).
-        - Средняя цена одного дня(доллары).
-        - Общая стомость заправок(доллары).
         - Средний расход топлива(галлоны).
+
+        Основная статистика:
+        - Самая часто посещаемая вами заправка.
+        - Самая выгодная заправка и информация о ней.
+        - Количество долларов, которые можно было сэкономить, если заправляться только на самой выгодной заправке.
 
         Returns
         -------
@@ -270,7 +271,7 @@ class Reporter():
         elements = []
 
         # Данные по статистике
-        elements.append(Paragraph("Short Statistics", self.s_header_2))
+        elements.append(Paragraph("Statistics", self.s_header_2))
         elements.append(Spacer(0, 10))
 
         table_data = self.table_data_to_list(
@@ -281,9 +282,10 @@ class Reporter():
                            AVG(price),
                            AVG(amount),
                            AVG(cost),
+                           SUM(cost),
                            AVG(mpg),
                            AVG(mile_price),
-                           cost
+                           SUM(amount) / (MAX(odometer) - MIN(odometer)) * 60
                            """,
                            self.condition))
 
@@ -292,9 +294,9 @@ class Reporter():
                            "AVERAGE \n MILIAGE \n BEETWEEN",
                            "AVERAGE \n GALLON \n PRICE",
                            "AVERAGE \n GALLONS",
-                           "AVERAGE \n COST", "AVERAGE \n MPG",
-                           "AVERAGE \n MILE \n PRICE",
-                           "AVERAGE \n DAY PRICE"])
+                           "AVERAGE \n COST", "TOTAL \n COST",
+                           "AVERAGE \n MPG", "AVERAGE \n MILE \n PRICE",
+                           "AVERAGE \n FUEL \n CONSUPTION"])
         # Создаем таблицу
         self.logger.debug("Creating document's stat table")
         table = Table(table_data, repeatRows=True)
@@ -304,15 +306,24 @@ class Reporter():
 
         elements.append(table)
         elements.append(Spacer(0, 20))
-        # (SELECT name FROM v_trans WHERE price = (SELECT MAX(price) FROM v_trans))
+
+        # Информация о самой выгодной заправке
+        table_data = self.table_data_to_list(
+            self.db.select("v_trans vv",
+                           """
+                           name,
+                           price,
+                           mpg,
+                           mile_price,
+                           COUNT(name)
+                           """,
+                           self.condition + " AND " + "price = (SELECT MIN(price) FROM v_trans) LIMIT 1"))
+
+        print(table_data)
+
+
 
         return elements
-
-    
-
-    def gen_full_stat(self):
-        return []
-
 
     def table_data_to_list(self, data):
         c = []
