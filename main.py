@@ -7,6 +7,9 @@ import reportgen
 import reporter
 
 
+# TODO: Добавить параметры, какой отчет создавать
+# TODO: Обновить документацию о статистике
+
 
 def main():
     parser = argparse.ArgumentParser(prog="fuel_stat",
