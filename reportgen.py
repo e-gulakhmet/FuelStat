@@ -107,7 +107,7 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
     # сумму приравниваем к цене текущей запраки.
     table_data = table_data_to_list(db.select("v_trans vv", 
                                               """dtime, name,
-                                                 odometer, mbs, gallon_price,
+                                                 odometer, mbs, price,
                                                  amount, cost, mpg,
                                                  mile_price,
                                                  CASE next_dtime = dtime
@@ -150,41 +150,64 @@ def report(start_date=None, end_date=None, gas_names=None, file_name=None):
 
 
     # Создаем таблицу
-    logger.debug("Creating document's table")
-    try:
-        main_table = Table(table_data, repeatRows=True)
-        table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                       ('BOX', (0, 0), (-1, -1), 0.25, colors.black)]
-        for row in merge_rows:
-            table_style.append(("SPAN", (9, row[0]), (9, row[1])))
-        main_table.setStyle(TableStyle(table_style))
-    except IndexError:
-        logger.error("Table data is empty or unsupported")
-    logger.info("Document's table was created")
-    elements.append(main_table)
-    elements.append(Spacer(0, 20))
+    logger.debug("Creating document's main table")
+    table = Table(table_data, repeatRows=True)
+    table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                   ('ALIGN', (0, 0), (-1, -1), "CENTER"),
+                   ('VALIGN', (0, 0), (-1, -1), "MIDDLE")]
+    for row in merge_rows:
+        table_style.append(("SPAN", (9, row[0]), (9, row[1])))
+    table.setStyle(TableStyle(table_style))
+    logger.info("Document's main table was created")
+    elements.append(table)
+    elements.append(Spacer(0, 30))
+
+
+    # Данные по статистеке 
+    elements.append(Paragraph("Statistics Information From " + start_date + " to " + end_date, s_header_2))
+    elements.append(Spacer(0, 10))
 
     # Получаем данные по статистике из вьюшки
     # - Общее пройденное расстояние(мили).
     # - Общая стомость заправок(доллары).
     # - Средний расход топлива(галлоны).
-    # - Средний пробег(мили).
+    # - Средний пробег между заправками(мили).
     # - Средняя цена одной заправки(доллары).
     # - Средний пробег на одном галлоне(мили).
     # - Средняя цена одной мили(доллары).
-    # - Самая часто посещаемая вами заправка.
-    # - Самая выгодная заправка и информация о ней.
-    # - Количество долларов, которые можно было сэкономить,
-    #   если заправляться только на самой выгодной заправке.
     table_data = table_data_to_list(db.select("v_trans",
                                               """
                                                 MAX(odometer) - MIN(odometer),
-                                                SUM(cost),
-                                                SUM(amount) / (MAX(odometer) - MIN(odometer)) * 60
+                                                AVG(mbs),
+                                                AVG(price),
+                                                AVG(amount),
+                                                AVG(cost),
+                                                AVG(mpg),
+                                                AVG(mile_price),
+                                                cost
                                               """,
                                               condition))
-    print(table_data)
+
+    table_data.insert(0, ["TOTAL \n DISTANCE", "AVERAGE \n MILIAGE \n BEETWEEN",
+                          "AVERAGE \n GALLON \n PRICE", "AVERAGE \n GALLONS",
+                          "AVERAGE \n COST", "AVERAGE \n MPG", "AVERAGE \n MILE \n PRICE",
+                          "AVERAGE \n DAY PRICE"])
+    # Создаем таблицу
+    logger.debug("Creating document's stat table")
+    table = Table(table_data, repeatRows=True)
+    table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                   ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                   ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                   ('ALIGN', (0, 0), (-1, -1), "CENTER"),
+                   ('VALIGN', (0, 0), (-1, -1), "MIDDLE")]
+    table.setStyle(TableStyle(table_style))
+    logger.info("Document's stat table was created")
+
+    elements.append(table)
+    elements.append(Spacer(0, 20))
+    # (SELECT name FROM v_trans WHERE price = (SELECT MAX(price) FROM v_trans))
 
 
     doc.build(elements)

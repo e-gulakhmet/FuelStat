@@ -4,6 +4,7 @@ import argparse
 
 import database
 import reportgen
+import reporter
 
 
 
@@ -62,23 +63,29 @@ def main():
     db.disconnect()
 
     if args.report is True:
-        reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
+        r = reporter.Reporter(args.startdata, args.enddata, args.gasname, args.filename)
+        r.create_report()
+        # reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 
 
 def recreate(database):
     database.create_table("fuel",
-                    """id INTEGER PRIMARY KEY,
-                    name TEXT NOT NULL UNIQUE,
-                    price INTEGER NOT NULL""")
+                          """
+                          id INTEGER PRIMARY KEY,
+                          name TEXT NOT NULL UNIQUE,
+                          price INTEGER NOT NULL
+                          """)
 
     # Создаем таблицу транзакций
     database.create_table("trans",
-                    """id INTEGER PRIMARY KEY,
-                    dtime TEXT DEFAULT CURRENT_TIMESTAMP,
-                    odometer INTEGER NOT NULL,
-                    fuel_id INTEGER NOT NULL,
-                    amount INTEGER NOT NULL,
-                    FOREIGN KEY (fuel_id) REFERENCES fuel(id)""")
+                          """
+                          id INTEGER PRIMARY KEY,
+                          dtime TEXT DEFAULT CURRENT_TIMESTAMP,
+                          odometer INTEGER NOT NULL,
+                          fuel_id INTEGER NOT NULL,
+                          amount INTEGER NOT NULL,
+                          FOREIGN KEY (fuel_id) REFERENCES fuel(id)
+                          """)
 
     # Данные, получаемые из таблицы:
     # id, дата, название заправки,
@@ -100,7 +107,7 @@ def recreate(database):
                             t.odometer,
                             tt.odometer as last_odometer,
                             t.odometer - tt.odometer as mbs,
-                            f.price as gallon_price,
+                            f.price,
                             t.amount,
                             t.amount * f.price / 100 as cost,
                             (t.odometer - tt.odometer) / t.amount as mpg,
