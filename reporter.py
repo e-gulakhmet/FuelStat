@@ -304,6 +304,28 @@ class Reporter():
         self.logger.info("Short statistics table was created")
         elements.append(table)
 
+        # Информация о самой часто посещаемой заправке
+        self.logger.debug("Generating info about the most visited gas station")
+        elements.append(Paragraph("The most visited gas station", self.s_header_2))
+        table_data = self.table_data_to_list(
+            self.db.select("v_trans v",
+                           """
+                           name,
+                           price,
+                           mpg,
+                           mile_price,
+                           (SELECT COUNT(vv.name) FROM v_trans vv WHERE vv.name = v.name) as names_count
+                           """,
+                           self.condition + " ORDER BY names_count DESC LIMIT 1"))
+
+        table_data.insert(0, ["GAS \n STATION", "GALLON \n PRICE", "MPG",
+                              "MILE \n PRICE", "VISITS"])
+                
+        table = Table(table_data, repeatRows=True)
+        table_style = self.s_table
+        table.setStyle(TableStyle(table_style))
+        self.logger.info("Generated info about the most visited gas station")
+        elements.append(table)
 
 
         # Информация о самой выгодной заправке
@@ -327,7 +349,7 @@ class Reporter():
         table = Table(table_data, repeatRows=True)
         table_style = self.s_table
         table.setStyle(TableStyle(table_style))
-        self.logger.info("Info about the most profitable gas station was generated")
+        self.logger.info("Generated info about the most profitable gas station was generated")
         elements.append(table)
     
 
