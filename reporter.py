@@ -11,7 +11,6 @@ from reportlab.lib.styles import getSampleStyleSheet
 
 # TODO: Сделать список стилей
 # TODO: Вывести подробную статистике
-# TODO: Описать функции создания статистик
 # TODO: Починить информацию о параметрах(ошибка при отсутствии дат)
 
 
@@ -195,7 +194,7 @@ class Reporter():
                            self.condition + " ORDER BY dtime"))
 
         table_data.insert(0,
-                          ["DATE", "GAS", "ODOMETER",
+                          ["DATE", "GAS \n STATION", "ODOMETER",
                            "MILIAGE \n BEETWEEN",
                            "GALLON \n PRICE",
                            "GALLONS", "COST", "MPG", 
@@ -237,7 +236,7 @@ class Reporter():
         table.setStyle(TableStyle(table_style))
         self.logger.info("Document's main table was created")
         elements.append(table)
-        elements.append(Spacer(0, 30))
+        elements.append(Spacer(0, 20))
 
         return elements
 
@@ -271,8 +270,8 @@ class Reporter():
         elements = []
 
         # Данные по статистике
-        elements.append(Paragraph("Statistics", self.s_header_2))
-        elements.append(Spacer(0, 10))
+        elements.append(Paragraph("Statistics", self.s_header_1))
+        elements.append(Spacer(0, 5))
 
         table_data = self.table_data_to_list(
             self.db.select("v_trans",
@@ -298,18 +297,20 @@ class Reporter():
                            "AVERAGE \n MPG", "AVERAGE \n MILE \n PRICE",
                            "AVERAGE \n FUEL \n CONSUPTION"])
         # Создаем таблицу
-        self.logger.debug("Creating document's stat table")
+        self.logger.debug("Creating short statistics table")
         table = Table(table_data, repeatRows=True)
         table_style = self.s_table
         table.setStyle(TableStyle(table_style))
-        self.logger.info("Document's stat table was created")
-
+        self.logger.info("Short statistics table was created")
         elements.append(table)
-        elements.append(Spacer(0, 20))
+
+
 
         # Информация о самой выгодной заправке
+        self.logger.debug("Generating info about the most profitable gas station")
+        elements.append(Paragraph("The most profitable gas station", self.s_header_2))
         table_data = self.table_data_to_list(
-            self.db.select("v_trans vv",
+            self.db.select("v_trans",
                            """
                            name,
                            price,
@@ -317,13 +318,23 @@ class Reporter():
                            mile_price,
                            COUNT(name)
                            """,
-                           self.condition + " AND " + "price = (SELECT MIN(price) FROM v_trans) LIMIT 1"))
+                           self.condition + " AND " + 
+                           "price = (SELECT MIN(price) FROM v_trans) LIMIT 1"))
 
-        print(table_data)
-
+        table_data.insert(0, ["GAS \n STATION", "GALLON \n PRICE", "MPG",
+                              "MILE \n PRICE", "VISITS"])
+                
+        table = Table(table_data, repeatRows=True)
+        table_style = self.s_table
+        table.setStyle(TableStyle(table_style))
+        self.logger.info("Info about the most profitable gas station was generated")
+        elements.append(table)
+    
 
 
         return elements
+
+
 
     def table_data_to_list(self, data):
         c = []
