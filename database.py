@@ -4,6 +4,10 @@ import os
 import csv
 
 
+# TODO: Добавить функцию отсуствия названия таблицы в select
+# TODO: Добавить параметр limit в create_view и select
+# TODO: Добавить параметр ORDER BY в create_view и select
+
 
 class DataBase():
     """

@@ -12,6 +12,7 @@ from reportlab.lib.styles import getSampleStyleSheet
 # TODO: Сделать список стилей
 # TODO: Вывести подробную статистике
 # TODO: Починить информацию о параметрах(ошибка при отсутствии дат)
+# TODO: Проверить принимает ли основное условие select, который находится внутри select
 
 
 
@@ -327,7 +328,6 @@ class Reporter():
         self.logger.info("Generated info about the most visited gas station")
         elements.append(table)
 
-
         # Информация о самой выгодной заправке
         self.logger.debug("Generating info about the most profitable gas station")
         elements.append(Paragraph("The most profitable gas station", self.s_header_2))
@@ -351,8 +351,28 @@ class Reporter():
         table.setStyle(TableStyle(table_style))
         self.logger.info("Generated info about the most profitable gas station was generated")
         elements.append(table)
-    
 
+        # Информация о том, сколько можно было съэкономить,
+        # если бы человек заправлялся только на самой выгодной
+        # заправке.
+        # Общая цена заправок равна сумме цен заправок.
+        # Общая цена заправок, если все заправки были бы
+        # самыми выгодными равна:
+        # цена одного галлона умноженная на общую сумму
+        # всех купленных галлонов, затем разделить 100,
+        # чтобы получить цену в галлонах.
+        table_data = self.table_data_to_list(
+            self.db.select("v_trans",
+                           """
+                           SUM(cost),
+                           (SELECT price
+                            FROM v_trans
+                            WHERE price = (SELECT MIN(price) FROM v_trans))
+                            * SUM(amount) / 100
+                           """,
+                           self.condition))
+
+        print(table_data)
 
         return elements
 
