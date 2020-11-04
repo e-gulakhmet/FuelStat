@@ -9,12 +9,8 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 
 
-# TODO: Сделать список стилей
-# TODO: Вывести подробную статистике
 # TODO: Починить информацию о параметрах(ошибка при отсутствии дат)
 # TODO: Проверить принимает ли основное условие select, который находится внутри select
-
-
 
 
 class MyLine(Flowable):
@@ -100,6 +96,9 @@ class Reporter():
         self.s_param.spaceAfter = 10
         self.s_header_2 = styles["Heading2"]
         self.s_header_2.alignment = TA_CENTER
+        self.s_center_text = styles["Normal"]
+        self.s_center_text.alignment = TA_CENTER
+        self.s_param.fontSize = 14
         self.s_table = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
                         ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                         ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
@@ -351,6 +350,7 @@ class Reporter():
         table.setStyle(TableStyle(table_style))
         self.logger.info("Generated info about the most profitable gas station was generated")
         elements.append(table)
+        elements.append(Spacer(0, 15))
 
         # Информация о том, сколько можно было съэкономить,
         # если бы человек заправлялся только на самой выгодной
@@ -371,8 +371,18 @@ class Reporter():
                             * SUM(amount) / 100
                            """,
                            self.condition))
-
-        print(table_data)
+        
+        elements.append(Paragraph("In general, you spent " + 
+                                  str(table_data[0][0]) + 
+                                  "$ on gas stations",
+                                  self.s_center_text))
+        elements.append(Paragraph("If you only refueled at the most " + 
+                                  "profitable gas station, the price would be " +
+                                  str(table_data[0][1]) + "$",
+                                  self.s_center_text))
+        elements.append(Paragraph("So we get, that you could save " +
+                                  str(round(table_data[0][0] - table_data[0][1], 2)) + "$",
+                                  self.s_center_text))              
 
         return elements
 
