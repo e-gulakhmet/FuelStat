@@ -218,7 +218,7 @@ class DataBase():
             self.logger.warning("Not connected to database")
 
 
-    def select(self, table_name, data='*', condition=None): # Выделить данные из таблицы
+    def select(self, table_name, data='*', condition=None, order_by=None, limit=None): # Выделить данные из таблицы
         """
         Выделяет данные из таблицы и возвращает их.
 
@@ -252,12 +252,17 @@ class DataBase():
             "Jon"
             "Alex"
         """
+
         if self.connected:
             try:
-                if condition is None:
-                    command = "SELECT " + data + " FROM " + table_name
-                else:
-                    command = "SELECT " + data + " FROM " + table_name + " WHERE " + condition
+                command = "SELECT " + data + " FROM " + table_name
+                if condition is not None:
+                    command += " WHERE " + condition
+                if order_by is not None:
+                    command += " ORDER BY " + order_by
+                if limit is not None:
+                    command += " LIMIT " + limit
+
                 self.logger.debug(command)
                 c = self.db.execute(command)
                 self.logger.info("Data was selected from table[" + table_name + "]")

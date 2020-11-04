@@ -22,11 +22,11 @@ def main():
                         help="paste data from files to tables")
     parser.add_argument("--log", action="store", default="info",
                         help="enable logging")
-    parser.add_argument("-r", "--report", action="store_true", default=None,
+    parser.add_argument("-r", "--report", action="store_true", default=False,
                         help="generates a report on fuel use")
-    parser.add_argument("-s", "--startdata", action="store", default=None,
+    parser.add_argument("-s", "--startdate", action="store", default="1000-00-00",
                         help="set the start date for the report")
-    parser.add_argument("-e", "--enddata", action="store", default=None,
+    parser.add_argument("-e", "--enddate", action="store", default="9999-00-00",
                         help="set the end date for the report")
     parser.add_argument("-f", "--filename", action="store", default="report",
                         help="set the name of the report file")
@@ -44,7 +44,7 @@ def main():
 
     if args.recreate:
         # Создаем таблицу запрвавок
-        recreate(db)
+        recreate(db, args)
 
 
     if args.load:
@@ -67,12 +67,12 @@ def main():
     db.disconnect()
 
     if args.report is True:
-        r = reporter.Reporter(args.startdata, args.enddata, args.gasname, args.filename)
+        r = reporter.Reporter(args.startdate, args.enddate, args.gasname, args.filename)
         r.create_report()
         # reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 
 
-def recreate(database):
+def recreate(database, args):
     database.create_table("fuel",
                           """
                           id INTEGER PRIMARY KEY,
@@ -102,6 +102,13 @@ def recreate(database):
     # стоимость одной милю,
     # пробег между заправками,
     # стоимость одного дня
+    condition = "t.fuel_id = f.id"
+    condition += " AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)"
+    condition += " AND nt.id = (SELECT MIN(id) FROM trans WHERE id > t.id)"
+    condition += " AND t.dtime >= '" + str(args.startdate) + "'"
+    condition += " AND t.dtime <= '" + str(args.enddate) + "'" 
+    if args.gasname is not None:
+        condition += " AND f.name in " + str(tuple(args.gasname))
     database.create_view("v_trans",
                          "trans t, trans tt, trans nt, fuel f",
                          """t.id, t.dtime,
@@ -116,11 +123,7 @@ def recreate(database):
                             t.amount * f.price / 100 as cost,
                             (t.odometer - tt.odometer) / t.amount as mpg,
                             t.amount * f.price / (t.odometer - tt.odometer) as mile_price
-                         """,
-                         """t.fuel_id = f.id AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)
-                            AND nt.id = (SELECT MIN(id) FROM trans WHERE id > t.id)
-                         """,
-                         True)
+                         """, condition, True)
 
 
 if __name__ == "__main__":

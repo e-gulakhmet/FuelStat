@@ -9,10 +9,6 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 
 
-# TODO: Починить информацию о параметрах(ошибка при отсутствии дат)
-# TODO: Проверить принимает ли основное условие select, который находится внутри select
-
-
 class MyLine(Flowable):
     def __init__(self, width, height):
         super().__init__()
@@ -29,7 +25,7 @@ class Reporter():
     Класс создания отчета
     """
 
-    def __init__(self, start_date=None, end_date=None, gas_names=None,
+    def __init__(self, start_date="1000-00-00", end_date="9999-00-00", gas_names=None,
                  file_name=None):
         """
         Инициализация класса.
@@ -61,18 +57,6 @@ class Reporter():
     
         self.db = database.DataBase("data/database.db")
     
-        # Создаем строку условия для получения данных из базы данных
-        self.logger.debug("Creating main condition to select data from data base")
-        self.condition = ""
-        if self.start_date is not None:
-            condition = self.upd_condition(self.condition, "dtime >= '" + str(self.start_date) + "'")
-        if self.end_date is not None:
-            self.condition = self.upd_condition(self.condition, "dtime <= '" + str(self.end_date) + "'")
-        if self.gas_names is not None:
-            self.condition = self.upd_condition(self.condition, "name in " + str(tuple(self.gas_names)))
-        self.logger.debug("Conditions is " + condition)
-        self.logger.info("Condition was created")
-
         # Cоздаем документ, в котором будут содержать полученные данные
         self.logger.debug("Creating DocTemplate")
         self.doc = SimpleDocTemplate("data/" + file_name + ".pdf",
@@ -85,7 +69,6 @@ class Reporter():
         self.logger.info("DocTemplate was created")
 
         self.elements = [] # Список, который будет содержать все элементы документа
-
 
         # Создаем нужные нам стили
         styles = getSampleStyleSheet()
@@ -111,7 +94,7 @@ class Reporter():
         self.elements.append(Spacer(0, 20))
 
         # Информация о параметрах отчета
-        param_info = "Start Date: " + self.start_date 
+        param_info = "Start Date: " + self.start_date
         param_info += "&nbsp;&nbsp;&nbsp;&nbsp; End Date: " + self.end_date
         gs = ""
         # Создаем строку с названями заправки
@@ -190,8 +173,7 @@ class Reporter():
                                       GROUP BY v.dtime
                                      )
                            END
-                            """,
-                           self.condition + " ORDER BY dtime"))
+                            """, order_by="dtime"))
 
         table_data.insert(0,
                           ["DATE", "GAS \n STATION", "ODOMETER",
@@ -285,8 +267,7 @@ class Reporter():
                            AVG(mpg),
                            AVG(mile_price),
                            SUM(amount) / (MAX(odometer) - MIN(odometer)) * 60
-                           """,
-                           self.condition))
+                           """))
 
         table_data.insert(0, 
                           ["TOTAL \n DISTANCE",
@@ -316,7 +297,7 @@ class Reporter():
                            mile_price,
                            (SELECT COUNT(vv.name) FROM v_trans vv WHERE vv.name = v.name) as names_count
                            """,
-                           self.condition + " ORDER BY names_count DESC LIMIT 1"))
+                           order_by="names_count DESC", limit="1"))
 
         table_data.insert(0, ["GAS \n STATION", "GALLON \n PRICE", "MPG",
                               "MILE \n PRICE", "VISITS"])
@@ -339,8 +320,7 @@ class Reporter():
                            mile_price,
                            COUNT(name)
                            """,
-                           self.condition + " AND " + 
-                           "price = (SELECT MIN(price) FROM v_trans) LIMIT 1"))
+                           "price = (SELECT MIN(price) FROM v_trans)", limit="1"))
 
         table_data.insert(0, ["GAS \n STATION", "GALLON \n PRICE", "MPG",
                               "MILE \n PRICE", "VISITS"])
@@ -369,19 +349,18 @@ class Reporter():
                             FROM v_trans
                             WHERE price = (SELECT MIN(price) FROM v_trans))
                             * SUM(amount) / 100
-                           """,
-                           self.condition))
+                           """))
         
         elements.append(Paragraph("In general, you spent " + 
                                   str(table_data[0][0]) + 
-                                  "$ on gas stations",
+                                  "$ on gas stations.",
                                   self.s_center_text))
         elements.append(Paragraph("If you only refueled at the most " + 
                                   "profitable gas station, the price would be " +
-                                  str(table_data[0][1]) + "$",
+                                  str(table_data[0][1]) + "$.",
                                   self.s_center_text))
         elements.append(Paragraph("So we get, that you could save " +
-                                  str(round(table_data[0][0] - table_data[0][1], 2)) + "$",
+                                  str(round(table_data[0][0] - table_data[0][1], 2)) + "$.",
                                   self.s_center_text))              
 
         return elements
@@ -398,11 +377,3 @@ class Reporter():
                 lst.append(e)
             c.append(lst)
         return c
-
-
-    def upd_condition(self, source, addition):    
-        if source == "":
-            source = addition
-        else:
-            source += " AND " + addition
-        return source
