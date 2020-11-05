@@ -113,10 +113,10 @@ class Reporter():
 
 
     
-    def create_report(self, main_info=True, stat=True):
+    def create_report(self, main_info=True, statistic=True):
         if main_info is True:
             self.elements.extend(self.gen_main_info())
-        if stat is True:
+        if statistic is True:
             self.elements.extend(self.gen_stat())
         self.doc.build(self.elements)
 

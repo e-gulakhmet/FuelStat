@@ -7,8 +7,6 @@ import reportgen
 import reporter
 
 
-# TODO: Добавить параметры, какой отчет создавать
-# TODO: Обновить документацию о статистике
 # TODO: Добавить русский язык
 
 
@@ -32,6 +30,10 @@ def main():
                         help="set the name of the report file")
     parser.add_argument("-g", "--gasname", action="append", default=None,
                         help="set gas names for the report")
+    parser.add_argument("-i", "--info", action="store_true", default=True,
+                        help="display information about refueling in a report")
+    parser.add_argument("--statistic", action="store_true", default=True,
+                        help="display statistics about refueling in a report")
     args = parser.parse_args()
 
     logging.basicConfig(filename="logging.log",
@@ -68,7 +70,7 @@ def main():
 
     if args.report is True:
         r = reporter.Reporter(args.startdate, args.enddate, args.gasname, args.filename)
-        r.create_report()
+        r.create_report(args.info, args.statistic)
         # reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 
 
@@ -123,7 +125,7 @@ def recreate(database, args):
                             t.amount * f.price / 100 as cost,
                             (t.odometer - tt.odometer) / t.amount as mpg,
                             t.amount * f.price / (t.odometer - tt.odometer) as mile_price
-                         """, condition, True)
+                         """, condition, re_create=True)
 
 
 if __name__ == "__main__":
