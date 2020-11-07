@@ -9,6 +9,13 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 
 
+# TODO: Сделать документ в альбомном формате
+# TODO: Выровнять поля(текст влево, цифры вправо)
+# TODO: Добавить поля(дюим, 25мм)
+# TODO: Изменить таблицу статистики(строки перенести в столбцы)
+
+
+
 class MyLine(Flowable):
     def __init__(self, width, height):
         super().__init__()
@@ -25,8 +32,8 @@ class Reporter():
     Класс создания отчета
     """
 
-    def __init__(self, start_date="1000-00-00", end_date="9999-00-00", gas_names=None,
-                 file_name=None):
+    def __init__(self, start_date="1000-00-00", end_date="9999-00-00", gas_name=None,
+                 file_name="report"):
         """
         Инициализация класса.
         Создаем документ, который затем будет содержать
@@ -46,13 +53,13 @@ class Reporter():
 
         self.start_date = start_date
         self.end_date = end_date
-        self.gas_names = gas_names
+        self.gas_name = gas_name
         self.file_name = file_name
 
         self.logger = logging.getLogger("REPORTER")  
         self.logger.debug("Report parameters: start_date[" + str(self.start_date) + ']' +
                           ", end_date[" + str(self.end_date) + ']' +
-                          ", gas_names[" + str(self.gas_names) + ']' +
+                          ", gas_names[" + str(self.gas_name) + ']' +
                           ", file_name[" + str(self.file_name) + ']')
     
         self.db = database.DataBase("data/database.db")
@@ -79,9 +86,8 @@ class Reporter():
         self.s_param.spaceAfter = 10
         self.s_header_2 = styles["Heading2"]
         self.s_header_2.alignment = TA_CENTER
-        self.s_center_text = styles["Normal"]
-        self.s_center_text.alignment = TA_CENTER
-        self.s_param.fontSize = 14
+        self.s_text = styles["Normal"]
+        self.s_text.fontSize = 14
         self.s_table = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
                         ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
                         ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
@@ -98,11 +104,11 @@ class Reporter():
         param_info += "&nbsp;&nbsp;&nbsp;&nbsp; End Date: " + self.end_date
         gs = ""
         # Создаем строку с названями заправки
-        if self.gas_names is None:
+        if self.gas_name is None:
             gs = "All"
         else:
-            gs = str(self.gas_names[0])
-            for n in self.gas_names:
+            gs = str(self.gas_name[0])
+            for n in self.gas_name:
                 gs += ", " + str(n)
         param_info += "&nbsp;&nbsp;&nbsp;&nbsp; Gas Stations: " + gs
         self.elements.append(Paragraph(param_info, self.s_param))
@@ -110,6 +116,11 @@ class Reporter():
         # Рисуем линию после параметров отчета
         self.elements.append(MyLine(self.doc.width, 0))
         self.elements.append(Spacer(0, 20))
+
+        self.condition = "dtime >= '" + str(self.start_date) + "'"
+        self.condition += " AND dtime <= '" + str(self.end_date) + "'" 
+        if self.gas_name is not None:
+            self.condition += " AND name in " + str(tuple(self.gas_name))
 
 
     
@@ -169,11 +180,13 @@ class Reporter():
                                 THEN (
                                       SELECT SUM(v.cost) 
                                       FROM v_trans v 
-                                      WHERE v.dtime = vv.dtime
+                                      WHERE v.dtime = vv.dtime AND
+                           """ + self.condition +
+                           """
                                       GROUP BY v.dtime
                                      )
                            END
-                            """, order_by="dtime"))
+                            """, condition=self.condition, order_by="dtime"))
 
         table_data.insert(0,
                           ["DATE", "GAS \n STATION", "ODOMETER",
@@ -241,7 +254,8 @@ class Reporter():
         Основная статистика:
         - Самая часто посещаемая вами заправка.
         - Самая выгодная заправка и информация о ней.
-        - Количество долларов, которые можно было сэкономить, если заправляться только на самой выгодной заправке.
+        - Количество долларов, которые можно было сэкономить,
+          если заправляться только на самой выгодной заправке.
 
         Returns
         -------
@@ -267,7 +281,7 @@ class Reporter():
                            AVG(mpg),
                            AVG(mile_price),
                            SUM(amount) / (MAX(odometer) - MIN(odometer)) * 60
-                           """))
+                           """, condition=self.condition))
 
         table_data.insert(0, 
                           ["TOTAL \n DISTANCE",
@@ -295,8 +309,8 @@ class Reporter():
                            price,
                            mpg,
                            mile_price,
-                           (SELECT COUNT(vv.name) FROM v_trans vv WHERE vv.name = v.name) as names_count
-                           """,
+                           (SELECT COUNT(vv.name) FROM v_trans vv WHERE vv.name = v.name AND """ +
+                           self.condition + ") as names_count", condition=self.condition,
                            order_by="names_count DESC", limit="1"))
 
         table_data.insert(0, ["GAS \n STATION", "GALLON \n PRICE", "MPG",
@@ -320,7 +334,10 @@ class Reporter():
                            mile_price,
                            COUNT(name)
                            """,
-                           "price = (SELECT MIN(price) FROM v_trans)", limit="1"))
+                           self.condition + 
+                           "AND price = (SELECT MIN(price) FROM v_trans WHERE "
+                           + self.condition + ")",
+                           limit="1"))
 
         table_data.insert(0, ["GAS \n STATION", "GALLON \n PRICE", "MPG",
                               "MILE \n PRICE", "VISITS"])
@@ -347,21 +364,20 @@ class Reporter():
                            SUM(cost),
                            (SELECT price
                             FROM v_trans
-                            WHERE price = (SELECT MIN(price) FROM v_trans))
-                            * SUM(amount) / 100
-                           """))
+                            WHERE price = (SELECT MIN(price) FROM v_trans WHERE """
+                           + self.condition + ")) * SUM(amount) / 100", condition=self.condition))
         
-        elements.append(Paragraph("In general, you spent " + 
+        elements.append(Paragraph("Total spent " + 
                                   str(table_data[0][0]) + 
                                   "$ on gas stations.",
-                                  self.s_center_text))
+                                  self.s_text))
         elements.append(Paragraph("If you only refueled at the most " + 
                                   "profitable gas station, the price would be " +
                                   str(table_data[0][1]) + "$.",
-                                  self.s_center_text))
+                                  self.s_text))
         elements.append(Paragraph("So we get, that you could save " +
                                   str(round(table_data[0][0] - table_data[0][1], 2)) + "$.",
-                                  self.s_center_text))              
+                                  self.s_text))              
 
         return elements
 

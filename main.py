@@ -3,7 +3,6 @@ import logging
 import argparse
 
 import database
-import reportgen
 import reporter
 
 
@@ -107,10 +106,6 @@ def recreate(database, args):
     condition = "t.fuel_id = f.id"
     condition += " AND tt.id = (SELECT MAX(id) FROM trans WHERE id < t.id)"
     condition += " AND nt.id = (SELECT MIN(id) FROM trans WHERE id > t.id)"
-    condition += " AND t.dtime >= '" + str(args.startdate) + "'"
-    condition += " AND t.dtime <= '" + str(args.enddate) + "'" 
-    if args.gasname is not None:
-        condition += " AND f.name in " + str(tuple(args.gasname))
     database.create_view("v_trans",
                          "trans t, trans tt, trans nt, fuel f",
                          """t.id, t.dtime,
