@@ -1,17 +1,11 @@
 import logging
 import database
-# from reportlab.pdfgen import canvas
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4
 from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Flowable
 from reportlab.lib.styles import getSampleStyleSheet
 
-
-# TODO: Сделать документ в альбомном формате
-# TODO: Выровнять поля(текст влево, цифры вправо)
-# TODO: Добавить поля(дюим, 25мм)
 # TODO: Изменить таблицу статистики(строки перенести в столбцы)
 
 
@@ -67,10 +61,10 @@ class Reporter():
         # Cоздаем документ, в котором будут содержать полученные данные
         self.logger.debug("Creating DocTemplate")
         self.doc = SimpleDocTemplate("data/" + file_name + ".pdf",
-                                     pagesize=A4,
+                                     pagesize=[297 * mm, 210 * mm], # A4 Альбомная ориентация
                                      topMargin=5 * mm,
                                      bottomMargin=5 * mm,
-                                     leftMargin=10 * mm,
+                                     leftMargin=25 * mm,
                                      rightMargin=10 * mm,
                                      showBoundary=0)
         self.logger.info("DocTemplate was created")
@@ -88,11 +82,6 @@ class Reporter():
         self.s_header_2.alignment = TA_CENTER
         self.s_text = styles["Normal"]
         self.s_text.fontSize = 14
-        self.s_table = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
-                        ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
-                        ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
-                        ('ALIGN', (0, 0), (-1, -1), "CENTER"),
-                        ('VALIGN', (0, 0), (-1, -1), "MIDDLE")]
 
 
         # Название документа
@@ -225,9 +214,16 @@ class Reporter():
         # Создаем таблицу
         self.logger.debug("Creating document's main table")
         table = Table(table_data, repeatRows=True)
-        table_style = self.s_table
+        table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('VALIGN', (0, 0), (-1, -1), "MIDDLE"),
+                       ('ALIGN', (0, 0), (-1, 0), "CENTER"),
+                       ('ALIGN', (2, 1), (-1, -1), "RIGHT")]
+        # Обединяем строки в таблице
         for row in merge_rows:
             table_style.append(("SPAN", (9, row[0]), (9, row[1])))
+
         table.setStyle(TableStyle(table_style))
         self.logger.info("Document's main table was created")
         elements.append(table)
@@ -294,7 +290,11 @@ class Reporter():
         # Создаем таблицу
         self.logger.debug("Creating short statistics table")
         table = Table(table_data, repeatRows=True)
-        table_style = self.s_table
+        table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('VALIGN', (0, 0), (-1, -1), "MIDDLE"),
+                       ('ALIGN', (0, 0), (-1, -1), "CENTER")]
         table.setStyle(TableStyle(table_style))
         self.logger.info("Short statistics table was created")
         elements.append(table)
@@ -317,7 +317,11 @@ class Reporter():
                               "MILE \n PRICE", "VISITS"])
                 
         table = Table(table_data, repeatRows=True)
-        table_style = self.s_table
+        table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('VALIGN', (0, 0), (-1, -1), "MIDDLE"),
+                       ('ALIGN', (0, 0), (-1, -1), "CENTER")]
         table.setStyle(TableStyle(table_style))
         self.logger.info("Generated info about the most visited gas station")
         elements.append(table)
@@ -343,7 +347,11 @@ class Reporter():
                               "MILE \n PRICE", "VISITS"])
                 
         table = Table(table_data, repeatRows=True)
-        table_style = self.s_table
+        table_style = [("BACKGROUND", (0, 0), (-1, 0), colors.lightblue),
+                       ('INNERGRID', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('BOX', (0, 0), (-1, -1), 0.25, colors.black),
+                       ('VALIGN', (0, 0), (-1, -1), "MIDDLE"),
+                       ('ALIGN', (0, 0), (-1, -1), "CENTER")]
         table.setStyle(TableStyle(table_style))
         self.logger.info("Generated info about the most profitable gas station was generated")
         elements.append(table)
