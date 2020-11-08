@@ -279,14 +279,17 @@ class Reporter():
                            SUM(amount) / (MAX(odometer) - MIN(odometer)) * 60
                            """, condition=self.condition))
 
-        table_data.insert(0, 
-                          ["TOTAL \n DISTANCE",
-                           "AVERAGE \n MILIAGE \n BEETWEEN",
-                           "AVERAGE \n GALLON \n PRICE",
-                           "AVERAGE \n GALLONS",
-                           "AVERAGE \n COST", "TOTAL \n COST",
-                           "AVERAGE \n MPG", "AVERAGE \n MILE \n PRICE",
-                           "AVERAGE \n FUEL \n CONSUPTION"])
+        row_name = ["TOTAL \n DISTANCE",
+                    "AVERAGE \n MILIAGE \n BEETWEEN",
+                    "AVERAGE \n GALLON \n PRICE",
+                    "AVERAGE \n GALLONS",
+                    "AVERAGE \n COST", "TOTAL \n COST",
+                    "AVERAGE \n MPG", "AVERAGE \n MILE \n PRICE",
+                    "AVERAGE \n FUEL \n CONSUPTION"]
+        table_data.insert(0, row_name)
+        # for i in range(row_name - 1):
+        #     table_data[i].insert(0, row_name[i])
+
         # Создаем таблицу
         self.logger.debug("Creating short statistics table")
         table = Table(table_data, repeatRows=True)
@@ -373,17 +376,16 @@ class Reporter():
                            (SELECT price
                             FROM v_trans
                             WHERE price = (SELECT MIN(price) FROM v_trans WHERE """
-                           + self.condition + ")) * SUM(amount) / 100", condition=self.condition))
+                           + self.condition + ")) * SUM(amount) / 100",
+                           condition=self.condition))
         
-        elements.append(Paragraph("Total spent " + 
-                                  str(table_data[0][0]) + 
-                                  "$ on gas stations.",
-                                  self.s_text))
-        elements.append(Paragraph("If you only refueled at the most " + 
-                                  "profitable gas station, the price would be " +
+        elements.append(Paragraph("Total spent on gas stations: " + 
+                                  str(table_data[0][0]) + "$.", self.s_text))
+        elements.append(Paragraph("Refueling at the best gas station," + 
+                                  " the total price would be: " +
                                   str(table_data[0][1]) + "$.",
                                   self.s_text))
-        elements.append(Paragraph("So we get, that you could save " +
+        elements.append(Paragraph("Could have saved: " +
                                   str(round(table_data[0][0] - table_data[0][1], 2)) + "$.",
                                   self.s_text))              
 
@@ -400,4 +402,19 @@ class Reporter():
                     e = round(e, 2)
                 lst.append(e)
             c.append(lst)
+        return c
+    
+
+    def table_data_to_v_list(self, data):
+        c = []
+        for row in data:
+            for i in range(len(row)):
+                e = row[i]
+                if type(e) is float:
+                    e = round(e, 2)
+                try:
+                    c[i].append(e)
+                except IndexError:
+                    c.append([e])
+
         return c
