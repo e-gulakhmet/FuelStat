@@ -7,6 +7,8 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 
 # TODO: Изменить таблицу статистики(строки перенести в столбцы)
+# TODO: Изменить информацию о статистике
+# TODO: Изменить числа с точкой
 
 
 
