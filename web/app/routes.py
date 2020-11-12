@@ -1,10 +1,9 @@
 from app import flsk
-from flask import render_template
+from flask import render_template, flash, redirect
 from app.forms import LoginForm
 
 
-@flsk.route('/')
-@flsk.route('/login')
+@flsk.route('/', methods=['GET', 'POST'])
 def login():
     # При входе на сайт, пользователя сразу переходит к странице
     # авторизации.
@@ -12,7 +11,10 @@ def login():
     # то проверяем введенные данные с данными, которые у нас есть.
     # Если были введены верные данные, то переводим его на основную
     # страницу.
-    # Иначе просим его ввести данные снова. 
+    # Иначе просим его ввести данные снова.
     user = {"name": "operator", "password": "operator"}
     form = LoginForm()
+    if form.validate_on_submit():
+        flash('Login requested for user {}'.format(
+            form.username.data))
     return render_template('login.html', title='Login', user=user, form=form)
