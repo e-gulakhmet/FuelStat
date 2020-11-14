@@ -3,14 +3,16 @@
 
 
 from app import flsk
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from app.forms import LoginForm
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
+from werkzeug.urls import url_parse
 
 
 
 @flsk.route("/index")
+@login_required # Проверяем авторизовался ли пользователь
 def index():
     return render_template("index.html", title="Index", user=current_user)
 
@@ -38,19 +40,30 @@ def login():
     form = LoginForm()
     # Если пришел POST запрос от браузера
     if form.validate_on_submit():
-        if user.username != form.username.data:
+        print(form.username.data, form.password.data)
+        if user.username != form.username.data or user.check_password(form.password.data) is False:
             flash('Invalid username or password')
             return redirect(url_for('login'))
         # Иначе загружаем пользователя
         # и переходим к основной странице
         login_user(user, remember=True)
-        return redirect(url_for("index"))
+        # Проверяем, если в строке был указан аргумент next,
+        # значит пользователь пыталься перейти на страницу для
+        # авторизованных пользователей, но так как он не авторизовалься,
+        # его перенаправили сюда. Тогда после того, как он
+        # авторизовался, переходим на стрницу указанную страницу.
+        next_page = request.args.get("next")
+        # Если аргумента next нет, то переходим на главную страницу
+        if next_page is None or url_parse(next_page).netloc != '':
+            next_page = url_for("index")
+        return redirect(next_page)
     # Генерируем страницу авторизиции
-    return render_template('login.html', title='Login', form=form)
+    return render_template("login.html", title="Login", form=form)
 
 
 
 @flsk.route('/logout')
+@login_required
 def logout():
     logout_user()
     return redirect(url_for('index'))
