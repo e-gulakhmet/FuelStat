@@ -1,36 +1,40 @@
-{% extends 'bootstrap/base.html' %}
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
 
-{% block title %}
-    {% if title %}
-        {{ title }} - FuelStat
-    {% else %}
-        FuelStat
-    {% endif %}
-{% endblock %}
+        {% block styles %}
+            <!-- Bootstrap CSS -->
+            {{ bootstrap.load_css() }}
+        {% endblock %}
+        
+        <title>
+            {% if title %}
+                {{ title }} - FuelStat
+            {% else %}
+                FuelStat
+            {% endif %}
+        </title>
+    </head>
 
-{% block navbar %}
-    <nav class="navbar navbar-default;">
-        <div class="container">
+    <body>
+        <nav class="navbar navbar-dark;" style="background-color: cornflowerblue;">
+            <div class="container">
+    
+                <a class="navbar-brand " href="{{ url_for('index') }}">FuelStat</a>
+    
+                <ul class="navbar-nav navbar-right">
+                    {% if current_user.is_anonymous %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('login') }}">Sign In</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('logout') }}">Sing Out</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
 
-            <a class="navbar-brand " href="{{ url_for('index') }}">FuelStat</a>
-
-            <ul class="nav navbar-nav navbar-right">
-                {% if current_user.is_anonymous %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('login') }}">Sign In</a>
-                </li>
-                {% endif %}
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('logout') }}">Sing Out</a>
-                </li>
-            </ul>
-        </div>
-    </nav>
-{% endblock %}
-
-
-{% block content %}
-    <div class="container">
         {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
@@ -39,6 +43,8 @@
         {% endif %}
         {% endwith %}
 
-        {% block app_content %}{% endblock %}
-    </div>
-{% endblock %}
+        <!-- Your page content -->
+        {% block content %}{% endblock %}
+
+    </body>
+</html>
