@@ -8,7 +8,7 @@
 
         {% endblock %}
 
-        <link rel="stylesheet" href="/app/templates/style.css">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
         
         <title>
             {% if title %}
@@ -20,17 +20,16 @@
     </head>
 
     <body>
-        <nav class="navbar">
-            <div class="container">
-    
-                <a class="navbar-brand" href="{{ url_for('index') }}">FuelStat</a>
-    
+        <nav class="navbar navbar-light">
+            <div class="container-fluid">
+                <a class="navbar-brand h1" href="{{ url_for('index') }}">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" width="60" height="60" class="inline-block">
+                    FuelStat
+                </a>
                 <ul class="navbar-nav navbar-right">
-                    {% if current_user.is_anonymous %}
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('login') }}">Sign In</a>
+                    <li>
+                        <div class="img-rounded profile-img"></div>
                     </li>
-                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url_for('logout') }}">Sing Out</a>
                     </li>
