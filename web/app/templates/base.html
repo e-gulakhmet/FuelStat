@@ -5,7 +5,10 @@
         {% block styles %}
             <!-- Bootstrap CSS -->
             {{ bootstrap.load_css() }}
+
         {% endblock %}
+
+        <link rel="stylesheet" href="/app/templates/style.css">
         
         <title>
             {% if title %}
@@ -17,10 +20,10 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-dark;" style="background-color: cornflowerblue;">
+        <nav class="navbar">
             <div class="container">
     
-                <a class="navbar-brand " href="{{ url_for('index') }}">FuelStat</a>
+                <a class="navbar-brand" href="{{ url_for('index') }}">FuelStat</a>
     
                 <ul class="navbar-nav navbar-right">
                     {% if current_user.is_anonymous %}
