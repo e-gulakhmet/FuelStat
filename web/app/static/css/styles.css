@@ -5,6 +5,11 @@ body {
     font-family: Arial, Helvetica, sans-serif
 }
 
+.container-fluid {
+    margin: 0px;
+    padding: 5px;
+}
+
 /* NAVBAR */
 .navbar {
     color: white;
@@ -14,16 +19,19 @@ body {
 .navbar-brand {
     font-size: 40px;
 }
+
 .dropdown-menu {
+    padding: 5px;
     background-color: #d4d8e9;
+}
+.dropdown-item {
+    margin: 0px;
+    padding: 5px;
 }
 .dropdown-item:hover {
     background-color: #b3b6c5;
 }
-.dropdown-toggle {
-    color: white;
-}
-.dropdown-toggle:hover {
+.dropdown-toggle, .dropdown-toggle:hover {
     color: white;
 }
 
@@ -39,7 +47,18 @@ body {
 
 
 /* INDEX PAGE*/
-.container.work {
+.container.index {
+    padding: 5px;
+    margin: 10px;
     background-color: #d4d8e9;
+}
+
+.container.index.func {
+    width: 250px;
+}
+
+.container.index.tools {
+    width: 250px;
+    height: 250px;
 }
 
