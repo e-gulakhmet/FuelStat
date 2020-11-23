@@ -40,7 +40,6 @@ def login():
     form = LoginForm()
     # Если пришел POST запрос от браузера
     if form.validate_on_submit():
-        print(form.username.data, form.password.data)
         if user.username != form.username.data or user.check_password(form.password.data) is False:
             flash('Invalid username or password')
             return redirect(url_for('login'))
