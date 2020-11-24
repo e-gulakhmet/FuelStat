@@ -1,18 +1,31 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <div class="container-fluid">
 
-        <div class="container index func">
-            <h1>
-                Function <br>
-                and Navigation
-            </h1>
+        <div class="d-flex flex-row justify-content-center align-items-stretch">
+
+            <div class="d-flex flex-column">
+                <div class="container index func">
+                    <h1>
+                        Function <br>
+                        and Navigation
+                    </h1>
+                </div>
+
+                <div class="container index tools">
+                    <h1>Some Tools</h1>
+                </div>
+            </div>
+
+            <div class="container-fluid index work">
+                <h1>Workspace</h1>
+            </div>
+
+            <div class="container index report">
+                <h1>
+                    Report <br>
+                    Settings
+                </h1>
+            </div>
         </div>
-
-        <div class="container index tools">
-            <h1>Some Tools</h1>
-        </div>
-
-    </div>
 {% endblock %}
