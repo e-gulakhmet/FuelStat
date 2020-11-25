@@ -1,23 +1,15 @@
 <div class="container-fluid index work">
-    <table class="table table-hover">
-        <thead>
-            <tr class="table-primary">
-                <th>DATE</th>
-                <th>GAS <br> STATION</th>
-                <th>ODOMETER</th>
-                <th>MILIAGE<br>BEETWEEN</th>
-                <th>GALLON <br> PRICE</th>
-                <th>GALLONS</th>
-                <th>COST</th>
-                <th>MPG</th>
-                <th>MILE <br> PRICE</th>
-                <th>DAY <br> PRICE</th>
-            </tr>
-        </thead>
-        <tbody>
-
-        </tbody>
-    </table>
+    <div style="height: 100%; overflow: scroll;">
+        <table class="table table-hover table-striped">
+            {% for row in data %}
+                <tr>
+                    {% for e in row %}
+                        <td>{{ e }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
 
 
 </div>

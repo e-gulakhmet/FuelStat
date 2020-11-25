@@ -8,13 +8,16 @@ from app.forms import LoginForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
+import sqlite3
 
 
 
 @flsk.route("/index")
 @login_required # Проверяем авторизовался ли пользователь
 def index():
-    return render_template("index.html", title="Index", user=current_user)
+    db = sqlite3.connect("../data/database.db")
+    data = db.execute("SELECT * FROM trans")
+    return render_template("index.html", title="Index", user=current_user, data=data)
 
 
 
