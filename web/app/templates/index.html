@@ -5,18 +5,15 @@
         <div class="d-flex flex-row justify-content-center align-items-stretch">
 
             <div class="d-flex flex-column">
-                
-                {%include "navigation.html" %}
 
-                {% block tools %}
-                    <div class="container index tools">
-                        <h1>Some Tools</h1>
-                    </div>
-                {% endblock %}
+                {% include "navigation.html" %}
+
+                {% include "fuel.html" %}
+
             </div>
 
-            {%include "workspace.html" %}
+            {% include "workspace.html" %}
 
-            {%include "report.html" %}           
+            {% include "report.html" %}           
         </div>
 {% endblock %}
