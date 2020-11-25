@@ -61,11 +61,11 @@ body, html {
 
 .container.index.func {
     height: 100%;
-    width: 250px;
+    width: 200px;
 }
 
 .container.index.tools {
-    width: 250px;
+    width: 200px;
     height: 250px;
 }
 
@@ -73,3 +73,13 @@ body, html {
     width: 250px;
 }
 
+table.table-bordered{
+    border: 1px solid black;
+    margin-top: 20px;
+  }
+table.table-bordered > thead > tr > th{
+    border: 1px solid black;
+}
+table.table-bordered > tbody > tr > td{
+    border: 1px solid black;
+}
