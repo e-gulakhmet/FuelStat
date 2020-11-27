@@ -42,7 +42,7 @@ body, html {
 }
 
 
-/* INDEX PAGE*/
+/* INDEX PAGE */
 .d-flex.flex-row {
     height: 89%;
 }
@@ -72,4 +72,11 @@ body, html {
 
 .container.index.report {
     width: 250px;
+}
+
+/* WORKSPACE */
+.table.workspace thead th {
+    background-color:  #d4d8e9;
+    position: sticky;
+    top: 0;
 }

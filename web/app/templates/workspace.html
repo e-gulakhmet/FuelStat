@@ -1,6 +1,14 @@
 <div class="container-fluid index work">
     <div class="table-responsive" style="height: 100%;">
-        <table class="table table-hover table-striped">
+        <table class="table table-hover table-striped workspace">
+            <thead>
+                <tr>
+                    <th>DATE</th>
+                    <th>ODOMETER</th>
+                    <th>STATION ID</th>
+                    <th>GALLONS COUNT</th>    
+                </tr>
+            </thead>
             <tbody style="overflow-y:auto;">
             {% for row in trans_data %}
                 <tr>

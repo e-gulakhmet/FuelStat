@@ -16,7 +16,7 @@ import sqlite3
 @login_required # Проверяем авторизовался ли пользователь
 def index():
     db = sqlite3.connect("../data/database.db")
-    trans_data = db.execute("SELECT * FROM trans")
+    trans_data = db.execute("SELECT dtime, odometer, fuel_id, amount FROM trans")
     fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
     return render_template("index.html", title="Index", user=current_user, trans_data=trans_data, fuel_data=fuel_data)
 
