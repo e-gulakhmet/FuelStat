@@ -16,13 +16,14 @@ import sqlite3
 @login_required # Проверяем авторизовался ли пользователь
 def index():
     db = sqlite3.connect("../data/database.db")
-    fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
+    fuel_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel ORDER BY id")
     trans_data = db.execute("SELECT dtime, odometer, fuel_id, amount FROM trans")
 
     navig_form = NavigationForm()
+    navig_form.names.choices = list(fuel_data)
 
     if navig_form.validate_on_submit():
-        print(navig_form.start_date.data, navig_form.end_date.data)
+        print(navig_form.start_date.data, navig_form.end_date.data, tuple(navig_form.names.data))
         trans_data = db.execute("""SELECT
                                    dtime, 
                                    odometer,
@@ -31,7 +32,8 @@ def index():
                                    FROM trans
                                    WHERE """ +
                                 "dtime > '" + str(navig_form.start_date.data) + "'" +
-                                "AND dtime < '" + str(navig_form.end_date.data) + "'")
+                                "AND dtime < '" + str(navig_form.end_date.data) + "'" +
+                                "AND fuel_id in " + str(tuple(navig_form.names.data)))
 
     return render_template("index.html",
                            trans_data=trans_data,
