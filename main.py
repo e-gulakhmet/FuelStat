@@ -85,7 +85,7 @@ def recreate(database, args):
     database.create_table("trans",
                           """
                           id INTEGER PRIMARY KEY,
-                          dtime TEXT DEFAULT CURRENT_TIMESTAMP,
+                          dtime DATETIME DEFAULT CURRENT_TIMESTAMP,
                           odometer INTEGER NOT NULL,
                           fuel_id INTEGER NOT NULL,
                           amount INTEGER NOT NULL,

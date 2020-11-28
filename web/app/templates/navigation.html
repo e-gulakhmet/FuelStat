@@ -1,5 +1,7 @@
+{% from 'bootstrap/form.html' import render_form, render_field %}
+
+
 <div class="container index navigation">
-    <h1>
-        Navigation
-    </h1>
+        <h1>Navigation</h1>
+        {{ render_form(navigation_form) }}
 </div>
