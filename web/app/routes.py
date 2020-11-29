@@ -16,11 +16,12 @@ import sqlite3
 @login_required # Проверяем авторизовался ли пользователь
 def index():
     db = sqlite3.connect("../data/database.db")
-    fuel_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel ORDER BY id")
+    fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
     trans_data = db.execute("SELECT dtime, odometer, fuel_id, amount FROM trans")
+    navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
 
     navig_form = NavigationForm()
-    navig_form.names.choices = list(fuel_data)
+    navig_form.names.choices = navig_data
 
     if navig_form.validate_on_submit():
         print(navig_form.start_date.data, navig_form.end_date.data, tuple(navig_form.names.data))
