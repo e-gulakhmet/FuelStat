@@ -16,3 +16,7 @@ class NavigationForm(FlaskForm):
     end_date = DateField("End Date", default=date(9000, 12, 31))
     names = SelectMultipleField("Stations Names")
     search = SubmitField("Allow")
+
+
+class WorkSpaceForm(FlaskForm):
+    submit = SubmitField('Accept')

@@ -4,7 +4,7 @@
 
 from app import flsk
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationForm
+from app.forms import LoginForm, NavigationForm, WorkSpaceForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
@@ -23,8 +23,9 @@ def index():
     navig_form = NavigationForm()
     navig_form.names.choices = navig_data
 
+    workspace_form = WorkSpaceForm()
+
     if navig_form.validate_on_submit():
-        print(navig_form.start_date.data, navig_form.end_date.data, tuple(navig_form.names.data))
         trans_data = db.execute("""SELECT
                                    dtime, 
                                    odometer,
@@ -39,7 +40,8 @@ def index():
     return render_template("index.html",
                            trans_data=trans_data,
                            fuel_data=fuel_data,
-                           navigation_form=navig_form)
+                           navigation_form=navig_form,
+                           workspace_form=workspace_form)
 
 
 
