@@ -1,26 +1,26 @@
-<div class="d-flex flex-row border border-2" style="height: 100%">
-    <div class="d-flex flex-column border boder-1" style="height: 100%">
-    <div class="table-responsive" style="height: 100%;">
-        <table class="table table-hover table-striped workspace">
-            <thead>
-                <tr>
-                    <th>DATE</th>
-                    <th>ODOMETER</th>
-                    <th>STATION ID</th>
-                    <th>GALLONS COUNT</th>    
-                </tr>
-            </thead>
-            <tbody style="overflow-y:auto;">
-            {% for row in trans_data %}
-                <tr>
-                    {% for e in row %}
-                        <td>{{ e }}</td>
-                    {% endfor %}
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+<div class="container-fluid index">
+    <div class="d-flex flex-column" style="height: 100%;">
+        <div class="table-responsive" style="height: 100%;">
+            <table class="table table-hover table-striped workspace">
+                <thead>
+                    <tr>
+                        <th>DATE</th>
+                        <th>ODOMETER</th>
+                        <th>STATION ID</th>
+                        <th>GALLONS COUNT</th>    
+                    </tr>
+                </thead>
+                <tbody style="overflow-y:auto;">
+                {% for row in trans_data %}
+                    <tr>
+                        {% for e in row %}
+                            <td>{{ e }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {{ render_form(workspace_form) }}
     </div>
-    {{ render_form(workspace_form) }}
-</div>
 </div>
