@@ -1,5 +1,6 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, DateField, SelectMultipleField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField
+from wtforms import DateField, SelectMultipleField, IntegerField, FloatField
 from wtforms.validators import DataRequired, StopValidation
 from datetime import date
 
@@ -20,3 +21,10 @@ class NavigationForm(FlaskForm):
 
 class WorkSpaceForm(FlaskForm):
     submit = SubmitField('Accept')
+
+
+class TableRowForm(FlaskForm):
+    date = DateField()
+    station_name = StringField()
+    fuel_id = IntegerField()
+    gallon_count = FloatField()

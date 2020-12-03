@@ -4,7 +4,7 @@
 
 from app import flsk
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationForm, WorkSpaceForm
+from app.forms import LoginForm, NavigationForm, WorkSpaceForm, TableRowForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
@@ -24,6 +24,7 @@ def index():
     navig_form.names.choices = navig_data
 
     workspace_form = WorkSpaceForm()
+    table_row_form = TableRowForm()
 
     if navig_form.validate_on_submit():
         trans_data = db.execute("""SELECT
@@ -41,7 +42,8 @@ def index():
                            trans_data=trans_data,
                            fuel_data=fuel_data,
                            navigation_form=navig_form,
-                           workspace_form=workspace_form)
+                           workspace_form=workspace_form,
+                           table_row_form=table_row_form)
 
 
 

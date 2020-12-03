@@ -12,9 +12,11 @@
                 </thead>
                 <tbody style="overflow-y:auto;">
                 {% for row in trans_data %}
-                    <tr>
+                    <tr id={{ row[0] }} onclick="reply_click(this.id)">
                         {% for e in row %}
-                            <td>{{ e }}</td>
+                            <td>
+                                {{ e }}
+                            </td>
                         {% endfor %}
                     </tr>
                 {% endfor %}
@@ -24,3 +26,10 @@
         {{ render_form(workspace_form) }}
     </div>
 </div>
+
+<script type="text/javascript">
+    function reply_click(clicked_id)
+    {
+        console.log(clicked_id);
+    }
+  </script>
