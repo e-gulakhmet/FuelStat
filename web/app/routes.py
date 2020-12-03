@@ -15,15 +15,18 @@ import sqlite3
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():
+
     db = sqlite3.connect("../data/database.db")
     fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
     trans_data = db.execute("SELECT dtime, odometer, fuel_id, amount FROM trans")
     navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
+    change_row = 0
 
     navig_form = NavigationForm()
     navig_form.names.choices = navig_data
 
     workspace_form = WorkSpaceForm()
+
     table_row_form = TableRowForm()
 
     if navig_form.validate_on_submit():

@@ -12,12 +12,15 @@
                 </thead>
                 <tbody style="overflow-y:auto;">
                 {% for row in trans_data %}
-                    <tr id={{ row[0] }} onclick="reply_click(this.id)">
+                    <tr>
                         {% for e in row %}
                             <td>
                                 {{ e }}
                             </td>
                         {% endfor %}
+                            <td>
+                                <button id={{ row[0] }} onclick="row_edit_click(this.id)" type="button" class="btn btn-outline-primary">Edit</button>
+                            </td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -28,8 +31,12 @@
 </div>
 
 <script type="text/javascript">
-    function reply_click(clicked_id)
+    function row_edit_click(row_id)
     {
-        console.log(clicked_id);
+        console.log(row_id);
+        let url = new URL(window.location.href);
+        console.log(window.location.href)
+        url.searchParams.set("row_id", row_id)
+        console.log(url)
     }
   </script>
