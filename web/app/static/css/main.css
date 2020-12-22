@@ -38,8 +38,10 @@ body, html {
 
 
 /* INDEX PAGE */
-.d-flex.flex-row {
-    height: 89%;
+#main-table {
+    width: 100%;
+    border: 10px red;
+    background-color: black;
 }
 
 .container.index {

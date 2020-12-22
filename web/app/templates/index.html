@@ -2,19 +2,18 @@
 {% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block content %}
-
-        <div class="d-flex flex-row justify-content-center align-items-stretch">
-
-            <div class="d-flex flex-column">
-
-                {% include "navigation.html" %}
-
-                {% include "fuel.html" %}
-
-            </div>
-
-            {% include "workspace.html" %}
-
-            {% include "report.html" %}           
-        </div>
+        <table id="main-table">
+            <tr>
+                <td>
+                    {% include "navigation.html" %}
+                    {% include "fuel.html" %}
+                </td>
+                <td>
+                    {% include "workspace.html" %}
+                </td>
+                <td>
+                    {% include "report.html" %}
+                </td>
+            </tr>       
+        </table>
 {% endblock %}
