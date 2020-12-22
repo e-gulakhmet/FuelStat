@@ -7,27 +7,22 @@ body, html {
 }
 
 /* NAVBAR */
-.navbar {
+#navbar {
+    width: 100%;
+}
+#brand-image {
+    margin-right: 10px;
+}
+#brand-name {
     color: white;
-    padding-left: 0px;
-    padding-right: 0px;
 }
-.navbar-brand {
-    font-size: 40px;
+.navbar-link {
+    min-width: 70px;
 }
-
-.dropdown-menu {
-    padding: 5px;
-    background-color: #d4d8e9;
+.navbar-link a{
+    color: white;
 }
-.dropdown-item {
-    margin: 0px;
-    padding: 5px;
-}
-.dropdown-item:hover {
-    background-color: #b3b6c5;
-}
-.dropdown-toggle, .dropdown-toggle:hover {
+#alert-text {
     color: white;
 }
 
