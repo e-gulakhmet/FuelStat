@@ -6,87 +6,82 @@ body, html {
     height: 100%;
 }
 
-/* NAVBAR */
-#navbar {
-    width: 100%;
-}
-#brand-image {
-    margin-right: 10px;
-}
-#brand-name {
-    color: white;
-}
-.navbar-link {
-    min-width: 70px;
-}
-.navbar-link a{
-    color: white;
-}
-#alert-text {
-    color: white;
+.container {
+    background-color: #d4d8e9;
+    border-radius: 10px;
 }
 
+/* NAVBAR */
+.navbar {
+    margin-top: 10px;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.brand {
+    vertical-align: middle;
+    display: inline;
+    text-align: center;
+    color: white;
+    text-decoration: none;
+}
+.navbar-button {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
 
 
 /* LOGIN PAGE */
 .container.login {
-    background-color: #d4d8e9;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     width: 500px;
     padding: 10px 30px;
-    border-radius: 20px;
 }
 
 
 /* INDEX PAGE */
-#main-table {
-    width: 100%;
-    border: 10px red;
-    background-color: black;
-}
-
 .container.index {
     padding: 5px;
     margin: 5px;
-    background-color: #d4d8e9;
-    border-radius: 10px;
+    display: inline-block;
 }
 
-.container-fluid.index {
-    padding: 5px;
-    margin: 5px;
-    background-color: #d4d8e9;
-    border-radius: 10px;
-}
 
 /* NAVIGATION */
-.container.index.navigation {
+.container.navigation {
     width: 200px;
     min-height: 420px;
+    padding: 5px;
+    margin: 5px;
 }
 
+
 /* FUEL */
-.container.index.fuel {
+.container.fuel {
     width: 200px;
     height: 100%;
     min-height: 100px;
+    padding: 5px;
+    margin: 5px;
 }
+
 
 /* REPORT */
 .container.index.report {
     width: 250px;
 }
 
+
 /* WORKSPACE */
 .table.workspace thead th {
     background-color:  #d4d8e9;
     position: sticky;
     top: 0;
-}
-
-.btn {
-    margin: 0px !important;
-}
-
-form {
-    margin-block-end: 0px !important;
 }

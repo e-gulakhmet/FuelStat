@@ -1,15 +1,13 @@
-<div class="container index fuel">
-    <div class="table-responsive" style="height: 100%;">
-        <table class="table">
-            <tbody>
-                {% for row in fuel_data %}
-                    <tr>
-                        {% for e in row %}
-                            <td>{{ e }}</td>
-                        {% endfor %}
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
+<div class="container fuel">
+    <table class="table">
+        <tbody>
+            {% for row in fuel_data %}
+                <tr>
+                    {% for e in row %}
+                        <td>{{ e }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>

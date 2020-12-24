@@ -1,33 +1,29 @@
-<div class="container-fluid index">
-    <div class="d-flex flex-column" style="height: 100%;">
-        <div class="table-responsive" style="height: 100%;">
-            <table class="table table-hover table-striped workspace">
-                <thead>
-                    <tr>
-                        <th>DATE</th>
-                        <th>ODOMETER</th>
-                        <th>STATION ID</th>
-                        <th>GALLONS COUNT</th>    
-                    </tr>
-                </thead>
-                <tbody style="overflow-y:auto;">
-                {% for row in trans_data %}
-                    <tr>
-                        {% for e in row %}
-                            <td>
-                                {{ e }}
-                            </td>
-                        {% endfor %}
-                            <td>
-                                <button id={{ row[0] }} onclick="row_edit_click(this.id)" type="button" class="btn btn-outline-primary">Edit</button>
-                            </td>
-                    </tr>
+<div class="container index workspace">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>DATE</th>
+                <th>ODOMETER</th>
+                <th>STATION ID</th>
+                <th>GALLONS COUNT</th>    
+            </tr>
+        </thead>
+        <tbody style="overflow-y:auto;">
+        {% for row in trans_data %}
+            <tr>
+                {% for e in row %}
+                    <td>
+                        {{ e }}
+                    </td>
                 {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        {{ render_form(workspace_form) }}
-    </div>
+                    <td>
+                        <button id="{{ row[0] }}" onclick="row_edit_click(this.id)" type="button" class="btn btn-outline-primary">Edit</button>
+                    </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {{ render_form(workspace_form) }}
 </div>
 
 <script type="text/javascript">
@@ -39,4 +35,4 @@
         url.searchParams.set("row_id", row_id)
         console.log(url)
     }
-  </script>
+</script>
