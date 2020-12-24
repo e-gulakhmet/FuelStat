@@ -2,10 +2,14 @@
 {% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block content %}
-    <div style="display: inline-block;">
-        {% include "navigation.html" %}
-        {% include "fuel.html" %}
+    <div class="container">
+        <div class="index_inner">
+            <div>
+                {% include "navigation.html" %}
+                {% include "fuel.html" %}
+            </div>
+            {% include "workspace.html" %}
+            {% include "report.html" %}
+        </div> 
     </div>
-    {% include "workspace.html" %}
-    {% include "report.html" %}
 {% endblock %}

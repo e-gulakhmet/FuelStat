@@ -9,27 +9,36 @@
                 FuelStat
             {% endif %}
         </title>
-
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/reset.css') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
         <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
     </head>
 
     <body>
-        <ul class="navbar">
-            <li style="float: left;">
-                <a href="{{ url_for('index') }}">
-                    <img class="brand" id="brand-image" src="{{ url_for('static', filename='images/logo.png') }}" width="120" height="80">
-                    <h1 class="brand" id="brand-name">
-                        FuelStat
-                    </h1>
-                </a>
-            </li>
-            {% if current_user.is_authenticated %}
-                <li style="float: right;">
-                    <a class="navbar-button" id="logout-link" href="{{ url_for('logout') }}">Sign Out</a>
-                </li>
-            {% endif %}
-        </ul>
+        <header class="header">
+            <div class="container">
+                <div class="header_inner">
+                    <div class="logo">
+                        <a href="{{ url_for('index') }}">
+                            <img src="{{ url_for('static', filename='images/logo.png') }}" width="120" height="80">
+                            FuelStat
+                        </a>
+                    </div>
+
+                    <nav class="menu">
+                        <ul class="menu_list">
+                            {% if current_user.is_authenticated %}
+                                <li>
+                                    <a href="{{ url_for('logout') }}">SIGN OUT</a>
+                                </li>
+                            {% endif %}
+                        </ul> 
+                    </nav>
+                </div>
+            </div>
+        </header>
 
         {% with messages = get_flashed_messages() %}
             {% if messages %}

@@ -1,87 +1,69 @@
-body, html {
-    padding: 0px;
-    margin: 0px;
+* {
+    box-sizing: border-box;
+}
+
+html {
+    font-family: 'Open Sans', sans-serif;
+}
+
+body {
     background-color: #2b2b73;
-    font-family: Arial;
-    height: 100%;
 }
 
 .container {
+    padding: 0px 10px;
+}
+
+
+/* BASE */
+.header_inner {
+    display: flex;
+    justify-content: space-between;
+    height: 80px;
+    align-items: center;
+}
+.logo a{
+    font-weight: 700;
+    font-size: 40px;
+    color: white;
+}
+.menu_list {
+    display: flex;
+}
+.menu_list a {
+    font-weight: 600;
+    font-size: 20px;
+    color: white;
+}
+
+
+/* INDEX */
+.index_container {
     background-color: #d4d8e9;
     border-radius: 10px;
-}
-
-/* NAVBAR */
-.navbar {
-    margin-top: 10px;
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-}
-.brand {
-    vertical-align: middle;
-    display: inline;
-    text-align: center;
-    color: white;
-    text-decoration: none;
-}
-.navbar-button {
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-
-/* LOGIN PAGE */
-.container.login {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 500px;
-    padding: 10px 30px;
-}
-
-
-/* INDEX PAGE */
-.container.index {
-    padding: 5px;
     margin: 5px;
-    display: inline-block;
+    padding: 20px;
+}
+.index_inner {
+    display: flex;
+    align-items: top;
 }
 
 
-/* NAVIGATION */
-.container.navigation {
-    width: 200px;
-    min-height: 420px;
-    padding: 5px;
-    margin: 5px;
-}
 
-
-/* FUEL */
-.container.fuel {
-    width: 200px;
-    height: 100%;
-    min-height: 100px;
-    padding: 5px;
-    margin: 5px;
-}
-
-
-/* REPORT */
-.container.index.report {
+/* NAVIGATION, FUEL*/
+.index_container.navigation,
+.index_container.fuel {
     width: 250px;
 }
 
+/* REPORT */
+.index_container.report {
+    width: 250px;
+}
 
 /* WORKSPACE */
-.table.workspace thead th {
-    background-color:  #d4d8e9;
-    position: sticky;
-    top: 0;
+.index_container.workspace{
+    flex: 1;
 }
+
