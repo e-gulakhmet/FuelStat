@@ -1,11 +1,25 @@
 {% extends "base.html" %}
-{% from 'bootstrap/form.html' import render_form, render_field %}
 
 {% block content %}
-    <div class="container">
-        <div class="index_container">
-            <h1>Sign In</h1>
-            {{ render_form(form) }}
+    <div class="login_container">
+        <p class="login_header">Sign In</p>
+        <div class="login_inner">
+            <form class="login_form" action="" method="POST">
+                {{ form.hidden_tag() }}
+                <div class="form_item">
+                    <p class="form_label">{{ form.username.label }}</p>
+                    <p class="form_username">{{ form.username(size=16) }}</p>
+                </div>
+                <div class="form_item">
+                    <p class="form_label">{{ form.password.label }}</p>
+                    <p class="form_password">{{ form.password(size=16) }}</p>
+                </div>
+                <div>
+                    <button class="form_button">
+                        {{ form.submit() }}
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
 {% endblock %}
