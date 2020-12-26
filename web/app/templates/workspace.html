@@ -17,8 +17,10 @@
                             {{ e }}
                         </td>
                     {% endfor %}
-                        <td>
-                            <button id="{{ row[0] }}" onclick="row_edit_click(this.id)" type="button" class="btn btn-outline-primary">Edit</button>
+                        <td style="text-align: end;">
+                            <a class="edit_button">
+                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
+                            </a>
                         </td>
                 </tr>
             {% endfor %}
