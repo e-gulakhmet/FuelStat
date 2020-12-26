@@ -15,7 +15,6 @@ body {
     padding: 0px 10px;
 }
 
-
 /* BASE */
 .header_inner {
     display: flex;
@@ -90,6 +89,21 @@ body {
 /* WORKSPACE */
 .index_container.workspace{
     flex: 1;
+}
+.table.workspace {
+    width: 100%;
+}
+.table.workspace th {
+    text-align: left;
+    font-weight: 600;
+    font-size: 20px;
+}
+.table.workspace td {
+    padding: 8px;
+    border-bottom: 1px solid #808080
+}
+.table.workspace tr:hover {
+    background-color: #bcc2dc;
 }
 
 
