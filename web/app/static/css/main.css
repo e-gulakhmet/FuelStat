@@ -89,13 +89,19 @@ body {
 /* WORKSPACE */
 .index_container.workspace{
     flex: 1;
+    height: 800px;
 }
 .table_workspace {
+    display: flex;
+    flex-flow: column;
     width: 100%;
-    overflow: auto;
-    height: 80%;
+    height: 100%;
 }
 .table_workspace thead {
+    flex: 1 1 auto;
+    display: table;
+    width: 100%;
+    table-layout: fixed;
     border-bottom: 3px solid #808080;
 }
 .table_workspace th {
@@ -103,14 +109,19 @@ body {
     font-weight: 600;
     font-size: 20px;
 }
-.spacer {
-    height: 20px;
+.table_workspace tbody {
+    flex: 1 1 auto;
+    display: block;
+    overflow: auto;
 }
 .table_workspace tbody tr:hover {
     background-color: #bcc2dc;
 }
 .table_workspace tbody tr {
     border-bottom: 1px solid #808080;
+    width: 100%;
+    display: table;
+    table-layout: fixed;
 }
 .table_workspace td {
     padding: 8px 0px;
