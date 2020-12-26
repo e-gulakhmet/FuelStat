@@ -64,13 +64,20 @@ body {
 }
 .index_inner {
     display: flex;
-    align-items: top;
+    align-items: stretch;
+}
+.index_left_inner {
+    display: flex;
+    flex-direction: column;
 }
 
 
 
 /* NAVIGATION, FUEL*/
-.index_container.navigation,
+.index_container.navigation {
+    width: 250px;
+    flex-grow: 1;
+}
 .index_container.fuel {
     width: 250px;
 }
