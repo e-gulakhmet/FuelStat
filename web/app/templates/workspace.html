@@ -1,26 +1,26 @@
 <div class="index_container workspace">
-    <table class="table workspace">
+    <table class="table_workspace">
         <thead>
             <tr>
                 <th>DATE</th>
                 <th>ODOMETER</th>
                 <th>STATION ID</th>
-                <th>GALLONS COUNT</th>    
+                <th>GALLONS COUNT</th>
             </tr>
         </thead>
         <tbody>
-        {% for row in trans_data %}
-            <tr>
-                {% for e in row %}
-                    <td>
-                        {{ e }}
-                    </td>
-                {% endfor %}
-                    <td>
-                        <button id="{{ row[0] }}" onclick="row_edit_click(this.id)" type="button" class="btn btn-outline-primary">Edit</button>
-                    </td>
-            </tr>
-        {% endfor %}
+            {% for row in trans_data %}
+                <tr>
+                    {% for e in row %}
+                        <td>
+                            {{ e }}
+                        </td>
+                    {% endfor %}
+                        <td>
+                            <button id="{{ row[0] }}" onclick="row_edit_click(this.id)" type="button" class="btn btn-outline-primary">Edit</button>
+                        </td>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>

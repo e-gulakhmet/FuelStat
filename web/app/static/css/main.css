@@ -90,20 +90,30 @@ body {
 .index_container.workspace{
     flex: 1;
 }
-.table.workspace {
+.table_workspace {
     width: 100%;
+    overflow: auto;
+    height: 80%;
 }
-.table.workspace th {
+.table_workspace thead {
+    border-bottom: 3px solid #808080;
+}
+.table_workspace th {
     text-align: left;
     font-weight: 600;
     font-size: 20px;
 }
-.table.workspace td {
-    padding: 8px;
-    border-bottom: 1px solid #808080
+.spacer {
+    height: 20px;
 }
-.table.workspace tr:hover {
+.table_workspace tbody tr:hover {
     background-color: #bcc2dc;
+}
+.table_workspace tbody tr {
+    border-bottom: 1px solid #808080;
+}
+.table_workspace td {
+    padding: 8px 0px;
 }
 
 
