@@ -11,6 +11,7 @@ body {
 }
 
 .container {
+    margin: 10px 0px;
     padding: 0px 10px;
 }
 
@@ -34,6 +35,23 @@ body {
     font-weight: 600;
     font-size: 20px;
     color: white;
+}
+.logout_button {
+    border-radius: 15px;
+    border: 3px solid white;
+    padding: 10px;
+}
+.container_alert {
+    background-color: rgba(112, 219, 112, 50%);
+    margin: 10px;
+    padding: 15px;
+    border-radius: 10px;
+    border:2px solid #70db70;
+}
+.alert_text {
+    color: black;
+    font-weight: 400;
+    font-size: 25px;
 }
 
 
@@ -99,5 +117,5 @@ body {
 }
 .form_username, .form_password {
     margin-top: 10px;
-    font-size: 20px;
+    font-size: 25px;
 }

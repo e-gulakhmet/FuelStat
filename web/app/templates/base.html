@@ -31,7 +31,7 @@
                         <ul class="menu_list">
                             {% if current_user.is_authenticated %}
                                 <li>
-                                    <a href="{{ url_for('logout') }}">SIGN OUT</a>
+                                    <a class="logout_button" href="{{ url_for('logout') }}">SIGN OUT</a>
                                 </li>
                             {% endif %}
                         </ul> 
@@ -43,8 +43,8 @@
         {% with messages = get_flashed_messages() %}
             {% if messages %}
                 {% for message in messages %}
-                    <div>
-                        <h1 id="alert-text">{{ message }}</h1>
+                    <div class="container_alert">
+                        <p class="alert_text">{{ message }}</p>
                     </div>
                 {% endfor %}
             {% endif %}
