@@ -27,14 +27,3 @@
         </tbody>
     </table>
 </div>
-
-<script type="text/javascript">
-    function row_edit_click(row_id)
-    {
-        console.log(row_id);
-        let url = new URL(window.location.href);
-        console.log(window.location.href)
-        url.searchParams.set("row_id", row_id)
-        console.log(url)
-    }
-</script>

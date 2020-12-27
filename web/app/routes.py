@@ -44,7 +44,7 @@ def index():
     return render_template("index.html",
                            trans_data=trans_data,
                            fuel_data=fuel_data,
-                           navigation_form=navig_form,
+                           navig_form=navig_form,
                            workspace_form=workspace_form,
                            table_row_form=table_row_form)
 

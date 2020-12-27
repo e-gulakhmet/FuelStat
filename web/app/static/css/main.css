@@ -72,14 +72,67 @@ body {
 
 
 
-/* NAVIGATION, FUEL*/
+/* NAVIGATION*/
 .index_container.navigation {
     width: 250px;
     flex-grow: 1;
 }
+.navig_header {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #808080;
+}
+.navig_form_container {
+    margin-bottom: 20px;
+}
+.navig_form_label {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.navig_form {
+    font-size: 18px;
+    border-radius: 5px;
+    border: 2px solid #808080;
+    padding-left: 5px;
+    transition-duration: 0.2s;
+}
+.navig_form:focus {
+    border-color: #9999ff;
+}
+.navig_form.names {
+    font-size: 20px;
+    width: 150px;
+    height: 200px;
+    background-color: #d4d8e9;
+    border: 2px solid #808080;
+    padding: 5px;
+}
+.navig_form_button {
+    height: 30px;
+    width: 60px;
+    border-radius: 10px;
+    border: 2px solid #2b2b73;
+    background-color: #c7c7ea;
+    transition-duration: 0.4s;
+}
+.navig_form_button:hover {
+    color: white;
+    background-color: #2b2b73;
+}
+.navig_form_button:active {
+    border-color: #66ff66;
+}
+
+
+/* FUEL */
 .index_container.fuel {
     width: 250px;
 }
+
 
 /* REPORT */
 .index_container.report {
@@ -137,6 +190,9 @@ body {
 .edit_button:hover {
     color: white;
     background-color: #a2a2dd;
+}
+.edit_button:active {
+    border-color: #66ff66;
 }
 
 
