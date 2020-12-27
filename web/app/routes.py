@@ -4,7 +4,7 @@
 
 from app import flsk
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationForm, WorkSpaceForm, TableRowForm
+from app.forms import LoginForm, NavigationForm, TableRowForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
@@ -15,21 +15,16 @@ import sqlite3
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():
-
     db = sqlite3.connect("../data/database.db")
     fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
     trans_data = db.execute("SELECT dtime, odometer, fuel_id, amount FROM trans")
     navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
-    change_row = 0
 
     navig_form = NavigationForm()
     navig_form.names.choices = navig_data
 
-    workspace_form = WorkSpaceForm()
-
-    table_row_form = TableRowForm()
-
     if navig_form.validate_on_submit():
+        print("Fuck!")
         trans_data = db.execute("""SELECT
                                    dtime, 
                                    odometer,
@@ -44,9 +39,7 @@ def index():
     return render_template("index.html",
                            trans_data=trans_data,
                            fuel_data=fuel_data,
-                           navig_form=navig_form,
-                           workspace_form=workspace_form,
-                           table_row_form=table_row_form)
+                           navig_form=navig_form)
 
 
 

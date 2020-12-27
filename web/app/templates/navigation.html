@@ -1,22 +1,25 @@
 <div class="index_container navigation">
         <p class="navig_header">Navigation<p>
-        <div class="navig_form_container">
-                <p class="navig_form_label">
-                        {{ navig_form.start_date.label }}
-                </p>
-                {{ navig_form.start_date(size=10, class="navig_form start_date") }}
-        </div>
-        <div class="navig_form_container">
-                <p class="navig_form_label">
-                        {{ navig_form.end_date.label }}
-                </p>
-                {{ navig_form.end_date(size=10, class="navig_form end_date") }}
-        </div>
-        <div class="navig_form_container">
-                <p class="navig_form_label">
-                        {{ navig_form.names.label }}
-                </p>
-                {{ navig_form.names(class="navig_form names") }}
-        </div>
-        {{ navig_form.search(class="navig_form_button") }}
+        <form action="" method="POST">
+                {{ navig_form.hidden_tag() }}
+                <div class="navig_form_container">
+                        <p class="navig_form_label">
+                                {{ navig_form.start_date.label }}
+                        </p>
+                        {{ navig_form.start_date(size=10, class="navig_form start_date") }}
+                </div>
+                <div class="navig_form_container">
+                        <p class="navig_form_label">
+                                {{ navig_form.end_date.label }}
+                        </p>
+                        {{ navig_form.end_date(size=10, class="navig_form end_date") }}
+                </div>
+                <div class="navig_form_container">
+                        <p class="navig_form_label">
+                                {{ navig_form.names.label }}
+                        </p>
+                        {{ navig_form.names(class="navig_form names") }}
+                </div>
+                {{ navig_form.allow(class="navig_form_button") }}
+        </form>
 </div>
