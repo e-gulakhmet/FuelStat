@@ -11,6 +11,7 @@ from werkzeug.urls import url_parse
 import sqlite3
 
 
+#TODO: Пофиксить подбор таблицы по одной заправке
 
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
@@ -23,8 +24,9 @@ def index():
     navig_form = NavigationForm()
     navig_form.names.choices = navig_data
 
+    row_form = TableRowForm()
+
     if navig_form.validate_on_submit():
-        print("Fuck!")
         trans_data = db.execute("""SELECT
                                    dtime, 
                                    odometer,
@@ -39,7 +41,8 @@ def index():
     return render_template("index.html",
                            trans_data=trans_data,
                            fuel_data=fuel_data,
-                           navig_form=navig_form)
+                           navig_form=navig_form,
+                           row_form=row_form)
 
 
 

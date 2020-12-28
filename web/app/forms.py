@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms import DateField, SelectMultipleField, IntegerField, FloatField
+from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField
 from wtforms.validators import DataRequired
 from datetime import date
 
@@ -17,10 +17,10 @@ class NavigationForm(FlaskForm):
     end_date = DateField("End Date", default=date(9000, 12, 31))
     names = SelectMultipleField("Stations Names")
     allow = SubmitField("Allow")
-
+    
 
 class TableRowForm(FlaskForm):
     date = DateField()
     station_name = StringField()
-    fuel_id = IntegerField()
+    fuel_station = SelectField()
     gallon_count = FloatField()
