@@ -194,8 +194,10 @@ body {
 .edit_button:active {
     border-color: #66ff66;
 }
-.row_form {
+.work_form_col {
     display: none;
+}
+.work_form {
     font-size: 18px;
     background-color: #d4d8e9;
     border: 1px solid #808080;

@@ -1,11 +1,8 @@
-function editRow(row_id) {
-    let date = document.querySelector(".row_form.date")
-    let odometer = document.querySelector(".row_form.odometer")
-    let station = document.querySelector(".row_form.fuel_station")
-    let gallon = document.querySelector(".row_form.gallon_count")
-    date.style.display = "block"
-    odometer.style.display = "block"
-    station.style.display = "block"
-    gallon.style.display = "block" 
-    console.log(row_id)   
+function editRow(row_id=0) {
+    let form_cols = document.querySelectorAll(".work_form_col.row_" + row_id)
+    let table_cols = document.querySelectorAll(".work_table_col.row_" + row_id)
+    for (let i = 0; i < 4; i++) {
+        form_cols[i].style.display = "table-cell"
+        table_cols[i].style.display = "none"
+    }    
 }

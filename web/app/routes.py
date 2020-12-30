@@ -18,7 +18,7 @@ import sqlite3
 def index():
     db = sqlite3.connect("../data/database.db")
     fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
-    trans_data = db.execute("SELECT dtime, odometer, fuel_id, amount FROM trans")
+    trans_data = db.execute("SELECT id, dtime, odometer, fuel_id, amount FROM trans")
     navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
 
     navig_form = NavigationForm()
@@ -27,7 +27,8 @@ def index():
     row_form = TableRowForm()
 
     if navig_form.validate_on_submit():
-        trans_data = db.execute("""SELECT
+        trans_data = db.execute("""SELECT 
+                                   id,
                                    dtime, 
                                    odometer,
                                    fuel_id,

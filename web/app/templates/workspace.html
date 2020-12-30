@@ -10,18 +10,14 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="row_form_inner">
-                <td>{{ row_form.date(size=10, class="row_form date") }}</td>
-                <td>{{ row_form.odometer(size=7, class="row_form odometer") }}</td>
-                <td>{{ row_form.fuel_station(class="row_form fuel_station") }}</td>
-                <td>{{ row_form.gallon_count(size=5, class="row_form gallon_count") }}</td>
-            </tr>
             {% for row in trans_data %}
                 <tr>
-                    {% for e in row %}
-                        <td>
-                            {{ e }}
-                        </td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.date(size=10, class="work_form date") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.odometer(size=7, class="work_form odometer") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.fuel_station(class="work_form fuel_station") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.gallon_count(size=5, class="work_form gallon_count") }}</td>
+                    {% for e in row[1:] %}
+                        <td class="work_table_col row_{{ row[0] }}">{{ e }}</td>
                     {% endfor %}
                         <td style="text-align: end;">
                             <a class="edit_button" onclick="editRow('{{ row[0] }}')">
