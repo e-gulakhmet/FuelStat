@@ -194,6 +194,16 @@ body {
 .edit_button:active {
     border-color: #66ff66;
 }
+.row_form {
+    display: none;
+    font-size: 18px;
+    background-color: #d4d8e9;
+    border: 1px solid #808080;
+    padding: 3px;
+    margin: 0px;
+    border-radius: 5px;
+}
+
 
 
 /* LOGIN */

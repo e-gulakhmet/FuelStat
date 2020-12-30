@@ -10,10 +10,11 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>{{ row_form.date }}</td>
-                <td>{{ row_form.date }}</td>
-                <td>{{ row_form.date }}</td>
+            <tr class="row_form_inner">
+                <td>{{ row_form.date(size=10, class="row_form date") }}</td>
+                <td>{{ row_form.odometer(size=7, class="row_form odometer") }}</td>
+                <td>{{ row_form.fuel_station(class="row_form fuel_station") }}</td>
+                <td>{{ row_form.gallon_count(size=5, class="row_form gallon_count") }}</td>
             </tr>
             {% for row in trans_data %}
                 <tr>

@@ -11,7 +11,7 @@ from werkzeug.urls import url_parse
 import sqlite3
 
 
-#TODO: Пофиксить подбор таблицы по одной заправке
+# TODO: Пофиксить подбор таблицы по одной заправке
 
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь

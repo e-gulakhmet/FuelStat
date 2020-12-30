@@ -21,6 +21,6 @@ class NavigationForm(FlaskForm):
 
 class TableRowForm(FlaskForm):
     date = DateField()
-    station_name = StringField()
+    odometer = IntegerField()
     fuel_station = SelectField()
     gallon_count = FloatField()
