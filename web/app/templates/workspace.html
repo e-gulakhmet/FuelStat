@@ -12,10 +12,10 @@
         <tbody>
             {% for row in trans_data %}
                 <tr>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.date(size=10, class="work_form date") }}</td>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.odometer(size=7, class="work_form odometer") }}</td>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.fuel_station(class="work_form fuel_station") }}</td>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.gallon_count(size=5, class="work_form gallon_count") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.date(size=10, class="date") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.odometer(size=7, class="odometer") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.fuel_station(class="station") }}</td>
+                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.gallon_count(size=5, class="gallons") }}</td>
                     {% for e in row[1:] %}
                         <td class="work_table_col row_{{ row[0] }}">{{ e }}</td>
                     {% endfor %}
