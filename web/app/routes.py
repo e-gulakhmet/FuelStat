@@ -12,6 +12,7 @@ import sqlite3
 
 
 # TODO: Пофиксить подбор таблицы по одной заправке
+# TODO: Заменить id запарвок на их названия
 
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь

@@ -11,15 +11,21 @@
         </thead>
         <tbody>
             {% for row in trans_data %}
-                <tr>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.date(size=10, class="date") }}</td>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.odometer(size=7, class="odometer") }}</td>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.fuel_station(class="station") }}</td>
-                    <td class="work_form_col row_{{ row[0] }}">{{ row_form.gallon_count(size=5, class="gallons") }}</td>
+                <tr class="work_table_row num_{{ row[0] }}">
+                    <td class="form_col">{{ row_form.date(size=10, class="date") }}</td>
+                    <td class="form_col">{{ row_form.odometer(size=7, class="odometer") }}</td>
+                    <td class="form_col">{{ row_form.fuel_station(class="station") }}</td>
+                    <td class="form_col">{{ row_form.gallon_count(size=5, class="gallons") }}</td>
+                    <td class="form_col" style="text-align: end;">
+                        <a class="save_button" onclick="saveRow()">
+                            <img src="{{ url_for('static', filename='images/save.png') }}" alt="">
+                        </a>
+                    </td>
+
                     {% for e in row[1:] %}
-                        <td class="work_table_col row_{{ row[0] }}">{{ e }}</td>
+                        <td class="table_col">{{ e }}</td>
                     {% endfor %}
-                        <td style="text-align: end;">
+                        <td class="table_col" style="text-align: end;">
                             <a class="edit_button" onclick="editRow('{{ row[0] }}')">
                                 <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
                             </a>
