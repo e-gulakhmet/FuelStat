@@ -20,6 +20,7 @@ class NavigationForm(FlaskForm):
     
 
 class TableRowForm(FlaskForm):
+    id = IntegerField()
     date = DateField()
     odometer = IntegerField()
     fuel_station = SelectField()

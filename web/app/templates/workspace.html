@@ -12,6 +12,7 @@
         <tbody>
             {% for row in trans_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
+                    <td class="form_col">{{ row_form.id(class="id") }}</td>
                     <td class="form_col">{{ row_form.date(size=10, class="date") }}</td>
                     <td class="form_col">{{ row_form.odometer(size=7, class="odometer") }}</td>
                     <td class="form_col">{{ row_form.fuel_station(class="station") }}</td>
