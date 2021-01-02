@@ -29,7 +29,7 @@ def index():
 
     db.execute("DROP VIEW IF EXISTS vtrans")
     db.execute("""CREATE VIEW vtrans AS SELECT
-                  t.id, t.dtime, t.odometer, f.name, t.amount
+                  t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                   FROM trans t, fuel f WHERE t.fuel_id = f.id
                   ORDER BY t.dtime""")
 
@@ -38,20 +38,21 @@ def index():
             db.execute("UPDATE trans" +
                        " SET dtime = '" + str(row_form.date.data) + "'" +
                        ", odometer = " + str(row_form.odometer.data) +
+                       ", fuel_id = " + str(row_form.fuel_station.data) +
                        ", amount = " + str(row_form.gallon_count.data) + 
                        " WHERE id = " + str(row_form.id.data))
             db.commit()
         elif navig_form.allow.data:
             db.execute("DROP VIEW IF EXISTS vtrans")
             db.execute("""CREATE VIEW vtrans AS SELECT
-                          t.id, t.dtime, t.odometer, f.name, t.amount
+                          t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                           FROM trans t, fuel f WHERE t.fuel_id = f.id""" +
                        " AND t.dtime > '" + str(navig_form.start_date.data) + "'" +
                        " AND t.dtime < '" + str(navig_form.end_date.data) + "'" +
                        " AND t.fuel_id in " + str(tuple(navig_form.names.data)) +
                        " ORDER BY t.dtime")
 
-    trans_data = db.execute("""SELECT id, dtime, odometer, name, amount
+    trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
                                FROM vtrans""")
 
     return render_template("index.html",

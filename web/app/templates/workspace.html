@@ -23,9 +23,12 @@
                             {{ row_form.save(class="save_button", onclick="saveRow()")}}
                         </td>
                     </form>
-
-                    {% for e in row[1:] %}
-                        <td class="table_col">{{ e }}</td>
+                    {% for i in range(1, row|length) %}
+                        {% if i == 1 %}
+                            <td class="table_col" style="display: none;">{{ row[i] }}</td>
+                        {% else %}
+                            <td class="table_col">{{ row[i] }}</td>
+                        {% endif %}
                     {% endfor %}
                         <td class="table_col" style="text-align: end;">
                             <a class="edit_button" onclick="editRow('{{ row[0] }}')">
