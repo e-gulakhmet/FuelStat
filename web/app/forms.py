@@ -25,4 +25,4 @@ class TableRowForm(FlaskForm):
     odometer = IntegerField("Odometer")
     fuel_station = SelectField("Station")
     gallon_count = FloatField("Gallons")
-    allow = SubmitField("Allow")
+    save = SubmitField("Save")

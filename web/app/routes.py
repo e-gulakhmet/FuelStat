@@ -13,6 +13,7 @@ import sqlite3
 
 # TODO: Пофиксить подбор таблицы по одной заправке
 # TODO: Заменить id запарвок на их названия
+# TODO: Пофиксить устновку даты в таблице
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -28,23 +29,20 @@ def index():
 
     row_form = TableRowForm()
 
-    if row_form.is_submitted():
-        print("Fuck")
-        db.execute("UPDATE trans" +
-                   " SET dtime = " + str(row_form.date.data) +
-                   ", odometer = " + str(row_form.odometer.data) +
-                   ", fuel_id = " + str(row_form.fuel_station.data) +
-                   ", amount = " + str(row_form.gallon_count.data) + 
-                   " WHERE id = " + str(row_form.id.data))
-        db.commit()
-
-    if navig_form.validate_on_submit():
-        print("Navigation")
-        trans_command = ("SELECT id, dtime, odometer, fuel_id, amount FROM trans WHERE" +
-                         " dtime > '" + str(navig_form.start_date.data) + "'" +
-                         " AND dtime < '" + str(navig_form.end_date.data) + "'" +
-                         " AND fuel_id in " + str(tuple(navig_form.names.data)) +
-                         " ORDER BY dtime")
+    if row_form.validate_on_submit() or navig_form.validate_on_submit():
+        if row_form.save.data:
+            db.execute("UPDATE trans" +
+                       " SET dtime = " + str(row_form.date.data) +
+                       ", odometer = " + str(row_form.odometer.data) +
+                       ", amount = " + str(row_form.gallon_count.data) + 
+                       " WHERE id = " + str(row_form.id.data))
+            db.commit()
+        elif navig_form.allow.data:
+            trans_command = ("SELECT id, dtime, odometer, fuel_id, amount FROM trans WHERE" +
+                             " dtime > '" + str(navig_form.start_date.data) + "'" +
+                             " AND dtime < '" + str(navig_form.end_date.data) + "'" +
+                             " AND fuel_id in " + str(tuple(navig_form.names.data)) +
+                             " ORDER BY dtime")
 
     trans_data = db.execute(trans_command)
 
