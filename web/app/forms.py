@@ -20,9 +20,9 @@ class NavigationForm(FlaskForm):
     
 
 class TableRowForm(FlaskForm):
-    id = IntegerField()
-    date = DateField()
-    odometer = IntegerField()
-    fuel_station = SelectField()
-    gallon_count = FloatField()
+    id = IntegerField("Id")
+    date = DateField("Date")
+    odometer = IntegerField("Odometer")
+    fuel_station = SelectField("Station")
+    gallon_count = FloatField("Gallons")
     allow = SubmitField("Allow")

@@ -11,7 +11,6 @@ function editRow(row_id) {
 
         form_cols[0].querySelector(".id").defaultValue = row_id
         for (let i = 1; i < form_cols.length; i++) {
-            console.log(i)
             if (i == 3) {
                 let option = document.createElement("options")
                 option.innerHTML = "Fuck"
@@ -32,4 +31,9 @@ function editRow(row_id) {
     else {
         alert("Сохраните редактируемую строку!")
     }
+}
+
+
+function saveRow() {
+    is_edit = false
 }

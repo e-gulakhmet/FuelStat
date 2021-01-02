@@ -206,12 +206,19 @@ body {
     border-radius: 5px;
 }
 .save_button {
-    padding: 0px 5px 3px 5px; 
-    margin-right: 10px;
+    height: 30px;
+    width: 60px;
     border-radius: 10px;
     border: 2px solid #2b2b73;
     background-color: #c7c7ea;
     transition-duration: 0.4s;
+}
+.save_button:hover {
+    color: white;
+    background-color: #2b2b73;
+}
+.save_button:active {
+    border-color: #66ff66;
 }
 
 

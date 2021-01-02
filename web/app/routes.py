@@ -14,42 +14,39 @@ import sqlite3
 # TODO: Пофиксить подбор таблицы по одной заправке
 # TODO: Заменить id запарвок на их названия
 
+
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():
     db = sqlite3.connect("../data/database.db")
     fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
-    trans_data = db.execute("SELECT id, dtime, odometer, fuel_id, amount FROM trans ORDER BY dtime")
     navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
+    trans_command = "SELECT id, dtime, odometer, fuel_id, amount FROM trans ORDER BY dtime"
 
     navig_form = NavigationForm()
     navig_form.names.choices = navig_data
 
     row_form = TableRowForm()
 
-    if row_form.validate_on_submit():
+    if row_form.is_submitted():
+        print("Fuck")
         db.execute("UPDATE trans" +
-                   " SET dtime = " + row_form.date.data +
-                   ", odometer = " + row_form.odometer.data +
-                   ", fuel_id = " + row_form.fuel_station.data +
-                   ", amount = " + row_form.gallon_count.data + 
-                   " WHERE id = " + row_form.id.data
-                   )
-        
+                   " SET dtime = " + str(row_form.date.data) +
+                   ", odometer = " + str(row_form.odometer.data) +
+                   ", fuel_id = " + str(row_form.fuel_station.data) +
+                   ", amount = " + str(row_form.gallon_count.data) + 
+                   " WHERE id = " + str(row_form.id.data))
+        db.commit()
 
     if navig_form.validate_on_submit():
-        trans_data = db.execute("""SELECT 
-                                   id,
-                                   dtime, 
-                                   odometer,
-                                   fuel_id,
-                                   amount
-                                   FROM trans
-                                   ORDER BY dtime
-                                   WHERE """ +
-                                "dtime > '" + str(navig_form.start_date.data) + "'" +
-                                " AND dtime < '" + str(navig_form.end_date.data) + "'" +
-                                " AND fuel_id in " + str(tuple(navig_form.names.data)))
+        print("Navigation")
+        trans_command = ("SELECT id, dtime, odometer, fuel_id, amount FROM trans WHERE" +
+                         " dtime > '" + str(navig_form.start_date.data) + "'" +
+                         " AND dtime < '" + str(navig_form.end_date.data) + "'" +
+                         " AND fuel_id in " + str(tuple(navig_form.names.data)) +
+                         " ORDER BY dtime")
+
+    trans_data = db.execute(trans_command)
 
     return render_template("index.html",
                            trans_data=trans_data,
