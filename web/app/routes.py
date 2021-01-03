@@ -27,6 +27,11 @@ def index():
 
     row_form = TableRowForm()
 
+    # for row in navig_data:
+    #     row = list(row)
+    # for row in navig_data:
+    #     print(row)
+
     db.execute("DROP VIEW IF EXISTS vtrans")
     db.execute("""CREATE VIEW vtrans AS SELECT
                   t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount
