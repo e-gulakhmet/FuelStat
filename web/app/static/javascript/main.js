@@ -1,5 +1,3 @@
-// TODO: Перенос данных о заправке в веб форму
-
 is_edit = false
 
 function editRow(row_id, station_id) {

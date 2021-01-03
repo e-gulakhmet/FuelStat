@@ -12,7 +12,6 @@ import sqlite3
 
 
 # TODO: Пофиксить подбор таблицы по одной заправке
-# TODO: Заменить id запарвок на их названия
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -48,14 +47,18 @@ def index():
                        " WHERE id = " + str(row_form.id.data))
             db.commit()
         elif navig_form.allow.data:
-            db.execute("DROP VIEW IF EXISTS vtrans")
-            db.execute("""CREATE VIEW vtrans AS SELECT
+            command = ("""CREATE VIEW vtrans AS SELECT
                           t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                           FROM trans t, fuel f WHERE t.fuel_id = f.id""" +
                        " AND t.dtime > '" + str(navig_form.start_date.data) + "'" +
-                       " AND t.dtime < '" + str(navig_form.end_date.data) + "'" +
-                       " AND t.fuel_id in " + str(tuple(navig_form.names.data)) +
-                       " ORDER BY t.dtime")
+                       " AND t.dtime < '" + str(navig_form.end_date.data) + "'")
+            if len(navig_form.names.data) == 1:
+                command += " AND t.fuel_id == " + str(navig_form.names.data[0])
+            elif len(navig_form.names.data) != 0:
+                command += " AND t.fuel_id in " + str(tuple(navig_form.names.data))
+            command += " ORDER BY dtime"
+            db.execute("DROP VIEW IF EXISTS vtrans")
+            db.execute(command)
 
     trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
                                FROM vtrans""")
