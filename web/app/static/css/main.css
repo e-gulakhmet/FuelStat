@@ -212,11 +212,6 @@ body {
     margin: 0px;
     border-radius: 5px;
 }
-.container_button {
-    padding: 0px;
-    margin: 0px;
-    border: 2px solid black;
-}
 .button.save {
     display: inline;
     height: 30px;
@@ -239,6 +234,19 @@ body {
     color: white;
     background-color: #2b2b73;
 }
+.button.new {
+    padding: 0px 15px;
+    font-size: 25px;
+    background-color: #c7c7ea;
+    transition-duration: 0.4s;
+}
+.button.new:hover {
+    color: white;
+    background-color: #2b2b73;
+}
+
+
+
 
 /* LOGIN */
 .login_container {

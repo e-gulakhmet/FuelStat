@@ -34,6 +34,23 @@
                     </form>
                 </tr>
             {% endfor %}
+            <tr class="work_table_row new">
+                <form action="{{ url_for('index') }}" method="POST">
+                    {{ row_form.hidden_tag() }}
+                    <td class="form_col">{{ row_form.date(size=10, class="date") }}</td>
+                    <td class="form_col">{{ row_form.odometer(size=7, class="odometer") }}</td>
+                    <td class="form_col">{{ row_form.fuel_station(class="station") }}</td>
+                    <td class="form_col">{{ row_form.gallon_count(size=5, class="gallons") }}</td>
+                    <td class="form_col" style="text-align: end;">
+                        {{ row_form.save(class="button save")}}
+                    </td>
+                </form>
+                <td style="text-align: center;" class="table_col">
+                    <a class="button new" onclick="newRow()">
+                        New Row
+                    </a>
+                </td>
+            </tr>
         </tbody>
     </table>
 </div>

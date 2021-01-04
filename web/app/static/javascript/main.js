@@ -60,3 +60,28 @@ function deleteRow(row_id) {
         }
     }
 }
+
+
+function newRow() {
+    if (is_edit) {
+        alert("Сохраните редактируемую строку!")
+    }
+    else {
+        var row = document.querySelector(".work_table_row.new")
+        var form_cols = row.querySelectorAll(".form_col")
+        var fuel_data = document.querySelector(".navig_form.names").querySelectorAll("option")
+        var table_col = row.querySelector(".table_col")
+
+        table_col.style.display = "none"
+        for (var i = 0; i < form_cols.length; i++) {
+            form_cols[i].style.display = "table-cell"
+        }
+
+        for (var i = 0; i < fuel_data.length; i++) {
+            var opt = document.createElement("option")
+            opt.value = fuel_data[i].value
+            opt.text = fuel_data[i].text
+            form_cols[2].querySelector(".station").add(opt)
+        }
+    }
+}
