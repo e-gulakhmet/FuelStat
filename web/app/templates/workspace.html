@@ -20,16 +20,19 @@
                         <td class="form_col">{{ row_form.fuel_station(class="station") }}</td>
                         <td class="form_col">{{ row_form.gallon_count(size=5, class="gallons") }}</td>
                         <td class="form_col" style="text-align: end;">
-                            {{ row_form.save(class="save_button", onclick="saveRow()")}}
+                            {{ row_form.save(class="button save", onclick="saveRow()")}}
                         </td>
                     </form>
                     {% for i in range(2, row|length) %}
                         <td class="table_col">{{ row[i] }}</td>
                     {% endfor %}
                     <td class="table_col" style="text-align: end;">
-                        <a class="edit_button" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
-                            <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
-                        </a>
+                            <a class="button delete" onclick="deleteRow('{{ row[0] }}')">
+                                Delete
+                            </a>
+                            <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
+                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
+                            </a>
                     </td>
                 </tr>
             {% endfor %}
