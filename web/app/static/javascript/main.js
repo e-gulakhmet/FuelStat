@@ -46,3 +46,16 @@ function editRow(row_id, station_id) {
 function saveRow() {
     is_edit = false
 }
+
+
+function deleteRow(row_id) {
+    if (is_edit) {
+        alert("Сохраните редактируемую строку!")
+    }
+    else {
+        var result = confirm("Удалить строку?")
+        if (result) {
+            document.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
+        }
+    }
+}

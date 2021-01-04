@@ -26,11 +26,6 @@ def index():
 
     row_form = TableRowForm()
 
-    # for row in navig_data:
-    #     row = list(row)
-    # for row in navig_data:
-    #     print(row)
-
     db.execute("DROP VIEW IF EXISTS vtrans")
     db.execute("""CREATE VIEW vtrans AS SELECT
                   t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount
@@ -59,6 +54,11 @@ def index():
             command += " ORDER BY dtime"
             db.execute("DROP VIEW IF EXISTS vtrans")
             db.execute(command)
+        elif row_form.delete.data:
+            if row_form.id.data is not None:
+                print("deleting")
+                db.execute("DELETE FROM trans WHERE id = " + row_form.id.data)
+                db.commit()
 
     trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
                                FROM vtrans""")

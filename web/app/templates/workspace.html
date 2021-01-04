@@ -27,12 +27,15 @@
                         <td class="table_col">{{ row[i] }}</td>
                     {% endfor %}
                     <td class="table_col" style="text-align: end;">
-                            <a class="button delete" onclick="deleteRow('{{ row[0] }}')">
-                                Delete
-                            </a>
-                            <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
-                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
-                            </a>
+                        <a onclick="deleteRow('{{ row[0] }}')">
+                            <form action="" method="POST" style="display: inline;">
+                                {{ row_form.hidden_tag() }}
+                                {{ row_form.delete(class="button delete") }}
+                            </form>
+                        </a>
+                        <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
+                            <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
+                        </a>
                     </td>
                 </tr>
             {% endfor %}
