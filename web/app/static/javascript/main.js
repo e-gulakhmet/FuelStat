@@ -55,6 +55,7 @@ function deleteRow(row_id) {
     else {
         var result = confirm("Удалить строку?")
         if (result) {
+            document.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
             document.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
         }
     }

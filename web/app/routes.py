@@ -57,7 +57,7 @@ def index():
         elif row_form.delete.data:
             if row_form.id.data is not None:
                 print("deleting")
-                db.execute("DELETE FROM trans WHERE id = " + row_form.id.data)
+                db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
                 db.commit()
 
     trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount

@@ -22,21 +22,16 @@
                         <td class="form_col" style="text-align: end;">
                             {{ row_form.save(class="button save", onclick="saveRow()")}}
                         </td>
+                        {% for i in range(2, row|length) %}
+                            <td class="table_col">{{ row[i] }}</td>
+                        {% endfor %}
+                        <td class="table_col" style="text-align: end;">
+                            {{ row_form.delete(class="button delete", onclick="deleteRow(" + row[0]|string +")") }}
+                            <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
+                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
+                            </a>
+                        </td>
                     </form>
-                    {% for i in range(2, row|length) %}
-                        <td class="table_col">{{ row[i] }}</td>
-                    {% endfor %}
-                    <td class="table_col" style="text-align: end;">
-                        <a onclick="deleteRow('{{ row[0] }}')">
-                            <form action="" method="POST" style="display: inline;">
-                                {{ row_form.hidden_tag() }}
-                                {{ row_form.delete(class="button delete") }}
-                            </form>
-                        </a>
-                        <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
-                            <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
-                        </a>
-                    </td>
                 </tr>
             {% endfor %}
         </tbody>
