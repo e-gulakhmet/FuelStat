@@ -10,6 +10,8 @@ from app.models import User
 from werkzeug.urls import url_parse
 import sqlite3
 
+# TODO: Добавить проверку введенных данных в формы новой заправки
+
 
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
@@ -56,6 +58,13 @@ def index():
                 print("deleting")
                 db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
                 db.commit()
+        elif row_form.add.data:
+            db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
+                       "'" + str(row_form.date.data) + "'" +
+                       ", " + str(row_form.odometer.data) + 
+                       ", " + str(row_form.fuel_station.data) +
+                       ", " + str(row_form.gallon_count.data) + ")")
+            db.commit()
 
     trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
                                FROM vtrans""")

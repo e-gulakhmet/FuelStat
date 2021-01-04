@@ -27,3 +27,4 @@ class TableRowForm(FlaskForm):
     gallon_count = FloatField("Gallons")
     save = SubmitField("Save")
     delete = SubmitField("Delete")
+    add = SubmitField("Add")
