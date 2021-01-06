@@ -4,13 +4,14 @@
 
 from app import flsk
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationForm, TableRowForm
+from app.forms import LoginForm, NavigationForm, TableRowForm, TableNewRowForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
 import sqlite3
 
 # TODO: Добавить проверку введенных данных в форме новой заправки
+# TODO: Убрать обновление страницы, если в этом нет нужды
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -25,13 +26,15 @@ def index():
 
     row_form = TableRowForm()
 
+    new_row_form = TableNewRowForm()
+
     db.execute("DROP VIEW IF EXISTS vtrans")
     db.execute("""CREATE VIEW vtrans AS SELECT
                   t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                   FROM trans t, fuel f WHERE t.fuel_id = f.id
                   ORDER BY t.dtime""")
 
-    if row_form.validate_on_submit() or navig_form.validate_on_submit():
+    if row_form.validate_on_submit() or navig_form.validate_on_submit() or new_row_form.validate_on_submit():
         if row_form.save.data:
             db.execute("UPDATE trans" +
                        " SET dtime = '" + str(row_form.date.data) + "'" +
@@ -58,13 +61,16 @@ def index():
                 print("deleting")
                 db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
                 db.commit()
-        elif row_form.add.data:
+        elif new_row_form.add.data:
+            print("Adding")
             db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
-                       "'" + str(row_form.date.data) + "'" +
-                       ", " + str(row_form.odometer.data) + 
-                       ", " + str(row_form.fuel_station.data) +
-                       ", " + str(row_form.gallon_count.data) + ")")
+                       "'" + str(new_row_form.date.data) + "'" +
+                       ", " + str(new_row_form.odometer.data) + 
+                       ", " + str(new_row_form.fuel_station.data) +
+                       ", " + str(new_row_form.gallon_count.data) + ")")
             db.commit()
+        else:
+            return
 
     trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
                                FROM vtrans""")
@@ -73,7 +79,8 @@ def index():
                            trans_data=trans_data,
                            fuel_data=fuel_data,
                            navig_form=navig_form,
-                           row_form=row_form)
+                           row_form=row_form,
+                           new_row_form=new_row_form)
 
 
 

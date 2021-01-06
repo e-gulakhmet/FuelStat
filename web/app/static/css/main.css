@@ -75,6 +75,8 @@ body {
 /* NAVIGATION*/
 .index_container.navigation {
     width: 250px;
+    height: 100%;
+    min-height: 500px;
     flex-grow: 1;
 }
 .navig_header {
@@ -129,8 +131,10 @@ body {
 
 
 /* FUEL */
-.index_container.fuel {
-    width: 250px;
+.index_container.errors {
+    max-width: 250px;
+    height: 230px;
+    overflow-y: auto;
 }
 
 
