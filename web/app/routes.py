@@ -10,7 +10,8 @@ from app.models import User
 from werkzeug.urls import url_parse
 import sqlite3
 
-# TODO: Добавить проверку введенных данных в формы новой заправки
+# TODO: Добавить проверку введенных данных в форме новой заправки
+# TODO: Исправить исчезание формы с заправками, после выбора заправки
 
 
 @flsk.route("/index", methods=["GET", "POST"])

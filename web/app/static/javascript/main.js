@@ -1,7 +1,13 @@
 is_edit = false
 
+
+// TODO: Убрать кнопки изменения, удаления, добавления, если текущая строка изменяется или добавляется новая
+
 function editRow(row_id, station_id) {
-    if (is_edit == false) {
+    if (is_edit) {
+        alert("Сохраните редактируемую строку!")
+    }
+    else {
         var work_row = document.querySelector(".work_table_row.num_" + row_id)
         var form_cols = work_row.querySelectorAll(".form_col")
         var table_cols = work_row.querySelectorAll(".table_col")
@@ -36,9 +42,6 @@ function editRow(row_id, station_id) {
         }
         work_row.style.backgroundColor = "#808080"
         is_edit = true
-    }
-    else {
-        alert("Сохраните редактируемую строку!")
     }
 }
 
