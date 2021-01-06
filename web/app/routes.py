@@ -11,7 +11,6 @@ from werkzeug.urls import url_parse
 import sqlite3
 
 # TODO: Добавить проверку введенных данных в форме новой заправки
-# TODO: Исправить исчезание формы с заправками, после выбора заправки
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -22,7 +21,7 @@ def index():
     navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
 
     navig_form = NavigationForm()
-    navig_form.names.choices = navig_data
+    navig_form.names.choices = list(navig_data)
 
     row_form = TableRowForm()
 
