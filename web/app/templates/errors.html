@@ -1,5 +1,8 @@
 <div class="index_container errors">
-    {% for error in new_row_form.odometer.errors %}
-            <p style="color: red;">[{{ error }}]</p>
-    {% endfor %}
+    <div class="error_inner">
+        {% for error in new_row_form.odometer.errors %}
+                <p style="color: red;">[{{ error }}]</p>
+        {% endfor %}
+        <span class="error new_row"></span>
+    </div>
 </div>

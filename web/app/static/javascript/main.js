@@ -1,5 +1,9 @@
 is_edit = false
 
+// TODO: Сделать веб формы зелеными, если верно
+// TODO: Добавить проверки даты при создании новой строки
+
+
 function editRow(row_id, station_id) {
     var work_row = document.querySelector(".work_table_row.num_" + row_id)
     var form_cols = work_row.querySelectorAll(".form_col")
@@ -91,7 +95,6 @@ function newRow() {
 
 function validOdometer(odometer) {
     form_date = document.querySelector(".work_table_row.new .form_col .date").value
-    console.log(form_date)
     if (date.value != "") {
         var values = []
         var max_values = []
@@ -101,39 +104,31 @@ function validOdometer(odometer) {
         for (var i = 0; i < rows.length - 1; i++) {
             table_cols = rows[i].querySelectorAll(".table_col")
             if (form_date == table_cols[0].innerHTML) {
-                values.push(table_cols[1].innerHTML)
+                values.push(parseInt(table_cols[1].innerHTML))
             }
             else if (table_cols[0].innerHTML < form_date) {
-                min_values.push(table_cols[1].innerHTML)
+                min_values.push(parseInt(table_cols[1].innerHTML))
             }
             else if (table_cols[0].innerHTML > form_date) {
-                max_values.push(table_cols[1].innerHTML)
+                max_values.push(parseInt(table_cols[1].innerHTML))
             }
         }
-        console.log(values)
-        console.log(min_values)
-        console.log(max_values)
-        if (values != []) {
-            if (values.length == 1 && odometer.value == values[0]) {
-                error = "Odometer must be more or less than " + values[0]
-            }
-            else {
-                var min_value = Math.min(values)
-                var max_value = Math.max(values)
-                if (odometer.value < min_value || odometer.value > max_value)
-                    error = "Odometer must be more than " + min_value + "and less than " + max_value
-            }
+        if (values.length == 1 && odometer.value == values[0]) {
+            error = "Odometer must be more or less than " + values[0]
+        }
+        else if (values.length > 1 && (odometer.value < Math.min.apply(null, values) || odometer.value > Math.max.apply(null, values))) {
+            error = "Odometer must be more than " + Math.min.apply(null, values) + " and less than " + Math.max.apply(null, values)
+        }
+        else if (odometer.value < Math.max.apply(null, min_values) || odometer.value > Math.min.apply(null, max_values)) {
+            error = "Odometer must be more than " + Math.max.apply(null, min_values) + " and less than " + Math.min.apply(null, max_values)
+        }
+        if (error != "") {
+            document.querySelector(".error.new_row").innerHTML = "* " + error
+            odometer.style.borderColor = "red"
         }
         else {
-            max_value = Math.min(max_values)
-            min_value = Math.max(min_values)
-            if (odometer.value < min_value || odometer.value > max_value) {
-                error = "Odometer must be more than " + min_value + "and less than " + max_value
-            }
-        }
-        console.log(odometer.value)
-        if (error != "") {
-            console.log(error)
+            document.querySelector(".error.new_row").innerHTML = ""
+            odometer.style.borderColor = "#808080"
         }
     }
 }
