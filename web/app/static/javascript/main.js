@@ -94,34 +94,28 @@ function newRow() {
 
 
 function validDateNewRow(date) {
-    form_odometer = document.querySelector(".work_table_row.new .form_col .odometer").value
+    var form_odometer = document.querySelector(".work_table_row.new .form_col .odometer").value
     if (form_odometer != "") {
+        form_odometer = parseInt(form_odometer)
         var max_value = ""
         var min_value = ""
         var error = ""
         rows = document.querySelectorAll(".work_table_row")
         for (var i = 0; i < rows.length - 1; i++) {
             table_cols = rows[i].querySelectorAll(".table_col")
-            if (table_cols[1].innerHTML < form_odometer) {
-                if (min_value < table_cols[0].innerHTML) {
-                    min_value = table_cols[0].innerHTML
-                }
+            if (parseInt(table_cols[1].innerHTML) < form_odometer && table_cols[0].innerHTML > min_value) {
+                min_value = table_cols[0].innerHTML
             }
-            else if (table_cols[1].innerHTML > form_odometer) {
-                console.log(table_cols[1])
-                if (max_value > table_cols[0].innerHTML || max_value == "") {
-                    max_value = table_cols[0].innerHTML
-                }
+            if (parseInt(table_cols[1].innerHTML) > form_odometer) {
+                max_value = table_cols[0].innerHTML
+                break
             }
         }
         if (date.value <= min_value || date.value >= max_value) {
             error = "Date must be more than " + min_value + " and less than " + max_value
         }
-        console.log(date.value)
-        console.log(min_value)
-        console.log(max_value)
         if (error != "") {
-            document.querySelector(".error.new_row").innerHTML = "* " + error
+            document.querySelector(".error.new_row").innerHTML += "\n* " + error
             date.style.borderColor = "red"
         }
         else {
@@ -169,7 +163,7 @@ function validOdometerNewRow(odometer) {
         }
     }
     if (error != "") {
-        document.querySelector(".error.new_row").innerHTML = "* " + error
+        document.querySelector(".error.new_row").innerHTML += "\n* " + error
         odometer.style.borderColor = "red"
     }
     else {
