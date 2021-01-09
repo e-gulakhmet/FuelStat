@@ -1,6 +1,6 @@
 from flask import Flask
 from flask_login import LoginManager
-from flask_bootstrap import Bootstrap
+import logging
 
 flsk = Flask(__name__)
 flsk.config["SECRET_KEY"] = "pedaling"
@@ -11,6 +11,8 @@ login = LoginManager(flsk)
 login.login_view = 'login'
 login.login_message = "Please Sign In"
 
-bootstrap = Bootstrap(flsk)
+logging.basicConfig(filename='logging.log',
+                    level=logging.DEBUG,
+                    format="%(asctime)s %(name)s [%(levelname)s] : %(message)s")
 
 from app import routes

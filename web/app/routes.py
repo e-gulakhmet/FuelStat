@@ -30,23 +30,31 @@ def index():
 
     new_row_form = TableNewRowForm()
 
-    db.execute("DROP VIEW IF EXISTS vtrans")
-    db.execute("""CREATE VIEW vtrans AS SELECT
-                  t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount
-                  FROM trans t, fuel f WHERE t.fuel_id = f.id
-                  ORDER BY t.dtime""")
+    try:
+        db.execute("DROP VIEW IF EXISTS vtrans")
+        db.execute("""CREATE VIEW vtrans AS SELECT
+                    t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount
+                    FROM trans t, fuel f WHERE t.fuel_id = f.id
+                    ORDER BY t.dtime""")
+    except sqlite3.Error as e:
+        flsk.logger.error(e)
 
     if row_form.validate_on_submit() or navig_form.validate_on_submit() or new_row_form.validate_on_submit():
-        print("submitted")
+        flsk.logger.debug("Index page submitted")
         if row_form.save.data:
-            db.execute("UPDATE trans" +
-                       " SET dtime = '" + str(row_form.date.data) + "'" +
-                       ", odometer = " + str(row_form.odometer.data) +
-                       ", fuel_id = " + str(row_form.fuel_station.data) +
-                       ", amount = " + str(row_form.gallon_count.data) + 
-                       " WHERE id = " + str(row_form.id.data))
-            db.commit()
+            flsk.logger.info("Row form save button was pressed")
+            try:
+                db.execute("UPDATE trans" +
+                           " SET dtime = '" + str(row_form.date.data) + "'" +
+                           ", odometer = " + str(row_form.odometer.data) +
+                           ", fuel_id = " + str(row_form.fuel_station.data) +
+                           ", amount = " + str(row_form.gallon_count.data) + 
+                           " WHERE id = " + str(row_form.id.data))
+                db.commit()
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
         elif navig_form.allow.data:
+            flsk.logger.debug("Navigation form allow button was pressed")
             command = ("""CREATE VIEW vtrans AS SELECT
                           t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                           FROM trans t, fuel f WHERE t.fuel_id = f.id""" +
@@ -57,26 +65,38 @@ def index():
             elif len(navig_form.names.data) != 0:
                 command += " AND t.fuel_id in " + str(tuple(navig_form.names.data))
             command += " ORDER BY dtime"
-            db.execute("DROP VIEW IF EXISTS vtrans")
-            db.execute(command)
+            try:
+                db.execute("DROP VIEW IF EXISTS vtrans")
+                db.execute(command)
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
         elif row_form.delete.data:
-            if row_form.id.data is not None:
-                print("deleting")
+            flsk.logger.debug("Row form delete button was pressed")
+            try:
                 db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
                 db.commit()
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
         elif new_row_form.add.data:
-            db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
-                       "'" + str(new_row_form.date.data) + "'" +
-                       ", " + str(new_row_form.odometer.data) + 
-                       ", " + str(new_row_form.fuel_station.data) +
-                       ", " + str(new_row_form.gallon_count.data) + ")")
+            flsk.logger.debug("New row form add button was pressed")
+            try:
+                db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
+                           "'" + str(new_row_form.date.data) + "'" +
+                           ", " + str(new_row_form.odometer.data) + 
+                           ", " + str(new_row_form.fuel_station.data) +
+                           ", " + str(new_row_form.gallon_count.data) + ")")
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
             db.commit()
         else:
             return
+    try:
+        trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
+                                FROM vtrans""")
+    except sqlite3.Error as e:
+        flsk.logger.error(e)
 
-    trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
-                               FROM vtrans""")
-
+    flsk.logger.debug("Rendering index page")
     return render_template("index.html",
                            trans_data=trans_data,
                            fuel_data=fuel_data,
@@ -102,18 +122,22 @@ def login():
     # Проверяем, если пользователь уже зашел,
     # то отправляем его на основную страницу.
     if current_user.is_authenticated:
+        flsk.logger.info("User already autheticated")
         return redirect(url_for('index'))
     # Создаем объект form, который содержит в себе веб-формы для
     # авторизации
     form = LoginForm()
     # Если пришел POST запрос от браузера
     if form.validate_on_submit():
+        flsk.logger.debug("Ligun page submitted")
         if user.username != form.username.data or user.check_password(form.password.data) is False:
+            flsk.logger.info("'Invalid username or password'")
             flash('Invalid username or password')
             return redirect(url_for('login'))
         # Иначе загружаем пользователя
         # и переходим к основной странице
         login_user(user, remember=form.remember.data)
+        flsk.logger.info("User signed in")
         # Проверяем, если в строке был указан аргумент next,
         # значит пользователь пытался перейти на страницу для
         # авторизованных пользователей, но так как он не авторизовалься,
@@ -125,6 +149,7 @@ def login():
             next_page = url_for("index")
         return redirect(next_page)
     # Генерируем страницу авторизиции
+    flsk.logger.debug("Rendering login page")
     return render_template("login.html", title="Login", form=form)
 
 
@@ -132,5 +157,6 @@ def login():
 @flsk.route('/logout')
 @login_required
 def logout():
+    flsk.logger.info("User logouted")
     logout_user()
     return redirect(url_for('index'))
