@@ -10,8 +10,10 @@ from app.models import User
 from werkzeug.urls import url_parse
 import sqlite3
 
-# TODO: Добавить проверку введенных данных в форме новой заправки
+
 # TODO: Убрать обновление страницы, если в этом нет нужды
+
+first = True
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -35,6 +37,7 @@ def index():
                   ORDER BY t.dtime""")
 
     if row_form.validate_on_submit() or navig_form.validate_on_submit() or new_row_form.validate_on_submit():
+        print("submitted")
         if row_form.save.data:
             db.execute("UPDATE trans" +
                        " SET dtime = '" + str(row_form.date.data) + "'" +
@@ -62,7 +65,6 @@ def index():
                 db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
                 db.commit()
         elif new_row_form.add.data:
-            print("Adding")
             db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
                        "'" + str(new_row_form.date.data) + "'" +
                        ", " + str(new_row_form.odometer.data) + 

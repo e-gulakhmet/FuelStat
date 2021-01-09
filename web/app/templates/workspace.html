@@ -36,7 +36,7 @@
             {% endfor %}
             <tr class="work_table_row new">
                 <form action="{{ url_for('index') }}" method="POST">
-                    {{ row_form.hidden_tag() }}
+                    {{ new_row_form.hidden_tag() }}
                     <td class="form_col">
                         {{ new_row_form.date(size=10, class="date", onfocusout="validDateNewRow(this)") }}
                     </td>

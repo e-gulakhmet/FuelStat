@@ -4,7 +4,6 @@ from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, Se
 from wtforms.validators import DataRequired, ValidationError, InputRequired
 from datetime import date
 import sqlite3
-from flask import flash
 
 
 class LoginForm(FlaskForm):
@@ -43,19 +42,16 @@ class TableRowForm(FlaskForm):
 
 
 class TableNewRowForm(FlaskForm):
-    date = DateField("Date", validators=[DataRequired()], format='%Y-%m-%d')
-    odometer = IntegerField("Odometer", validators=[InputRequired()])
+    date = DateField("Date", validators=[DataRequired()])
+    odometer = IntegerField("Odometer", validators=[DataRequired()])
     fuel_station = SelectField("Station", validators=[DataRequired()])
     gallon_count = FloatField("Gallons", validators=[DataRequired()])
     add = SubmitField("Add")
     
     def validate_odometer(form, field):
-        print(form.date.data)
         db = sqlite3.connect("../data/database.db")
         min_value = list(db.execute("SELECT MAX(odometer) FROM trans WHERE dtime <= '" + str(form.date.data) + "'"))[0][0]
         max_value = list(db.execute("SELECT MIN(odometer) FROM trans WHERE dtime >= '" + str(form.date.data) + "'"))[0][0]
-        print(min_value)
-        print(max_value)
         if field.data < min_value:
             raise ValidationError("Odometer must be greater than " + str(min_value))
         if field.data > max_value:

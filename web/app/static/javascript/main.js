@@ -1,8 +1,5 @@
 is_edit = false
 
-// TODO: Сделать веб формы зелеными, если верно
-// TODO: Добавить проверки даты при создании новой строки
-
 
 function editRow(row_id, station_id) {
     var work_row = document.querySelector(".work_table_row.num_" + row_id)
@@ -115,7 +112,7 @@ function validDateNewRow(date) {
             error = "Date must be more than " + min_value + " and less than " + max_value
         }
         if (error != "") {
-            document.querySelector(".error.new_row").innerHTML += "\n* " + error
+            document.querySelector(".error.new_row").innerHTML = "* " + error
             date.style.borderColor = "red"
         }
         else {
@@ -163,7 +160,7 @@ function validOdometerNewRow(odometer) {
         }
     }
     if (error != "") {
-        document.querySelector(".error.new_row").innerHTML += "\n* " + error
+        document.querySelector(".error.new_row").innerHTML = "* " + error
         odometer.style.borderColor = "red"
     }
     else {
