@@ -21,6 +21,10 @@
                     {% endfor %}
                 </div>
                 <div>
+                    <span class="form_remeber_label">{{ form.remember.label }}</span>
+                    <span class="form_remember">{{ form.remember }}</span>
+                </div>
+                <div>
                     <button class="form_button">
                         {{ form.submit() }}
                     </button>

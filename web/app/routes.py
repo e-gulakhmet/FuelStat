@@ -129,15 +129,15 @@ def login():
     form = LoginForm()
     # Если пришел POST запрос от браузера
     if form.validate_on_submit():
-        flsk.logger.debug("Ligun page submitted")
+        flsk.logger.debug("L0gin page submitted")
         if user.username != form.username.data or user.check_password(form.password.data) is False:
-            flsk.logger.info("'Invalid username or password'")
+            flsk.logger.info("Invalid username or password")
             flash('Invalid username or password')
             return redirect(url_for('login'))
         # Иначе загружаем пользователя
         # и переходим к основной странице
         login_user(user, remember=form.remember.data)
-        flsk.logger.info("User signed in")
+        flsk.logger.info("User" + user.username + " signed in")
         # Проверяем, если в строке был указан аргумент next,
         # значит пользователь пытался перейти на страницу для
         # авторизованных пользователей, но так как он не авторизовалься,
