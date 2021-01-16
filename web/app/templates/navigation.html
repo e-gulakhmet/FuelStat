@@ -1,34 +1,59 @@
 <div class="index_container navigation">
         <p class="navig_header">Navigation</p>
-        <form action="" method="POST">
-                <div class="navig_form_container">
-                        <p class="navig_form_label" style="margin-bottom: 10px;">Table</p>
-                        <a class="navig_button trans" style="display: inline;" onclick="changeTable('trans')">
-                                Transactions
-                        </a>
-                        <a class="navig_button fuel" style="display: inline;" onclick="changeTable('fuel')">
-                                Fuel
-                        </a>
-                </div>
-                {{ navig_form.hidden_tag() }}
+        <div class="navig_form_container">
+                <p class="navig_form_label" style="margin-bottom: 10px;">Table</p>
+                <a class="navig_button trans" style="display: inline;" onclick="showTranssTable()">
+                        Transactions
+                </a>
+                <a class="navig_button fuel" style="display: inline;" onclick="showFuelTable()">
+                        Fuel
+                </a>
+        </div>
+        <div class="navig_inner trans">
+                <form action="" method="POST">
+                        {{ navig_trans_form.hidden_tag() }}
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.start_date.label }}
+                                </p>
+                                {{ navig_trans_form.start_date(size=10, class="navig_form start_date") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.end_date.label }}
+                                </p>
+                                {{ navig_trans_form.end_date(size=10, class="navig_form end_date") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.names.label }}
+                                </p>
+                                {{ navig_trans_form.names(class="navig_form names") }}
+                        </div>
+                        {{ navig_trans_form.allow(class="navig_form_button") }}
+                </form>
+        </div>
+        <div class="navig_inner fuel">
+                {{ navig_fuel_form.hidden_tag() }}
                 <div class="navig_form_container">
                         <p class="navig_form_label">
-                                {{ navig_form.start_date.label }}
+                                {{ navig_fuel_form.names.label }}
                         </p>
-                        {{ navig_form.start_date(size=10, class="navig_form start_date") }}
+                        {{ navig_fuel_form.names(class="navig_form names") }}
                 </div>
                 <div class="navig_form_container">
                         <p class="navig_form_label">
-                                {{ navig_form.end_date.label }}
+                                {{ navig_fuel_form.start_price.label }}
                         </p>
-                        {{ navig_form.end_date(size=10, class="navig_form end_date") }}
+                        {{ navig_fuel_form.start_price(size=10, class="navig_form start_price") }}
                 </div>
                 <div class="navig_form_container">
                         <p class="navig_form_label">
-                                {{ navig_form.names.label }}
+                                {{ navig_fuel_form.end_price.label }}
                         </p>
-                        {{ navig_form.names(class="navig_form names") }}
+                        {{ navig_fuel_form.end_price(size=10, class="navig_form end_price") }}
                 </div>
-                {{ navig_form.allow(class="navig_form_button") }}
-        </form>
+                {{ navig_fuel_form.allow(class="navig_form_button") }}
+        </div>
+                
 </div>

@@ -175,6 +175,9 @@ function validOdometerNewRow(odometer) {
 }
 
 
-function changeTable(table_name) {
-    
+function showFuelTable() {
+    document.querySelector(".table_workspace.fuel").style.display = "flex"
+    document.querySelector(".table_workspace.trans").style.display = "none"
+    document.querySelector(".navig_inner.fuel").style.display = "block"
+    document.querySelector(".navig_inner.trans").style.display = "none"
 }

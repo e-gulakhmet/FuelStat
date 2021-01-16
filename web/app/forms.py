@@ -13,7 +13,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 
-class NavigationForm(FlaskForm):
+class NavigationTransForm(FlaskForm):
     start_date = DateField("Start Date", default=date(1000, 1, 1),
                            validators=[DataRequired()], format='%Y-%m-%d')
     end_date = DateField("End Date", default=date(9000, 12, 31),
@@ -30,6 +30,16 @@ class NavigationForm(FlaskForm):
         if field.data < form.start_date.data:
             raise ValidationError("End date must be greater than start date")
     
+
+class NavigationFuelForm(FlaskForm):
+    names = SelectMultipleField("Stations Names",
+                                validators=[DataRequired()])
+    start_price = IntegerField("Start Price", default=0, 
+                               validators=[DataRequired()])
+    end_price = IntegerField("Start Price", default=1000, 
+                             validators=[DataRequired()])
+    allow = SubmitField("Allow")
+
 
 class TableRowForm(FlaskForm):
     id = IntegerField("Id")
