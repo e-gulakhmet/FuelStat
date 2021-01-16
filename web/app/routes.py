@@ -13,14 +13,12 @@ import sqlite3
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
 
-first = True
-
 
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():
     db = sqlite3.connect("../data/database.db")
-    fuel_data = db.execute("SELECT id, name FROM fuel ORDER BY id")
+    fuel_data = db.execute("SELECT id, name, price FROM fuel ORDER BY id")
     navig_data = db.execute("SELECT CAST(id as TEXT), name FROM fuel")
 
     navig_form = NavigationForm()

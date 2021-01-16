@@ -1,5 +1,6 @@
 <div class="index_container workspace">
-    <table class="table_workspace">
+
+    <table class="table_workspace trans">
         <thead>
             <tr>
                 <th>DATE</th>
@@ -47,6 +48,58 @@
                     <td class="form_col">{{ new_row_form.gallon_count(size=5, class="gallons") }}</td>
                     <td class="form_col" style="text-align: end;">
                         {{ new_row_form.add(class="button add")}}
+                    </td>
+                </form>
+                <td style="text-align: center;" class="table_col">
+                    <a class="button new" onclick="newRow()">
+                        New Row
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table style="display: none;" class="table_workspace fuel">
+        <thead>
+            <tr>
+                <th>NAME</th>
+                <th>PRICE</th>
+                <th></th>
+            </tr>
+        </thead>    
+        <tbody>
+            {% for row in fuel_data %}
+                <tr class="work_table_row num_{{ row[0] }}">
+                    <form action="{{ url_for('index') }}" method="POST">
+                        {{ row_form.hidden_tag() }}
+                        <td class="form_col">{{ row_form.id(class="id") }}</td>
+                        <td class="form_col">{{ row_form.date(size=10, class="name") }}</td>
+                        <td class="form_col">{{ row_form.odometer(size=7, class="price") }}</td>
+                        <td class="form_col" style="text-align: end;">
+                            {{ row_form.save(class="button save", onclick="saveRow()")}}
+                        </td>
+                        {% for i in range(2, row|length) %}
+                            <td class="table_col">{{ row[i] }}</td>
+                        {% endfor %}
+                        <td class="table_col" style="text-align: end;">
+                            {{ row_form.delete(class="button delete", onclick="deleteRow(" + row[0]|string +")") }}
+                            <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
+                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
+                            </a>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
+            <tr class="work_table_row new">
+                <form action="{{ url_for('index') }}" method="POST">
+                    {{ new_row_form.hidden_tag() }}
+                    <td class="form_col">
+                        {{ new_row_form.date(size=10, class="name") }}
+                    </td>
+                    <td class="form_col">
+                        {{ new_row_form.odometer(size=7, class="price") }}
+                    </td>
+                    <td class="form_col" style="text-align: end;">
+                        {{ new_row_form.add(class="button add") }}
                     </td>
                 </form>
                 <td style="text-align: center;" class="table_col">

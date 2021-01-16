@@ -173,3 +173,8 @@ function validOdometerNewRow(odometer) {
         odometer.style.borderColor = "green"
     }
 }
+
+
+function changeTable(table_name) {
+    
+}

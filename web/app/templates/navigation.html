@@ -1,6 +1,15 @@
 <div class="index_container navigation">
-        <p class="navig_header">Navigation<p>
+        <p class="navig_header">Navigation</p>
         <form action="" method="POST">
+                <div class="navig_form_container">
+                        <p class="navig_form_label" style="margin-bottom: 10px;">Table</p>
+                        <a class="navig_button trans" style="display: inline;" onclick="changeTable('trans')">
+                                Transactions
+                        </a>
+                        <a class="navig_button fuel" style="display: inline;" onclick="changeTable('fuel')">
+                                Fuel
+                        </a>
+                </div>
                 {{ navig_form.hidden_tag() }}
                 <div class="navig_form_container">
                         <p class="navig_form_label">
