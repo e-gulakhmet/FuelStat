@@ -2,10 +2,15 @@ is_edit = false
 
 
 function editRow(row_id, station_id) {
+    // Строка в которой была нажата кнопка
     var work_row = document.querySelector(".work_table_row.num_" + row_id)
+    // Столбцы, в которых находятся веб формы
     var form_cols = work_row.querySelectorAll(".form_col")
+    // Столбцы, в к содержутся значения(не веб формы)
     var table_cols = work_row.querySelectorAll(".table_col")
+    // Названия и id заправок
     var fuel_data = document.querySelector(".navig_form.names").querySelectorAll("option")
+
     var form_names = [".date", ".odometer", ".station", ".gallons"]
 
     form_cols[0].querySelector(".id").defaultValue = row_id

@@ -39,9 +39,13 @@ def index():
     except sqlite3.Error as e:
         flsk.logger.error(e)
 
+    # Проверяем, была ли нажата какая-то из submit кнопок в веб формах
     if row_form.validate_on_submit() or navig_form.validate_on_submit() or new_row_form.validate_on_submit():
         flsk.logger.debug("Index page submitted")
+        # Проверяем какая кнопка была нажата
         if row_form.save.data:
+            # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
+            # подстваляя новые значения
             flsk.logger.info("Row form save button was pressed")
             try:
                 db.execute("UPDATE trans" +
@@ -54,6 +58,8 @@ def index():
             except sqlite3.Error as e:
                 flsk.logger.error(e)
         elif navig_form.allow.data:
+            # Если кнопка подтвержедения в навигационной форму была нажата,
+            # то получаем данные от базы данных с новыми параметрами
             flsk.logger.debug("Navigation form allow button was pressed")
             command = ("""CREATE VIEW vtrans AS SELECT
                           t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount
@@ -71,6 +77,8 @@ def index():
             except sqlite3.Error as e:
                 flsk.logger.error(e)
         elif row_form.delete.data:
+            # Если была нажата кнопка удаления в веб форме строки в таблицу,
+            # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
             flsk.logger.debug("Row form delete button was pressed")
             try:
                 db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
@@ -78,6 +86,8 @@ def index():
             except sqlite3.Error as e:
                 flsk.logger.error(e)
         elif new_row_form.add.data:
+            # Если в веб форме новой строки была нажата кнопка добавления,
+            # добавляем новую строку с параментрами из веб форм
             flsk.logger.debug("New row form add button was pressed")
             try:
                 db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
@@ -90,12 +100,14 @@ def index():
             db.commit()
         else:
             return
+    # Достаем данные о заправлках из базы данных
     try:
         trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
                                 FROM vtrans""")
     except sqlite3.Error as e:
         flsk.logger.error(e)
 
+    # Обновляе страницуы
     flsk.logger.debug("Rendering index page")
     return render_template("index.html",
                            trans_data=trans_data,
