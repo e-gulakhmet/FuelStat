@@ -46,7 +46,13 @@ function editRow(row_id, station_id) {
 
 
 function hide_buttons() {
-    rows = document.querySelectorAll(".work_table_row")
+    var rows = null
+    if (document.querySelector(".table_workspace.trans").style.display != "none") {
+        rows = document.querySelectorAll(".table_workspace.trans .work_table_row")
+    }
+    if (document.querySelector(".table_workspace.fuel").style.display != "none") {
+        rows = document.querySelectorAll(".table_workspace.fuel .work_table_row")
+    }
     for (var i = 0; i < rows.length - 1; i++) {
         rows[i].querySelector(".button.delete").style.display = "none"
         rows[i].querySelector(".button.edit").style.display = "none"
@@ -62,8 +68,15 @@ function saveRow() {
 function deleteRow(row_id) {
     var result = confirm("Удалить строку?")
     if (result) {
-        document.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
-        document.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
+        var table = null
+        if (document.querySelector(".table_workspace.trans").style.display != "none") {
+            table = document.querySelectorAll(".table_workspace.trans")
+        }
+        if (document.querySelector(".table_workspace.fuel").style.display != "none") {
+            table = document.querySelectorAll(".table_workspace.fuel")
+        }
+        table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
+        table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
     }
 }
 
@@ -73,7 +86,13 @@ function newRow() {
         alert("Сохраните редактируемую строку!")
     }
     else {
-        var row = document.querySelector(".work_table_row.new")
+        var row = null
+        if (document.querySelector(".table_workspace.trans").style.display != "none") {
+            var row = document.querySelector(".table_workspace.trans .work_table_row.new")
+        }
+        else if (document.querySelector(".table_workspace.fuel").style.display != "none") {
+            var row = document.querySelector(".table_workspace.fuel .work_table_row.new")
+        }
         var form_cols = row.querySelectorAll(".form_col")
         var fuel_data = document.querySelector(".navig_form.names").querySelectorAll("option")
         var table_col = row.querySelector(".table_col")
@@ -175,9 +194,22 @@ function validOdometerNewRow(odometer) {
 }
 
 
-function showFuelTable() {
-    document.querySelector(".table_workspace.fuel").style.display = "flex"
-    document.querySelector(".table_workspace.trans").style.display = "none"
-    document.querySelector(".navig_inner.fuel").style.display = "block"
-    document.querySelector(".navig_inner.trans").style.display = "none"
+function changeTable(table_name) {
+    var tables = []
+    if (table_name == "trans") {
+        document.querySelector(".navig_form_label.start").innerHTML = "Start Date"
+        document.querySelector(".navig_form_label.end").innerHTML = "End Date"
+        tables.push("trans")
+        tables.push("fuel")
+    }
+    else {
+        document.querySelector(".navig_form_label.start").innerHTML = "Start Value"
+        document.querySelector(".navig_form_label.end").innerHTML = "End Value"
+        tables.push("fuel")
+        tables.push("trans") 
+    }
+    document.querySelector(".table_workspace." + tables[0]).style.display = "flex"
+    document.querySelector(".table_workspace." + tables[1]).style.display = "none"
+
+    document.querySelector(".navig_form_table_name").value = table_name
 }

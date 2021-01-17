@@ -87,9 +87,6 @@ body {
     padding-bottom: 5px;
     border-bottom: 2px solid #808080;
 }
-.navig_inner.fuel {
-    display: none;
-}
 .navig_form_container {
     margin-bottom: 20px;
 }

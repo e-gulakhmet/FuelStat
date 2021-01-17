@@ -13,6 +13,6 @@ login.login_message = "Please Sign In"
 
 logging.basicConfig(filename='logging.log',
                     level=logging.DEBUG,
-                    format="%(asctime)s %(name)s [%(levelname)s] : %(message)s, line %(lineno)d in %(pathname)s'))")
+                    format="%(asctime)s %(name)s [%(levelname)s] : %(message)s, line %(lineno)d in %(filename)s'))")
 
 from app import routes
