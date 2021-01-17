@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField
-from wtforms.validators import DataRequired, ValidationError, InputRequired
+from wtforms.validators import DataRequired, ValidationError
 from datetime import date
 import sqlite3
 
@@ -13,12 +13,11 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 
-class NavigationForm(FlaskForm):
-    table_name = StringField()
-    start_value = DateField("Start Date", default=date(1000, 1, 1),
-                            validators=[DataRequired()], format='%Y-%m-%d')
-    end_value = DateField("End Date", default=date(9000, 12, 31),
-                          validators=[DataRequired()], format='%Y-%m-%d')
+class NavigationTransForm(FlaskForm):
+    start_date = DateField("Start Date", default=date(1000, 1, 1),
+                           validators=[DataRequired()], format='%Y-%m-%d')
+    end_date = DateField("End Date", default=date(9000, 12, 31),
+                         validators=[DataRequired()], format='%Y-%m-%d')
     names = SelectMultipleField("Stations Names",
                                 validators=[DataRequired()])
     allow = SubmitField("Allow")
@@ -30,6 +29,16 @@ class NavigationForm(FlaskForm):
     def validate_end_date(form, field):
         if field.data < form.start_date.data:
             raise ValidationError("End date must be greater than start date")
+
+
+class NavigationFuelForm(FlaskForm):
+    names = SelectMultipleField("Stations Names",
+                                validators=[DataRequired()])
+    start_price = IntegerField("Start Price", default=0, 
+                               validators=[DataRequired()])
+    end_price = IntegerField("Start Price", default=1000, 
+                             validators=[DataRequired()])
+    allow = SubmitField("Allow")
 
 
 class TableRowForm(FlaskForm):
@@ -57,3 +66,7 @@ class TableNewRowForm(FlaskForm):
             raise ValidationError("Odometer must be greater than " + str(min_value))
         if field.data > max_value:
             raise ValidationError("Odometer must be less than " + str(max_value))
+
+
+class WorkTableForm(FlaskForm):
+    table_name = StringField()

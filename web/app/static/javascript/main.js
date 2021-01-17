@@ -197,19 +197,23 @@ function validOdometerNewRow(odometer) {
 function changeTable(table_name) {
     var tables = []
     if (table_name == "trans") {
-        document.querySelector(".navig_form_label.start").innerHTML = "Start Date"
-        document.querySelector(".navig_form_label.end").innerHTML = "End Date"
         tables.push("trans")
         tables.push("fuel")
     }
     else {
-        document.querySelector(".navig_form_label.start").innerHTML = "Start Value"
-        document.querySelector(".navig_form_label.end").innerHTML = "End Value"
         tables.push("fuel")
-        tables.push("trans") 
+        tables.push("trans")
     }
-    document.querySelector(".table_workspace." + tables[0]).style.display = "flex"
+    console.log(tables)
+    // Показываем таблицу с данными о транзакциях
     document.querySelector(".table_workspace." + tables[1]).style.display = "none"
+    document.querySelector(".table_workspace." + tables[0]).style.display = "flex"
 
-    document.querySelector(".navig_form_table_name").value = table_name
+    // Показываем навигационную панель для транзакций
+    document.querySelector(".navig_inner." + tables[1]).style.display = "none"
+    document.querySelector(".navig_inner." + tables[0]).style.display = "block"
+
+    document.querySelector(".navig_button." + tables[0]).backgroundColor = "#66ff66"
+    document.querySelector(".navig_button." + tables[1]).backgroundColor = "#c7c7ea"
+    document.querySelector(".table_name").value = table_name
 }

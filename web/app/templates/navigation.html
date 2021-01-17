@@ -1,6 +1,5 @@
 <div class="index_container navigation">
         <p class="navig_header">Navigation</p>
-        {{ navig_form.table_name(class="navig_form_table_name", style="display: none") }}
         <div class="navig_form_container">
                 <p class="navig_form_label" style="margin-bottom: 10px;">Table</p>
                 <a class="navig_button trans" style="display: inline;" onclick="changeTable('trans')">
@@ -10,26 +9,52 @@
                         Fuel
                 </a>
         </div>
-        <form action="" method="POST">
-                {{ navig_form.hidden_tag() }}
-                <div class="navig_form_container">
-                        <p class="navig_form_label start">
-                                Start Date
-                        </p>
-                        {{ navig_form.start_value(size=10, class="navig_form start") }}
-                </div>
-                <div class="navig_form_container">
-                        <p class="navig_form_label end">
-                                End Date
-                        </p>
-                        {{ navig_form.end_value(size=10, class="navig_form end") }}
-                </div>
-                <div class="navig_form_container">
-                        <p class="navig_form_label names">
-                                {{ navig_form.names.label }}
-                        </p>
-                        {{ navig_form.names(class="navig_form names") }}
-                </div>
-                {{ navig_form.allow(class="navig_form_button") }}
-        </form>                
+        <div class="navig_inner trans">
+                <form action="" method="POST">
+                        {{ navig_trans_form.hidden_tag() }}
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.start_date.label }}
+                                </p>
+                                {{ navig_trans_form.start_date(size=10, class="navig_form start_date") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.end_date.label }}
+                                </p>
+                                {{ navig_trans_form.end_date(size=10, class="navig_form end_date") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.names.label }}
+                                </p>
+                                {{ navig_trans_form.names(class="navig_form names") }}
+                        </div>
+                        {{ navig_trans_form.allow(class="navig_form_button") }}
+                </form>
+        </div>
+        <div class="navig_inner fuel" style="display: none;">
+                <form action=""  method="POST">
+                        {{ navig_fuel_form.hidden_tag() }}
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_fuel_form.names.label }}
+                                </p>
+                                {{ navig_fuel_form.names(class="navig_form names") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_fuel_form.start_price.label }}
+                                </p>
+                                {{ navig_fuel_form.start_price(size=10, class="navig_form start_price") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_fuel_form.end_price.label }}
+                                </p>
+                                {{ navig_fuel_form.end_price(size=10, class="navig_form end_price") }}
+                        </div>
+                        {{ navig_fuel_form.allow(class="navig_form_button") }}
+                </form>
+        </div>          
 </div>
