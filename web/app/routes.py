@@ -12,7 +12,6 @@ import sqlite3
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
-# TODO: Сделать навигацию по разным таблицам используя одну форму
 # TODO: Настроить веб форму, в которой будет информация о названии текущей таблицы
 
 
@@ -146,6 +145,10 @@ def index():
                                 FROM vfuel""")
     except sqlite3.Error as e:
         flsk.logger.error(e)
+
+    print(table_form.table_name.data)
+
+    # table_form.table_name.default = table_form.table_name.data
 
     # Обновляем страницу
     flsk.logger.debug("Rendering index page")

@@ -69,4 +69,4 @@ class TableNewRowForm(FlaskForm):
 
 
 class WorkTableForm(FlaskForm):
-    table_name = StringField()
+    table_name = StringField("name", default="trans")

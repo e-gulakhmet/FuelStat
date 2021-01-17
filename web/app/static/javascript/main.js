@@ -204,7 +204,6 @@ function changeTable(table_name) {
         tables.push("fuel")
         tables.push("trans")
     }
-    console.log(tables)
     // Показываем таблицу с данными о транзакциях
     document.querySelector(".table_workspace." + tables[1]).style.display = "none"
     document.querySelector(".table_workspace." + tables[0]).style.display = "flex"
@@ -216,4 +215,9 @@ function changeTable(table_name) {
     document.querySelector(".navig_button." + tables[0]).backgroundColor = "#66ff66"
     document.querySelector(".navig_button." + tables[1]).backgroundColor = "#c7c7ea"
     document.querySelector(".table_name").value = table_name
+    document.querySelector(".table_name").defaultValue = table_name
+    console.log(document.querySelector(".table_name").value)
 }
+
+console.log(document.querySelector(".table_name").defaultValue)
+changeTable(document.querySelector(".table_name").value)
