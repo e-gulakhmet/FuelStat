@@ -23,7 +23,7 @@ function editRow(row_id, station_id) {
             form_cols[i].querySelector(form_names[i - 1]).add(option)
             for (var t = 0; t < fuel_data.length; t++) {
                 var opt = document.createElement("option")
-                if ( fuel_data[t].value == station_id) {
+                if (fuel_data[t].value == station_id) {
                     continue
                 }
                 else {
@@ -219,5 +219,4 @@ function changeTable(table_name) {
     console.log(document.querySelector(".table_name").value)
 }
 
-console.log(document.querySelector(".table_name").defaultValue)
 changeTable(document.querySelector(".table_name").value)

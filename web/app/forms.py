@@ -20,7 +20,7 @@ class NavigationTransForm(FlaskForm):
                          validators=[DataRequired()], format='%Y-%m-%d')
     names = SelectMultipleField("Stations Names",
                                 validators=[DataRequired()])
-    allow = SubmitField("Allow")
+    trans_allow = SubmitField("Allow")
 
     def validate_start_date(form, field):
         if field.data < form.start_date.data:
@@ -32,13 +32,12 @@ class NavigationTransForm(FlaskForm):
 
 
 class NavigationFuelForm(FlaskForm):
-    names = SelectMultipleField("Stations Names",
-                                validators=[DataRequired()])
+    table_name = StringField("name", default="trans")
     start_price = IntegerField("Start Price", default=0, 
                                validators=[DataRequired()])
-    end_price = IntegerField("Start Price", default=1000, 
+    end_price = IntegerField("End Price", default=1000, 
                              validators=[DataRequired()])
-    allow = SubmitField("Allow")
+    fuel_allow = SubmitField("Allow")
 
 
 class TableRowForm(FlaskForm):
@@ -66,7 +65,3 @@ class TableNewRowForm(FlaskForm):
             raise ValidationError("Odometer must be greater than " + str(min_value))
         if field.data > max_value:
             raise ValidationError("Odometer must be less than " + str(max_value))
-
-
-class WorkTableForm(FlaskForm):
-    table_name = StringField("name", default="trans")

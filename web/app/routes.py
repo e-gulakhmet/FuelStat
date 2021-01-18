@@ -4,7 +4,7 @@
 
 from app import flsk
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm, TableRowForm, TableNewRowForm, WorkTableForm
+from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm, TableRowForm, TableNewRowForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
@@ -12,7 +12,6 @@ import sqlite3
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
-# TODO: Настроить веб форму, в которой будет информация о названии текущей таблицы
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -21,13 +20,11 @@ def index():
     db = sqlite3.connect("../data/database.db")
     navig_data = list(db.execute("SELECT CAST(id as TEXT), name FROM fuel"))
 
-    table_form = WorkTableForm()
-
     navig_trans_form = NavigationTransForm()
     navig_trans_form.names.choices = navig_data
 
     navig_fuel_form = NavigationFuelForm()
-    navig_fuel_form.names.choices = navig_data
+    table_name = navig_fuel_form.table_name.data
 
     row_form = TableRowForm()
 
@@ -69,10 +66,24 @@ def index():
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif navig_trans_form.allow.data:
+        elif navig_fuel_form.fuel_allow.data:
             # Если кнопка подтвержедения в навигационной форму была нажата,
-            # то получаем данные от базы данных с новыми параметрами
-            flsk.logger.debug("Navigation form allow button was pressed")
+            # то создаем новую view
+            flsk.logger.debug("Navigation fuel form allow button was pressed")
+            command = ("""CREATE VIEW vfuel AS SELECT
+                          id, name, price
+                          FROM fuel
+                          WHERE price > """ + str(navig_fuel_form.start_price.data) +
+                       " AND price < " + str(navig_fuel_form.end_price.data))
+            try:
+                db.execute("DROP VIEW IF EXISTS vfuel")
+                db.execute(command)
+            except sqlite3.Error as e:
+                flsk.logger.error(e)   
+        elif navig_trans_form.trans_allow.data:
+            # Если кнопка подтвержедения в навигационной форме была нажата,
+            # то Создаем новую view
+            flsk.logger.debug("Navigation trans form allow button was pressed")
             command = ("""CREATE VIEW vtrans AS SELECT
                           t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                           FROM trans t, fuel f WHERE t.fuel_id = f.id""" +
@@ -88,31 +99,12 @@ def index():
                 db.execute(command)
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif navig_fuel_form.allow.data:
-            # Если кнопка подтвержедения в навигационной форму была нажата,
-            # то получаем данные от базы данных с новыми параметрами
-            flsk.logger.debug("Navigation form allow button was pressed")
-            command = ("""CREATE VIEW vfuel AS SELECT
-                         id, name, price
-                         FROM fuel
-                         WHERE name in """ + str(tuple(navig_fuel_form.names.data)) +
-                       " AND price > " + str(navig_fuel_form.start_price.data) +
-                       " AND price < " + str(navig_fuel_form.end_price.data))
-            if len(navig_fuel_form.names.data) == 1:
-                command += " AND t.fuel_id == " + str(navig_trans_form.names.data[0])
-            elif len(navig_fuel_form.names.data) != 0:
-                command += " AND t.fuel_id in " + str(tuple(navig_trans_form.names.data))
-            try:
-                db.execute("DROP VIEW IF EXISTS vfuel")
-                db.execute(command)
-            except sqlite3.Error as e:
-                flsk.logger.error(e)   
         elif row_form.delete.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
             flsk.logger.debug("Row form delete button was pressed")
             try:
-                if table_form.table_name.data == "trans":
+                if table_name == "trans":
                     db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
                 else:
                     db.execute("DELETE FROM fuel WHERE id = " + str(row_form.id.data))
@@ -146,9 +138,10 @@ def index():
     except sqlite3.Error as e:
         flsk.logger.error(e)
 
-    print(table_form.table_name.data)
-
-    # table_form.table_name.default = table_form.table_name.data
+    # Устанавливае название таблицы, такое же, как и последнее значение
+    # Нужно для того, чтобы при слудующем обновлении страницы была показана
+    # таблица, которая была до
+    # navig_fuel_form.table_name.default = table_name
 
     # Обновляем страницу
     flsk.logger.debug("Rendering index page")
@@ -157,7 +150,6 @@ def index():
                            fuel_data=fuel_data,
                            navig_trans_form=navig_trans_form,
                            navig_fuel_form=navig_fuel_form,
-                           table_form=table_form,
                            row_form=row_form,
                            new_row_form=new_row_form)
 

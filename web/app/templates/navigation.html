@@ -30,18 +30,13 @@
                                 </p>
                                 {{ navig_trans_form.names(class="navig_form names") }}
                         </div>
-                        {{ navig_trans_form.allow(class="navig_form_button") }}
+                        {{ navig_trans_form.trans_allow(class="navig_form_button") }}
                 </form>
         </div>
         <div class="navig_inner fuel" style="display: none;">
                 <form action=""  method="POST">
                         {{ navig_fuel_form.hidden_tag() }}
-                        <div class="navig_form_container">
-                                <p class="navig_form_label">
-                                        {{ navig_fuel_form.names.label }}
-                                </p>
-                                {{ navig_fuel_form.names(class="navig_form names") }}
-                        </div>
+                        {{ navig_fuel_form.table_name(class="table_name", style="display: none;") }}
                         <div class="navig_form_container">
                                 <p class="navig_form_label">
                                         {{ navig_fuel_form.start_price.label }}
@@ -54,7 +49,7 @@
                                 </p>
                                 {{ navig_fuel_form.end_price(size=10, class="navig_form end_price") }}
                         </div>
-                        {{ navig_fuel_form.allow(class="navig_form_button") }}
+                        {{ navig_fuel_form.fuel_allow(class="navig_form_button") }}
                 </form>
         </div>          
 </div>
