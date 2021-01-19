@@ -12,6 +12,7 @@ import sqlite3
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
+# TODO: Переключение на последнюю открытую таблицу после удаления строки
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -25,6 +26,7 @@ def index():
 
     navig_fuel_form = NavigationFuelForm()
     table_name = navig_fuel_form.table_name.data
+    print(table_name)
 
     trans_row_form = TransTableRowForm()
 
@@ -112,6 +114,15 @@ def index():
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
+        elif fuel_row_form.delete_fuel.data:
+            # Если была нажата кнопка удаления в веб форме строки в таблицу,
+            # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
+            flsk.logger.debug("Row form delete button was pressed")
+            try:
+                db.execute("DELETE FROM fuel WHERE id = " + str(fuel_row_form.id.data))
+                db.commit()
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
         elif trans_new_row_form.add.data:
             # Если в веб форме новой строки была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
@@ -142,7 +153,7 @@ def index():
     # Устанавливае название таблицы, такое же, как и последнее значение
     # Нужно для того, чтобы при слудующем обновлении страницы была показана
     # таблица, которая была до
-    # navig_fuel_form.table_name.default = table_name
+    navig_fuel_form.table_name.default = table_name
 
     # Обновляем страницу
     flsk.logger.debug("Rendering index page")

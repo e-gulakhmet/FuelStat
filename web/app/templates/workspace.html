@@ -73,7 +73,7 @@
         <tbody>
             {% for row in fuel_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
-                    <form action="{{ url_for('index') }}" method="POST">
+                    <form action="{{ url_for('index') }}" method="POST" novalidate>
                         {{ fuel_row_form.hidden_tag() }}
                         <td class="form_col">{{ fuel_row_form.id(class="id") }}</td>
                         <td class="form_col">{{ fuel_row_form.name(size=10, class="name") }}</td>
