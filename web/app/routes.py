@@ -56,7 +56,7 @@ def index():
     if fuel_row_form.validate_on_submit() or trans_row_form.validate_on_submit() or navig_fuel_form.validate_on_submit() or navig_trans_form.validate_on_submit() or fuel_new_row_form.validate_on_submit() or trans_new_row_form.validate_on_submit():
         flsk.logger.debug("Index page submitted")
         # Проверяем какая кнопка была нажата
-        if trans_row_form.save.data:
+        if trans_row_form.save_trans.data:
             # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
             # подстваляя новые значения
             flsk.logger.info("Row form save button was pressed")
@@ -103,7 +103,7 @@ def index():
                 db.execute(command)
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif trans_row_form.delete.data:
+        elif trans_row_form.delete_trans.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
             flsk.logger.debug("Row form delete button was pressed")
