@@ -40,22 +40,22 @@ class NavigationFuelForm(FlaskForm):
     fuel_allow = SubmitField("Allow")
 
 
-class TableRowForm(FlaskForm):
-    id = IntegerField("Id")
+class TransTableRowForm(FlaskForm):
+    id = IntegerField("id")
     date = DateField("Date", validators=[DataRequired()], format='%Y-%m-%d')
     odometer = IntegerField("Odometer", validators=[DataRequired()])
     fuel_station = SelectField("Station", validators=[DataRequired()])
     gallon_count = FloatField("Gallons", validators=[DataRequired()])
-    save = SubmitField("Save")
-    delete = SubmitField("Delete")
+    save_trans = SubmitField("Save")
+    delete_trans = SubmitField("Delete")
 
 
-class TableNewRowForm(FlaskForm):
+class TransTableNewRowForm(FlaskForm):
     date = DateField("Date", validators=[DataRequired()])
     odometer = IntegerField("Odometer", validators=[DataRequired()])
     fuel_station = SelectField("Station", validators=[DataRequired()])
     gallon_count = FloatField("Gallons", validators=[DataRequired()])
-    add = SubmitField("Add")
+    add_trans = SubmitField("Add")
     
     def validate_odometer(form, field):
         db = sqlite3.connect("../data/database.db")
@@ -65,3 +65,17 @@ class TableNewRowForm(FlaskForm):
             raise ValidationError("Odometer must be greater than " + str(min_value))
         if field.data > max_value:
             raise ValidationError("Odometer must be less than " + str(max_value))
+
+
+class FuelTableRowForm(FlaskForm):
+    id = IntegerField("id")
+    name = StringField("Name", validators=[DataRequired()])
+    price = StringField("Price", validators=[DataRequired()])
+    save_fuel = SubmitField("Save")
+    delete_fuel = SubmitField("Delete")
+
+
+class FuelTableNewRowForm(FlaskForm):
+    name = StringField("Name")
+    price = StringField("Price")
+    add_fuel = SubmitField("Add")

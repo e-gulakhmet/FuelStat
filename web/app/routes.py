@@ -4,7 +4,7 @@
 
 from app import flsk
 from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm, TableRowForm, TableNewRowForm
+from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm, TransTableRowForm, TransTableNewRowForm, FuelTableNewRowForm, FuelTableRowForm
 from flask_login import current_user, login_user, logout_user, login_required
 from app.models import User
 from werkzeug.urls import url_parse
@@ -26,9 +26,13 @@ def index():
     navig_fuel_form = NavigationFuelForm()
     table_name = navig_fuel_form.table_name.data
 
-    row_form = TableRowForm()
+    trans_row_form = TransTableRowForm()
 
-    new_row_form = TableNewRowForm()
+    trans_new_row_form = TransTableNewRowForm()
+
+    fuel_row_form = FuelTableRowForm()
+
+    fuel_new_row_form = FuelTableNewRowForm()
 
     # Создаем view для того, чтобы в дальнейшем не повторять условия 
     try:
@@ -49,20 +53,20 @@ def index():
         flsk.logger.error(e)
 
     # Проверяем, была ли нажата какая-то из submit кнопок в веб формах
-    if row_form.validate_on_submit() or navig_fuel_form.validate_on_submit() or navig_trans_form.validate_on_submit() or new_row_form.validate_on_submit():
+    if fuel_row_form.validate_on_submit() or trans_row_form.validate_on_submit() or navig_fuel_form.validate_on_submit() or navig_trans_form.validate_on_submit() or fuel_new_row_form.validate_on_submit() or trans_new_row_form.validate_on_submit():
         flsk.logger.debug("Index page submitted")
         # Проверяем какая кнопка была нажата
-        if row_form.save.data:
+        if trans_row_form.save.data:
             # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
             # подстваляя новые значения
             flsk.logger.info("Row form save button was pressed")
             try:
                 db.execute("UPDATE trans" +
-                           " SET dtime = '" + str(row_form.date.data) + "'" +
-                           ", odometer = " + str(row_form.odometer.data) +
-                           ", fuel_id = " + str(row_form.fuel_station.data) +
-                           ", amount = " + str(row_form.gallon_count.data) + 
-                           " WHERE id = " + str(row_form.id.data))
+                           " SET dtime = '" + str(trans_row_form.date.data) + "'" +
+                           ", odometer = " + str(trans_row_form.odometer.data) +
+                           ", fuel_id = " + str(trans_row_form.fuel_station.data) +
+                           ", amount = " + str(trans_row_form.gallon_count.data) + 
+                           " WHERE id = " + str(trans_row_form.id.data))
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
@@ -99,28 +103,25 @@ def index():
                 db.execute(command)
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif row_form.delete.data:
+        elif trans_row_form.delete.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
             flsk.logger.debug("Row form delete button was pressed")
             try:
-                if table_name == "trans":
-                    db.execute("DELETE FROM trans WHERE id = " + str(row_form.id.data))
-                else:
-                    db.execute("DELETE FROM fuel WHERE id = " + str(row_form.id.data))
+                db.execute("DELETE FROM trans WHERE id = " + str(trans_row_form.id.data))
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif new_row_form.add.data:
+        elif trans_new_row_form.add.data:
             # Если в веб форме новой строки была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
             flsk.logger.debug("New row form add button was pressed")
             try:
                 db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
-                           "'" + str(new_row_form.date.data) + "'" +
-                           ", " + str(new_row_form.odometer.data) + 
-                           ", " + str(new_row_form.fuel_station.data) +
-                           ", " + str(new_row_form.gallon_count.data) + ")")
+                           "'" + str(trans_new_row_form.date.data) + "'" +
+                           ", " + str(trans_new_row_form.odometer.data) + 
+                           ", " + str(trans_new_row_form.fuel_station.data) +
+                           ", " + str(trans_new_row_form.gallon_count.data) + ")")
             except sqlite3.Error as e:
                 flsk.logger.error(e)
             db.commit()
@@ -150,8 +151,10 @@ def index():
                            fuel_data=fuel_data,
                            navig_trans_form=navig_trans_form,
                            navig_fuel_form=navig_fuel_form,
-                           row_form=row_form,
-                           new_row_form=new_row_form)
+                           trans_row_form=trans_row_form,
+                           trans_new_row_form=trans_new_row_form,
+                           fuel_row_form=fuel_row_form,
+                           fuel_new_row_form=fuel_new_row_form)
 
 
 

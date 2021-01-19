@@ -70,10 +70,12 @@ function deleteRow(row_id) {
     if (result) {
         var table = null
         if (document.querySelector(".table_workspace.trans").style.display != "none") {
-            table = document.querySelectorAll(".table_workspace.trans")
+            console.log("trans")
+            table = document.querySelector(".table_workspace.trans")
         }
-        if (document.querySelector(".table_workspace.fuel").style.display != "none") {
-            table = document.querySelectorAll(".table_workspace.fuel")
+        else if (document.querySelector(".table_workspace.fuel").style.display != "none") {
+            console.log("fuel")
+            table = document.querySelector(".table_workspace.fuel")
         }
         table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
         table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
