@@ -13,6 +13,8 @@ import sqlite3
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
 # TODO: Переключение на последнюю открытую таблицу после удаления строки
+# TODO: Поставить функции в определенном пораядке
+# TODO: Добавить валидацию для форм в таблице
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -25,8 +27,6 @@ def index():
     navig_trans_form.names.choices = navig_data
 
     navig_fuel_form = NavigationFuelForm()
-    table_name = navig_fuel_form.table_name.data
-    print(table_name)
 
     trans_row_form = TransTableRowForm()
 
@@ -81,6 +81,7 @@ def index():
                           FROM fuel
                           WHERE price > """ + str(navig_fuel_form.start_price.data) +
                        " AND price < " + str(navig_fuel_form.end_price.data))
+            navig_fuel_form.table_name.default = "fuel"
             try:
                 db.execute("DROP VIEW IF EXISTS vfuel")
                 db.execute(command)
@@ -118,6 +119,7 @@ def index():
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
             flsk.logger.debug("Row form delete button was pressed")
+            navig_fuel_form.table_name.default = "fuel"
             try:
                 db.execute("DELETE FROM fuel WHERE id = " + str(fuel_row_form.id.data))
                 db.commit()
@@ -149,11 +151,6 @@ def index():
                                 FROM vfuel""")
     except sqlite3.Error as e:
         flsk.logger.error(e)
-
-    # Устанавливае название таблицы, такое же, как и последнее значение
-    # Нужно для того, чтобы при слудующем обновлении страницы была показана
-    # таблица, которая была до
-    navig_fuel_form.table_name.default = table_name
 
     # Обновляем страницу
     flsk.logger.debug("Rendering index page")
