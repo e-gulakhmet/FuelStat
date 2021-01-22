@@ -2,8 +2,13 @@
     box-sizing: border-box;
 }
 
+@font-face {
+    font-family: OpenSans;
+    src: url(../fonts/Open_Sans/OpenSans-Regular.ttf);
+}
+
 html {
-    font-family: 'Open Sans', sans-serif;
+    font-family: 'Open Sans';
 }
 
 body {
