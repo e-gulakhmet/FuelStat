@@ -32,7 +32,6 @@ class NavigationTransForm(FlaskForm):
 
 
 class NavigationFuelForm(FlaskForm):
-    table_name = StringField("name", default="trans")
     start_price = IntegerField("Start Price", default=0, 
                                validators=[DataRequired()])
     end_price = IntegerField("End Price", default=1000, 

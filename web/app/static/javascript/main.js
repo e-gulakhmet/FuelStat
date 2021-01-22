@@ -237,4 +237,4 @@ function changeTable(table_name) {
     console.log(document.querySelector(".table_name").value)
 }
 
-changeTable(document.querySelector(".table_name").value)
+changeTable(document.querySelector(".table_name").defaultValue)

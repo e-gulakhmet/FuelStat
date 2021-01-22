@@ -10,7 +10,7 @@
                 </a>
         </div>
         <div class="navig_inner trans">
-                <form action="" method="POST">
+                <form action="" method="POST" novalidate>
                         {{ navig_trans_form.hidden_tag() }}
                         <div class="navig_form_container">
                                 <p class="navig_form_label">
@@ -34,9 +34,8 @@
                 </form>
         </div>
         <div class="navig_inner fuel" style="display: none;">
-                <form action=""  method="POST">
+                <form action=""  method="POST" novalidate>
                         {{ navig_fuel_form.hidden_tag() }}
-                        {{ navig_fuel_form.table_name(class="table_name", style="display: none;") }}
                         <div class="navig_form_container">
                                 <p class="navig_form_label">
                                         {{ navig_fuel_form.start_price.label }}

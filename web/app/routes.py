@@ -12,7 +12,6 @@ import sqlite3
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
-# TODO: Переключение на последнюю открытую таблицу после удаления строки
 # TODO: Поставить функции в определенном пораядке
 # TODO: Добавить валидацию для форм в таблице
 # TODO: Использовать скачанные шрифты
@@ -36,6 +35,8 @@ def index():
     fuel_row_form = FuelTableRowForm()
 
     fuel_new_row_form = FuelTableNewRowForm()
+
+    table_name = "trans"
 
     # Создаем view для того, чтобы в дальнейшем не повторять условия 
     try:
@@ -73,25 +74,25 @@ def index():
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif navig_fuel_form.fuel_allow.data:
-            # Если кнопка подтвержедения в навигационной форму была нажата,
-            # то создаем новую view
-            flsk.logger.debug("Navigation fuel form allow button was pressed")
-            command = ("""CREATE VIEW vfuel AS SELECT
-                          id, name, price
-                          FROM fuel
-                          WHERE price > """ + str(navig_fuel_form.start_price.data) +
-                       " AND price < " + str(navig_fuel_form.end_price.data))
-            navig_fuel_form.table_name.default = "fuel"
+            table_name = "trans"
+        elif fuel_row_form.save_fuel.data:
+            # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
+            # подстваляя новые значения
+            flsk.logger.info("Fuel row form save button was pressed")
             try:
-                db.execute("DROP VIEW IF EXISTS vfuel")
-                db.execute(command)
+                db.execute("UPDATE fuel" +
+                           " SET name = '" + str(fuel_row_form.name.data) + "'" +
+                           ", price = " + str(fuel_row_form.price.data) +
+                           " WHERE id = " + str(fuel_row_form.id.data))
+                db.commit()
             except sqlite3.Error as e:
-                flsk.logger.error(e)   
+                flsk.logger.error(e)
+            table_name = "fuel"
+
         elif navig_trans_form.trans_allow.data:
             # Если кнопка подтвержедения в навигационной форме была нажата,
             # то Создаем новую view
-            flsk.logger.debug("Navigation trans form allow button was pressed")
+            flsk.logger.debug("Trans navigation trans form allow button was pressed")
             command = ("""CREATE VIEW vtrans AS SELECT
                           t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount
                           FROM trans t, fuel f WHERE t.fuel_id = f.id""" +
@@ -107,29 +108,50 @@ def index():
                 db.execute(command)
             except sqlite3.Error as e:
                 flsk.logger.error(e)
+            table_name = "trans"
+        elif navig_fuel_form.fuel_allow.data:
+            # Если кнопка подтвержедения в навигационной форму была нажата,
+            # то создаем новую view
+            flsk.logger.debug("Fuel navigation fuel form allow button was pressed")
+            command = ("""CREATE VIEW vfuel AS SELECT
+                          id, name, price
+                          FROM fuel
+                          WHERE price > """ + str(navig_fuel_form.start_price.data) +
+                       " AND price < " + str(navig_fuel_form.end_price.data))
+            table_name = "fuel"
+            try:
+                db.execute("DROP VIEW IF EXISTS vfuel")
+                db.execute(command)
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
+            table_name = "fuel"
+
         elif trans_row_form.delete_trans.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
-            flsk.logger.debug("Row form delete button was pressed")
+            flsk.logger.debug("Trans row form delete button was pressed")
             try:
                 db.execute("DELETE FROM trans WHERE id = " + str(trans_row_form.id.data))
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
+            table_name = "trans"
         elif fuel_row_form.delete_fuel.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
-            flsk.logger.debug("Row form delete button was pressed")
-            navig_fuel_form.table_name.default = "fuel"
+            flsk.logger.debug("Fuel row form delete button was pressed")
+            table_name = "fuel"
             try:
                 db.execute("DELETE FROM fuel WHERE id = " + str(fuel_row_form.id.data))
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
+            table_name = "fuel"
+
         elif trans_new_row_form.add_trans.data:
             # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
-            flsk.logger.debug("New row form add button was pressed")
+            flsk.logger.debug("Trans new row form add button was pressed")
             try:
                 db.execute("INSERT INTO trans(dtime, odometer, fuel_id, amount) VALUES (" +
                            "'" + str(trans_new_row_form.date.data) + "'" +
@@ -139,22 +161,11 @@ def index():
             except sqlite3.Error as e:
                 flsk.logger.error(e)
             db.commit()
-        elif fuel_row_form.save_fuel.data:
-            # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
-            # подстваляя новые значения
-            flsk.logger.info("Fuel row form save button was pressed")
-            try:
-                db.execute("UPDATE fuel" +
-                           " SET name = '" + str(fuel_row_form.name.data) + "'" +
-                           ", price = " + str(fuel_row_form.price.data) +
-                           " WHERE id = " + str(fuel_row_form.id.data))
-                db.commit()
-            except sqlite3.Error as e:
-                flsk.logger.error(e)
+            table_name = "trans"
         elif fuel_new_row_form.add_fuel.data:
             # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
-            flsk.logger.debug("New row form add button was pressed")
+            flsk.logger.debug("Fuel new row form add button was pressed")
             try:
                 db.execute("INSERT INTO fuel(name, price) VALUES (" +
                            "'" + str(fuel_new_row_form.name.data) + "'" +
@@ -162,6 +173,7 @@ def index():
             except sqlite3.Error as e:
                 flsk.logger.error(e)
             db.commit()
+            table_name = "fuel"
     # Достаем данные о заправлках из базы данных
     try:
         trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
@@ -184,7 +196,8 @@ def index():
                            trans_row_form=trans_row_form,
                            trans_new_row_form=trans_new_row_form,
                            fuel_row_form=fuel_row_form,
-                           fuel_new_row_form=fuel_new_row_form)
+                           fuel_new_row_form=fuel_new_row_form,
+                           table_name=table_name)
 
 
 
