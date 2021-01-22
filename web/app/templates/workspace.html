@@ -30,7 +30,7 @@
                         {% endfor %}
                         <td class="table_col" style="text-align: end;">
                             {{ trans_row_form.delete_trans(class="button delete", onclick="deleteRow(" + row[0]|string +")") }}
-                            <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
+                            <a class="button edit" onclick="editRow('trans', '{{ row[0] }}', '{{ row[1] }}')">
                                 <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
                             </a>
                         </td>
@@ -86,7 +86,7 @@
                         {% endfor %}
                         <td class="table_col" style="text-align: end;">
                             {{ fuel_row_form.delete_fuel(class="button delete", onclick="deleteRow(" + row[0]|string +")") }}
-                            <a class="button edit" onclick="editRow('{{ row[0] }}', '{{ row[1] }}')">
+                            <a class="button edit" onclick="editRow('fuel', '{{ row[0] }}', '{{ row[1] }}')">
                                 <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
                             </a>
                         </td>

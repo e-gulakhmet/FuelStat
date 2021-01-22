@@ -15,6 +15,7 @@ import sqlite3
 # TODO: Переключение на последнюю открытую таблицу после удаления строки
 # TODO: Поставить функции в определенном пораядке
 # TODO: Добавить валидацию для форм в таблице
+# TODO: Использовать скачанные шрифты
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -125,8 +126,8 @@ def index():
                 db.commit()
             except sqlite3.Error as e:
                 flsk.logger.error(e)
-        elif trans_new_row_form.add.data:
-            # Если в веб форме новой строки была нажата кнопка добавления,
+        elif trans_new_row_form.add_trans.data:
+            # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
             flsk.logger.debug("New row form add button was pressed")
             try:
@@ -138,17 +139,38 @@ def index():
             except sqlite3.Error as e:
                 flsk.logger.error(e)
             db.commit()
-        else:
-            return
+        elif fuel_row_form.save_fuel.data:
+            # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
+            # подстваляя новые значения
+            flsk.logger.info("Fuel row form save button was pressed")
+            try:
+                db.execute("UPDATE fuel" +
+                           " SET name = '" + str(fuel_row_form.name.data) + "'" +
+                           ", price = " + str(fuel_row_form.price.data) +
+                           " WHERE id = " + str(fuel_row_form.id.data))
+                db.commit()
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
+        elif fuel_new_row_form.add_fuel.data:
+            # Если в веб форме новой строки, была нажата кнопка добавления,
+            # добавляем новую строку с параментрами из веб форм
+            flsk.logger.debug("New row form add button was pressed")
+            try:
+                db.execute("INSERT INTO fuel(name, price) VALUES (" +
+                           "'" + str(fuel_new_row_form.name.data) + "'" +
+                           ", " + str(fuel_new_row_form.price.data) + ")")
+            except sqlite3.Error as e:
+                flsk.logger.error(e)
+            db.commit()
     # Достаем данные о заправлках из базы данных
     try:
         trans_data = db.execute("""SELECT id, fuel_id, dtime, odometer, name, amount
-                                FROM vtrans""")
+                                   FROM vtrans""")
     except sqlite3.Error as e:
         flsk.logger.error(e)
     try:
         fuel_data = db.execute("""SELECT id, name, price
-                                FROM vfuel""")
+                                  FROM vfuel""")
     except sqlite3.Error as e:
         flsk.logger.error(e)
 

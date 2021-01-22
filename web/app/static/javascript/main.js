@@ -1,9 +1,28 @@
 is_edit = false
 
 
-function editRow(row_id, station_id) {
+function editRow(table_name, row_id, station_id) {
+    // Заменяет элементы таблицы на веб формы 
+    // и добавляет кнопку сохранения.
+    // Paremetrs:
+    // ---------
+    // table_name : str, int
+    //      Название таблицы, в строках которой нужно заменить элементы.
+    // row_id : str
+    //      Номер строки, элементы которой нужно заменить.
+    // station_id : str, int
+    //      Номер заправки, которая указана в таблице.
+    //      Нужно для того, чтобы поставить эту заправке первой.
+    if (table_name == "trans") {
+        var table = document.querySelector(".table_workspace.trans")
+        var form_names = [".date", ".odometer", ".station", ".gallons"]
+    }
+    else if (table_name == "fuel") {
+        var table = document.querySelector(".table_workspace.fuel")
+        var form_names = [".name", ".price"]
+    }
     // Строка в которой была нажата кнопка
-    var work_row = document.querySelector(".work_table_row.num_" + row_id)
+    var work_row = table.querySelector(".work_table_row.num_" + row_id)
     // Столбцы, в которых находятся веб формы
     var form_cols = work_row.querySelectorAll(".form_col")
     // Столбцы, в к содержутся значения(не веб формы)
@@ -11,29 +30,26 @@ function editRow(row_id, station_id) {
     // Названия и id заправок
     var fuel_data = document.querySelector(".navig_form.names").querySelectorAll("option")
 
-    var form_names = [".date", ".odometer", ".station", ".gallons"]
-
     form_cols[0].querySelector(".id").defaultValue = row_id
     for (var i = 1; i < form_cols.length - 1; i++) {
         form_cols[i].querySelector(form_names[i - 1]).defaultValue = table_cols[i - 1].innerHTML
-        if (i == 3) {
-            var option = document.createElement("option")
-            option.value = station_id
-            option.text = table_cols[i - 1].innerHTML
-            form_cols[i].querySelector(form_names[i - 1]).add(option)
-            for (var t = 0; t < fuel_data.length; t++) {
-                var opt = document.createElement("option")
-                if (fuel_data[t].value == station_id) {
-                    continue
-                }
-                else {
+        if (table_name == "trans") {
+            if (i == 3) {
+                var option = document.createElement("option")
+                option.value = station_id
+                option.text = table_cols[i - 1].innerHTML
+                form_cols[i].querySelector(form_names[i - 1]).add(option)
+                for (var t = 0; t < fuel_data.length; t++) {
+                    var opt = document.createElement("option")
+                    if (fuel_data[t].value == station_id) {
+                        continue
+                    }
                     opt.value = fuel_data[t].value
                     opt.text = fuel_data[t].text
+                    form_cols[i].querySelector(form_names[i - 1]).add(opt)
                 }
-                form_cols[i].querySelector(form_names[i - 1]).add(opt)
             }
         }
-        form_cols[i].querySelector(form_names[i - 1]).defaultValue = table_cols[i - 1].innerHTML
     }
     for (var i = 1; i < form_cols.length; i++) {
         form_cols[i].style.display = "table-cell"
