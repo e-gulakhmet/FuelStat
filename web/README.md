@@ -1,12 +1,4 @@
-# Пfкеты необходимые для работы
-Flask:
+## Запуск приложения:
+Установка всех пакетов:
 
-    pip install flask
-
-Flask-WTF(Веб Формы):
-
-    pip install flask-wtf
-
-Flask-Login:
-
-    pip install flask-login
+    pip install -r requirements.txt
