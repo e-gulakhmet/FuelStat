@@ -3,10 +3,6 @@ Flask:
 
     pip install flask
 
-Bootstrap
-
-    pip install flask_bootstrap
-
 Flask-WTF(Веб Формы):
 
     pip install flask-wtf

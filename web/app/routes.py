@@ -73,10 +73,10 @@ def index():
                 db.commit()
                 flsk.logger.info("Row with id = " + str(trans_row_form) + "from the trans table was updated")
                 flsk.logger.debug("With parameters:" +
-                           "\n    dtime=" + str(trans_row_form.date.data) +
-                           ",\n    odometer=" + str(trans_row_form.odometer.data) +
-                           ",\n    fuel_id = " + str(trans_row_form.fuel_station.data) +
-                           ",\n    amount = " + str(trans_row_form.gallon_count.data)
+                                  "\n    dtime=" + str(trans_row_form.date.data) +
+                                  ",\n    odometer=" + str(trans_row_form.odometer.data) +
+                                  ",\n    fuel_id = " + str(trans_row_form.fuel_station.data) +
+                                  ",\n    amount = " + str(trans_row_form.gallon_count.data))
             except sqlite3.Error as e:
                 flsk.logger.error(e)
             table_name = "trans"
@@ -191,7 +191,7 @@ def index():
                 db.execute("INSERT INTO fuel(name, price) VALUES (" +
                            "'" + str(fuel_new_row_form.name.data) + "'" +
                            ", " + str(fuel_new_row_form.price.data) + ")")
-                  db.commit()
+                db.commit()
                 flsk.logger.info("Added new row to fuel table")
             except sqlite3.Error as e:
                 flsk.logger.error(e)
