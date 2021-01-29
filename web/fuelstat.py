@@ -9,3 +9,6 @@
 # TOASK: Зачем нужно задавать в конфигурации SECRET_KEY
 
 from app import flsk
+
+if __name__ == "__main__":
+    flsk.run()

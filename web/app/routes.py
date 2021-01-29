@@ -1,21 +1,20 @@
 # Данные файл содержит в себе функции для отображения страниц, по
 # указанным путям
 
+from flask import render_template, flash, redirect, url_for, request
+from flask_login import current_user, login_user, logout_user, login_required
+from werkzeug.urls import url_parse
 
 from app import flsk
-from flask import render_template, flash, redirect, url_for, request
-from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm, TransTableRowForm, TransTableNewRowForm, FuelTableNewRowForm, FuelTableRowForm
-from flask_login import current_user, login_user, logout_user, login_required
+from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm
+from app.forms import TransTableRowForm, TransTableNewRowForm
+from app.forms import FuelTableNewRowForm, FuelTableRowForm
 from app.models import User
-from werkzeug.urls import url_parse
-import sqlite3
-
-import database
+from app.database import DataBase
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
 # TODO: Добавить валидацию для форм в таблице
-# TODO: Использовать свою database.py
 # TODO: Сделать разные логгеры для каждого из классов или файлов
 # TODO: Заменить str condition в database.py на tuple condition
 
@@ -23,7 +22,7 @@ import database
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():
-    db = database.DataBase("../data/database.db")
+    db = DataBase("../data/database.db")
     navig_data = list(db.select("name", "CAST(id as TEXT), name"))
 
     navig_trans_form = NavigationTransForm()
