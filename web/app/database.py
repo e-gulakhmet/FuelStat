@@ -5,6 +5,7 @@ import csv
 
 
 # TODO: Добавить функцию отсуствия названия таблицы в select
+# TODO: Заменить str condition в database.py на tuple condition
 
 
 class DataBase():

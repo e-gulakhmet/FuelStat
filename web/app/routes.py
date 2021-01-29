@@ -9,15 +9,13 @@ import logging
 from app import flsk
 from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm
 from app.forms import TransTableRowForm, TransTableNewRowForm
-from app.forms import FuelTableNewRowForm, FuelTableRowForm
+from app.forms import FuelTableNewRowForm, FuelTableRowForm, ReportForm
 from app.models import User
 from app.database import DataBase
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
 # TODO: Добавить валидацию для форм в таблице
-# TODO: Сделать разные логгеры для каждого из классов или файлов
-# TODO: Заменить str condition в database.py на tuple condition
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -27,10 +25,10 @@ def index():
     logger = logging.getLogger("INDEX")
 
     db = DataBase("../data/database.db")
-    navig_data = list(db.select("fuel", "CAST(id as TEXT), name"))
+    stations_info = list(db.select("fuel", "CAST(id as TEXT), name"))
 
     navig_trans_form = NavigationTransForm()
-    navig_trans_form.names.choices = navig_data
+    navig_trans_form.names.choices = stations_info
 
     navig_fuel_form = NavigationFuelForm()
 
@@ -41,6 +39,9 @@ def index():
     fuel_row_form = FuelTableRowForm()
 
     fuel_new_row_form = FuelTableNewRowForm()
+
+    report_form = ReportForm()
+    report_form.names.choices = stations_info
 
     table_name = "trans"
 
@@ -160,6 +161,7 @@ def index():
                            trans_new_row_form=trans_new_row_form,
                            fuel_row_form=fuel_row_form,
                            fuel_new_row_form=fuel_new_row_form,
+                           report_form=report_form,
                            table_name=table_name)
 
 

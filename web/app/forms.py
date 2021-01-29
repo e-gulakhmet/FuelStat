@@ -78,3 +78,21 @@ class FuelTableNewRowForm(FlaskForm):
     name = StringField("Name")
     price = StringField("Price")
     add_fuel = SubmitField("Add")
+
+
+class ReportForm(FlaskForm):
+    start_date = DateField("Start Date", default=date(1000, 1, 1),
+                           validators=[DataRequired()], format='%Y-%m-%d')
+    end_date = DateField("End Date", default=date(9000, 12, 31),
+                         validators=[DataRequired()], format='%Y-%m-%d')
+    names = SelectMultipleField("Stations Names",
+                                validators=[DataRequired()])
+    report_allow = SubmitField("Allow")
+
+    def validate_start_date(form, field):
+        if field.data < form.start_date.data:
+            raise ValidationError("Start date must be less than end date")
+
+    def validate_end_date(form, field):
+        if field.data < form.start_date.data:
+            raise ValidationError("End date must be greater than start date")
