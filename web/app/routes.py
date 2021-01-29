@@ -4,6 +4,7 @@
 from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
+import logging
 
 from app import flsk
 from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm
@@ -22,8 +23,11 @@ from app.database import DataBase
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():
+
+    logger = logging.getLogger("INDEX")
+
     db = DataBase("../data/database.db")
-    navig_data = list(db.select("name", "CAST(id as TEXT), name"))
+    navig_data = list(db.select("fuel", "CAST(id as TEXT), name"))
 
     navig_trans_form = NavigationTransForm()
     navig_trans_form.names.choices = navig_data
@@ -53,12 +57,12 @@ def index():
        or navig_trans_form.validate_on_submit()
        or fuel_new_row_form.validate_on_submit()
        or trans_new_row_form.validate_on_submit()):
-        flsk.logger.debug("Index submit button was pressed")
+        logger.debug("Index submit button was pressed")
         # Проверяем какая кнопка была нажата
         if trans_row_form.save_trans.data:
             # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
             # подстваляя новые значения
-            flsk.logger.debug("Save button was pressed in the row of the trans table")
+            logger.debug("Save button was pressed in the row of the trans table")
             db.update("trans", 
                       ("dtime = '" + str(trans_row_form.date.data) + "'" +
                        ", odometer = " + str(trans_row_form.odometer.data) +
@@ -70,7 +74,7 @@ def index():
         elif fuel_row_form.save_fuel.data:
             # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
             # подстваляя новые значения
-            flsk.logger.debug("Save button was pressed in the row of the fuel table")
+            logger.debug("Save button was pressed in the row of the fuel table")
             db.update("fuel",
                       "name = '" + str(fuel_row_form.name.data) + "'" +
                       ", price = " + str(fuel_row_form.price.data),
@@ -81,7 +85,7 @@ def index():
         elif navig_trans_form.trans_allow.data:
             # Если кнопка подтвержедения в навигационной форме была нажата,
             # то Создаем новую view
-            flsk.logger.debug("Allow button was pressed in the trans navigation")
+            logger.debug("Allow button was pressed in the trans navigation")
             condition = ("t.fuel_id = f.id" +
                          " AND t.dtime > '" + str(navig_trans_form.start_date.data) + "'" +
                          " AND t.dtime < '" + str(navig_trans_form.end_date.data) + "'")
@@ -97,7 +101,7 @@ def index():
         elif navig_fuel_form.fuel_allow.data:
             # Если кнопка подтвержедения в навигационной форму была нажата,
             # то создаем новую view
-            flsk.logger.debug("Allow button was pressed in the fuel navigation")
+            logger.debug("Allow button was pressed in the fuel navigation")
             db.create_view("vfuel", "fuel", "id, name, price",
                            ("price > " + str(navig_fuel_form.start_price.data) +
                             " AND price < " + str(navig_fuel_form.end_price.data)),
@@ -108,14 +112,14 @@ def index():
         elif trans_row_form.delete_trans.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
-            flsk.logger.debug("Delete button was pressed in the row of the trans table")
+            logger.debug("Delete button was pressed in the row of the trans table")
             db.delete("trans", "id = " + str(trans_row_form.id.data))
             db.commit()
             table_name = "trans"
         elif fuel_row_form.delete_fuel.data:
             # Если была нажата кнопка удаления в веб форме строки в таблицу,
             # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
-            flsk.logger.debug("Delete button was pressed in the row of the fuel table")
+            logger.debug("Delete button was pressed in the row of the fuel table")
             db.delete("fuel", "id = " + str(fuel_row_form.id.data))
             db.commit()
             table_name = "fuel"
@@ -123,7 +127,7 @@ def index():
         elif trans_new_row_form.add_trans.data:
             # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
-            flsk.logger.debug("Add button was pressed in the new row of the trans table")
+            logger.debug("Add button was pressed in the new row of the trans table")
             db.insert("trans", "dtime, odometer, fuel_id, amount",
                       ("'" + str(trans_new_row_form.date.data) + "'" +
                        ", " + str(trans_new_row_form.odometer.data) + 
@@ -133,20 +137,20 @@ def index():
         elif fuel_new_row_form.add_fuel.data:
             # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
-            flsk.logger.debug("Add button was pressed in the new row of the fuel table")
+            logger.debug("Add button was pressed in the new row of the fuel table")
             db.insert("fuel", "name, price", 
                       ("'" + str(fuel_new_row_form.name.data) + "'" +
                        ", " + str(fuel_new_row_form.price.data)))
             table_name = "fuel"
     # Достаем данные о заправлках из базы данных
-    flsk.logger.debug("Selecting data from trans view")
+    logger.debug("Selecting data from trans view")
     trans_data = db.select("vtrans",
                            "id, fuel_id, dtime, odometer, name, amount")
-    flsk.logger.debug("Selecting data from fuel view")
+    logger.debug("Selecting data from fuel view")
     fuel_data = db.select("vfuel", "id, name, price")
 
     # Обновляем страницу
-    flsk.logger.debug("Rendering index page")
+    logger.debug("Rendering index page")
     return render_template("index.html",
                            trans_data=trans_data,
                            fuel_data=fuel_data,
@@ -163,6 +167,8 @@ def index():
 @flsk.route("/", methods=["GET", "POST"])
 @flsk.route("/login", methods=["GET", "POST"])
 def login():
+    logger = logging.getLogger("LOGIN")
+
     # При входе на сайт, пользователь сразу переходит к странице
     # авторизации.
     # Он вводит свой логин и пароль, а так как пользователь у нас один,
@@ -176,22 +182,22 @@ def login():
     # Проверяем, если пользователь уже зашел,
     # то отправляем его на основную страницу.
     if current_user.is_authenticated:
-        flsk.logger.info("User already autheticated")
+        logger.info("User already autheticated")
         return redirect(url_for('index'))
     # Создаем объект form, который содержит в себе веб-формы для
     # авторизации
     form = LoginForm()
     # Если пришел POST запрос от браузера
     if form.validate_on_submit():
-        flsk.logger.debug("L0gin page submitted")
+        logger.debug("L0gin page submitted")
         if user.username != form.username.data or user.check_password(form.password.data) is False:
-            flsk.logger.info("Invalid username or password")
+            logger.info("Invalid username or password")
             flash('Invalid username or password')
             return redirect(url_for('login'))
         # Иначе загружаем пользователя
         # и переходим к основной странице
         login_user(user, remember=form.remember.data)
-        flsk.logger.info("User" + user.username + " signed in")
+        logger.info("User" + user.username + " signed in")
         # Проверяем, если в строке был указан аргумент next,
         # значит пользователь пытался перейти на страницу для
         # авторизованных пользователей, но так как он не авторизовалься,
@@ -203,7 +209,7 @@ def login():
             next_page = url_for("index")
         return redirect(next_page)
     # Отображаем страницу авторизиции
-    flsk.logger.debug("Rendering login page")
+    logger.debug("Rendering login page")
     return render_template("login.html", title="Login", form=form)
 
 
@@ -211,6 +217,5 @@ def login():
 @flsk.route('/logout')
 @login_required
 def logout():
-    flsk.logger.info("User logouted")
     logout_user()
     return redirect(url_for('index'))

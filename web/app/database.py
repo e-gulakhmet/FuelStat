@@ -34,8 +34,8 @@ class DataBase():
         self.connected = False
 
         # Удаляем файл базу данных
-        self.logger.info("Deleting table...")
         if re_create:
+            self.logger.info("Deleting table...")
             try:
                 os.remove(database_file)
                 self.logger.info("Database was deleted")
