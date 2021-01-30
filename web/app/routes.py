@@ -24,8 +24,8 @@ from app.database import DataBase
 def index():
 
     logger = logging.getLogger("INDEX")
-    print(os.getcwd().replace("web", "data/database.db"))
-    db = DataBase(os.getcwd().replace("web", "data/database.db"))
+    
+    db = DataBase(__file__.replace("web/app/routes.py", "data/database.db"))
     stations_info = list(db.select("fuel", "CAST(id as TEXT), name"))
 
     navig_trans_form = NavigationTransForm()
@@ -155,8 +155,8 @@ def index():
                       __file__.replace("web/app/routes.py", "main.py") +
                       " --report" +
                       " --start '" + str(report_form.start_date.data) + "'" +
-                      " --end '" + str(report_form.end_date.data) + "' --log debug")
-            return render_template("file.html")
+                      " --end '" + str(report_form.end_date.data) + "'")
+            return send_file(__file__.replace("web/app/routes.py", "data/report.pdf"), attachment_filename="report.pdf")
     # Достаем данные о заправлках из базы данных
     logger.debug("Selecting data from trans view")
     trans_data = db.select("vtrans",
