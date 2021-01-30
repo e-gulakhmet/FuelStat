@@ -5,6 +5,7 @@ from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import logging
+import os
 
 from app import flsk
 from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm
@@ -90,8 +91,8 @@ def index():
             condition = ("t.fuel_id = f.id" +
                          " AND t.dtime > '" + str(navig_trans_form.start_date.data) + "'" +
                          " AND t.dtime < '" + str(navig_trans_form.end_date.data) + "'" +
-                         " AND odometer > " + str(navig_trans_form.start_odometer.data) +
-                         " AND odometer < " + str(navig_trans_form.end_odometer.data))
+                         " AND t.odometer > " + str(navig_trans_form.start_odometer.data) +
+                         " AND t.odometer < " + str(navig_trans_form.end_odometer.data))
             if len(navig_trans_form.names.data) == 1:
                 condition += " AND t.fuel_id == " + str(navig_trans_form.names.data[0])
             elif len(navig_trans_form.names.data) != 0:
@@ -145,6 +146,17 @@ def index():
                       ("'" + str(fuel_new_row_form.name.data) + "'" +
                        ", " + str(fuel_new_row_form.price.data)))
             table_name = "fuel"
+
+        elif report_form.report_allow.data:
+            # Если кнопка подтвержедения в навигационной форме была нажата,
+            # то Создаем новую view
+            logger.debug("Allow button was pressed in the report")
+            curr_dir = os.getcwd()
+            os.chdir(curr_dir.replace("/web", ""))
+            os.system("python main.py --report" +
+                      " --start '" + str(report_form.start_date.data) + "'" +
+                      " --end '" + str(report_form.end_date.data) + "'")
+            table_name = "trans"
     # Достаем данные о заправлках из базы данных
     logger.debug("Selecting data from trans view")
     trans_data = db.select("vtrans",

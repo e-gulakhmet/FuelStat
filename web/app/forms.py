@@ -35,11 +35,11 @@ class NavigationTransForm(FlaskForm):
             raise ValidationError("End date must be greater than start date")
 
     def validate_start_odometer(form, field):
-        if field.data < form.end_odometer:
+        if field.data < form.end_odometer.data:
             raise ValidationError("Start odometer must be less than end odometer")
     
     def validate_end_odometer(form, field):
-        if field.data < form.end_odometer:
+        if field.data > form.start_odometer.data:
             raise ValidationError("End odometer must be greater than start odometer")
 
 
@@ -112,3 +112,11 @@ class ReportForm(FlaskForm):
     def validate_end_date(form, field):
         if field.data < form.start_date.data:
             raise ValidationError("End date must be greater than start date")
+    
+    def validate_start_odometer(form, field):
+        if field.data < form.end_odometer.data:
+            raise ValidationError("Start odometer must be less than end odometer")
+    
+    def validate_end_odometer(form, field):
+        if field.data > form.start_odometer.data:
+            raise ValidationError("End odometer must be greater than start odometer")
