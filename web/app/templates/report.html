@@ -17,6 +17,18 @@
             </div>
             <div class="report_form_container">
                 <p class="report_form_label">
+                        {{ report_form.start_odometer.label }}
+                </p>
+                {{ report_form.start_odometer(size=10, class="report_form start_odometer") }}
+            </div>
+            <div class="report_form_container">
+                <p class="report_form_label">
+                        {{ report_form.end_odometer.label }}
+                </p>
+                {{ report_form.end_odometer(size=10, class="report_form end_odometer") }}
+            </div>
+            <div class="report_form_container">
+                <p class="report_form_label">
                         {{ report_form.names.label }}
                 </p>
                 {{ report_form.names(class="report_form names") }}

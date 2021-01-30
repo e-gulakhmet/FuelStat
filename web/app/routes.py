@@ -89,7 +89,9 @@ def index():
             logger.debug("Allow button was pressed in the trans navigation")
             condition = ("t.fuel_id = f.id" +
                          " AND t.dtime > '" + str(navig_trans_form.start_date.data) + "'" +
-                         " AND t.dtime < '" + str(navig_trans_form.end_date.data) + "'")
+                         " AND t.dtime < '" + str(navig_trans_form.end_date.data) + "'" +
+                         " AND odometer > " + str(navig_trans_form.start_odometer.data) +
+                         " AND odometer < " + str(navig_trans_form.end_odometer.data))
             if len(navig_trans_form.names.data) == 1:
                 condition += " AND t.fuel_id == " + str(navig_trans_form.names.data[0])
             elif len(navig_trans_form.names.data) != 0:

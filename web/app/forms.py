@@ -18,17 +18,29 @@ class NavigationTransForm(FlaskForm):
                            validators=[DataRequired()], format='%Y-%m-%d')
     end_date = DateField("End Date", default=date(9000, 12, 31),
                          validators=[DataRequired()], format='%Y-%m-%d')
+    start_odometer = IntegerField("Start Odometer", default=1,
+                                  validators=[DataRequired()])                             
+    end_odometer = IntegerField("End Odometer", default=1000000,
+                                validators=[DataRequired()])
     names = SelectMultipleField("Stations Names",
                                 validators=[DataRequired()])
     trans_allow = SubmitField("Allow")
 
     def validate_start_date(form, field):
-        if field.data < form.start_date.data:
+        if field.data > form.end_date.data:
             raise ValidationError("Start date must be less than end date")
 
     def validate_end_date(form, field):
         if field.data < form.start_date.data:
             raise ValidationError("End date must be greater than start date")
+
+    def validate_start_odometer(form, field):
+        if field.data < form.end_odometer:
+            raise ValidationError("Start odometer must be less than end odometer")
+    
+    def validate_end_odometer(form, field):
+        if field.data < form.end_odometer:
+            raise ValidationError("End odometer must be greater than start odometer")
 
 
 class NavigationFuelForm(FlaskForm):
@@ -85,6 +97,10 @@ class ReportForm(FlaskForm):
                            validators=[DataRequired()], format='%Y-%m-%d')
     end_date = DateField("End Date", default=date(9000, 12, 31),
                          validators=[DataRequired()], format='%Y-%m-%d')
+    start_odometer = IntegerField("Start Odometer", default=1,
+                                  validators=[DataRequired()])                             
+    end_odometer = IntegerField("End Odometer", default=1000000,
+                                validators=[DataRequired()])
     names = SelectMultipleField("Stations Names",
                                 validators=[DataRequired()])
     report_allow = SubmitField("Allow")

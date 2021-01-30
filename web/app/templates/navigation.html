@@ -26,6 +26,18 @@
                         </div>
                         <div class="navig_form_container">
                                 <p class="navig_form_label">
+                                        {{ navig_trans_form.start_odometer.label }}
+                                </p>
+                                {{ navig_trans_form.start_odometer(size=10, class="navig_form start_odometer") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
+                                        {{ navig_trans_form.end_odometer.label }}
+                                </p>
+                                {{ navig_trans_form.end_odometer(size=10, class="navig_form end_odometer") }}
+                        </div>
+                        <div class="navig_form_container">
+                                <p class="navig_form_label">
                                         {{ navig_trans_form.names.label }}
                                 </p>
                                 {{ navig_trans_form.names(class="navig_form names") }}

@@ -113,7 +113,7 @@ body {
 .navig_form.names {
     font-size: 20px;
     width: 150px;
-    height: 250px;
+    height: 100px;
     background-color: #d4d8e9;
     border: 2px solid #808080;
     padding: 5px;
@@ -175,6 +175,74 @@ body {
 /* REPORT */
 .index_container.report {
     width: 250px;
+}
+.report_header {
+    text-align: center;
+    font-size: 25px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #808080;
+}
+.report_form_container {
+    margin-bottom: 20px;
+}
+.report_form_label {
+    font-size: 20px;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+.report_form {
+    font-size: 18px;
+    border-radius: 5px;
+    border: 2px solid #808080;
+    padding-left: 5px;
+    transition-duration: 0.2s;
+}
+.report_form:focus {
+    border-color: #9999ff;
+}
+.report_form.names {
+    font-size: 20px;
+    width: 150px;
+    height: 100px;
+    background-color: #d4d8e9;
+    border: 2px solid #808080;
+    padding: 5px;
+}
+.report_form_button {
+    height: 30px;
+    width: 60px;
+    border-radius: 10px;
+    border: 2px solid #2b2b73;
+    background-color: #c7c7ea;
+    transition-duration: 0.3s;
+}
+.report_form_button:hover {
+    color: white;
+    background-color: #2b2b73;
+}
+.report_form_button:active {
+    border-color: #66ff66;
+}
+.report_button {
+    cursor: pointer;
+    font-size: 17px;
+    padding: 0px 10px;
+    border-radius: 5px;
+    border: 2px solid #2b2b73;
+    background-color: #c7c7ea;
+    transition-duration: 0.4s;
+}
+.report_button:hover {
+    color: white;
+    background-color: #2b2b73;
+}
+.report_button:active {
+    border-color: #66ff66;
+}
+.report_button.trans {
+    margin-right: 15px;
 }
 
 /* WORKSPACE */
