@@ -30,6 +30,10 @@ def main():
                         help="set the name of the report file")
     parser.add_argument("-g", "--gasname", action="append", default=None,
                         help="set gas names for the report")
+    parser.add_argument("--startodometer", action="store", default=1,
+                        help="set gas id for the report")
+    parser.add_argument("--endodometer", action="store", default=10000000,
+                        help="set gas id for the report")
     parser.add_argument("-i", "--info", action="store_true", default=True,
                         help="display information about refueling in a report")
     parser.add_argument("--statistic", action="store_true", default=True,
@@ -70,7 +74,8 @@ def main():
     db.disconnect()
 
     if args.report is True:
-        r = reporter.Reporter(args.startdate, args.enddate, args.gasname, args.filename)
+        r = reporter.Reporter(args.startdate, args.enddate, args.gasname,
+                              args.startodometer, args.endodometer, args.filename)
         r.create_report(args.info, args.statistic)
         # reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 

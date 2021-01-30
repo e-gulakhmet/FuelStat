@@ -151,11 +151,21 @@ def index():
             # Если кнопка подтвержедения в навигационной форме была нажата,
             # то Создаем новую view
             logger.debug("Allow button was pressed in the report")
+            report_param = (" --report" +
+                            " --startdate " + str(report_form.start_date.data) +
+                            " --enddate " + str(report_form.end_date.data) +
+                            " --startodometer " + str(report_form.start_odometer.data) +
+                            " --endodometer " + str(report_form.end_odometer.data))
+            if report_form.names.data is not None:
+                for i in report_form.names.data:
+                    for station in stations_info:
+                        if station[0] == i:
+                            report_param += " --gasname " + station[1]
+                            break
+            print(report_param)
             os.system("python " +
                       __file__.replace("web/app/routes.py", "main.py") +
-                      " --report" +
-                      " --start '" + str(report_form.start_date.data) + "'" +
-                      " --end '" + str(report_form.end_date.data) + "'")
+                      report_param)
             return send_file(__file__.replace("web/app/routes.py", "data/report.pdf"), attachment_filename="report.pdf")
     # Достаем данные о заправлках из базы данных
     logger.debug("Selecting data from trans view")

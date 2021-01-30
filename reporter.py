@@ -29,7 +29,9 @@ class Reporter():
     Класс создания отчета
     """
 
-    def __init__(self, start_date="1000-00-00", end_date="9999-00-00", gas_name=None,
+    def __init__(self, start_date="1000-00-00", end_date="9999-00-00",
+                 gas_name=None,
+                 start_odometer=1, end_odometer=1000000,
                  file_name="report"):
         """
         Инициализация класса.
@@ -44,6 +46,10 @@ class Reporter():
             Конечная дата отчета.
         gas_name : str
             Названия заправок по которым будет строиться отчет.
+        start_odometer : str
+            Пробег, с которого будет начинаться отчет.
+        end_odometer : str
+            Пробег, которым будет заканчиваться отчет.
         file_name : str
             Название файла отчета.
         """
@@ -51,12 +57,16 @@ class Reporter():
         self.start_date = start_date
         self.end_date = end_date
         self.gas_name = gas_name
+        self.start_odometer = start_odometer
+        self.end_odometer = end_odometer
         self.file_name = file_name
 
         self.logger = logging.getLogger("REPORTER")  
         self.logger.debug("Report parameters: start_date[" + str(self.start_date) + ']' +
                           ", end_date[" + str(self.end_date) + ']' +
                           ", gas_names[" + str(self.gas_name) + ']' +
+                          ", start_odometer[" + str(self.start_odometer) + "]" +
+                          ", end_odometer[" + str(self.end_odometer) + "]" +
                           ", file_name[" + str(self.file_name) + ']')
     
         self.db = database.DataBase(__file__.replace("reporter.py", "data/database.db"))
@@ -111,8 +121,13 @@ class Reporter():
 
         self.condition = "dtime >= '" + str(self.start_date) + "'"
         self.condition += " AND dtime <= '" + str(self.end_date) + "'" 
+        self.condition += " AND odometer >= " + str(self.start_odometer)
+        self.condition += " AND odometer <= " + str(self.end_odometer) + " "
         if self.gas_name is not None:
-            self.condition += " AND name in " + str(tuple(self.gas_name))
+            if len(self.gas_name) == 1:
+                self.condition += "AND name = '" + str(self.gas_name[0]) + "'"
+            else:
+                self.condition += "AND name in " + str(tuple(self.gas_name))
 
 
     
