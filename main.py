@@ -1,6 +1,7 @@
 # from reportlab.pdfgen import canvas
 import logging
 import argparse
+import os
 
 import database
 import reporter
@@ -41,7 +42,8 @@ def main():
     logger = logging.getLogger("MAIN")
 
     # Создаем базу данных заправок
-    db = database.DataBase("data/database.db", args.recreate)
+    print(__file__.replace("main.py", "data/database.db"))
+    db = database.DataBase(__file__.replace("main.py", "data/database.db"), args.recreate)
 
     if args.recreate:
         # Создаем таблицу запрвавок
@@ -50,11 +52,11 @@ def main():
 
     if args.load:
         # Вставляем данные из текстового файла в таблицу
-        db.insert_list("fuel", "name, price", db.csv_to_list("data/fuel.csv"))
+        db.insert_list("fuel", "name, price", db.csv_to_list(__file__.replace("main.py", "data/fuel.csv")))
 
         # Получаем список значений из файла
         data = []
-        for row in db.csv_to_list("data/trans.csv"):
+        for row in db.csv_to_list(__file__.replace("main.py", "data/trans.csv")):
             # Разбираем каждую строку
             # Получем id заправки из файла fuel.txt по названию заправки
             fuel_id = db.select("fuel", "id", "name = '" + row[2] + "'").fetchone()

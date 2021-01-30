@@ -5,6 +5,7 @@ from reportlab.lib.units import mm
 from reportlab.lib import colors
 from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, Spacer, Flowable
 from reportlab.lib.styles import getSampleStyleSheet
+import os
 
 # TODO: Изменить таблицу статистики(строки перенести в столбцы)
 # TODO: Изменить информацию о статистике
@@ -58,11 +59,11 @@ class Reporter():
                           ", gas_names[" + str(self.gas_name) + ']' +
                           ", file_name[" + str(self.file_name) + ']')
     
-        self.db = database.DataBase("data/database.db")
+        self.db = database.DataBase(__file__.replace("reporter.py", "data/database.db"))
     
         # Cоздаем документ, в котором будут содержать полученные данные
         self.logger.debug("Creating DocTemplate")
-        self.doc = SimpleDocTemplate("data/" + file_name + ".pdf",
+        self.doc = SimpleDocTemplate(__file__.replace("reporter.py", "/data/" + file_name + ".pdf"),
                                      pagesize=[297 * mm, 210 * mm], # A4 Альбомная ориентация
                                      topMargin=5 * mm,
                                      bottomMargin=5 * mm,
