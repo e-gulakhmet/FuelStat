@@ -1,7 +1,7 @@
 # Данные файл содержит в себе функции для отображения страниц, по
 # указанным путям
 
-from flask import render_template, flash, redirect, url_for, request, render_template, send_file
+from flask import render_template, flash, redirect, url_for, request, send_file
 from flask_login import current_user, login_user, logout_user, login_required
 from werkzeug.urls import url_parse
 import logging

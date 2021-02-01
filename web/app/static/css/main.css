@@ -188,6 +188,7 @@ body {
     margin-bottom: 20px;
 }
 .report_form_label {
+    user-select: none;
     font-size: 20px;
     font-weight: 600;
     margin-bottom: 5px;
@@ -244,6 +245,26 @@ body {
 .report_button.trans {
     margin-right: 15px;
 }
+.report_form_container.statistic {
+    display: flex;
+    align-items: center;
+}
+.report_form.statistic {
+    display: inline;
+    cursor: pointer;
+    height: 20px;
+    width: 20px;
+    border-radius: 5px;
+    background-color: #eee;
+    transition-duration: 0.4s;
+}
+.report_form.statistic:hover {
+    background-color: #ccc;
+}
+.report_form.statistic:checked {
+    background-color: #2196F3;
+}
+
 
 /* WORKSPACE */
 .index_container.workspace{
