@@ -245,11 +245,13 @@ body {
 .report_button.trans {
     margin-right: 15px;
 }
-.report_form_container.statistic {
+.report_form_container.checkbox {
     display: flex;
     align-items: center;
 }
-.report_form.statistic {
+.report_form.checkbox {
+    margin-left: 5px;
+    margin-bottom: 5px;
     display: inline;
     cursor: pointer;
     height: 20px;
@@ -258,10 +260,10 @@ body {
     background-color: #eee;
     transition-duration: 0.4s;
 }
-.report_form.statistic:hover {
+.report_form.checkbox:hover {
     background-color: #ccc;
 }
-.report_form.statistic:checked {
+.report_form.checkbox:checked {
     background-color: #2196F3;
 }
 

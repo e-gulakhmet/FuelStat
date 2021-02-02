@@ -103,8 +103,9 @@ class ReportForm(FlaskForm):
                                 validators=[DataRequired()])
     names = SelectMultipleField("Stations Names",
                                 validators=[DataRequired()])
-    statistic = BooleanField("Statistic", default=True)
-    report_allow = SubmitField("Allow")
+    show_table = BooleanField("Show Table", default=True)
+    show_statistic = BooleanField("Show Statistic", default=True)
+    get_report = SubmitField("Get Report")
 
     def validate_start_date(form, field):
         if field.data < form.start_date.data:

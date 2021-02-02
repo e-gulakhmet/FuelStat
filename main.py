@@ -1,7 +1,6 @@
 # from reportlab.pdfgen import canvas
 import logging
 import argparse
-import os
 
 import database
 import reporter
@@ -77,7 +76,6 @@ def main():
         r = reporter.Reporter(args.startdate, args.enddate, args.gasname,
                               args.startodometer, args.endodometer, args.filename)
         r.create_report(args.info, args.statistic)
-        # reportgen.report(args.startdata, args.enddata, args.gasname, args.filename)
 
 
 def recreate(database, args):

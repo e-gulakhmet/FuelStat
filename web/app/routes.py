@@ -147,7 +147,7 @@ def index():
                        ", " + str(fuel_new_row_form.price.data)))
             table_name = "fuel"
 
-        elif report_form.report_allow.data:
+        elif report_form.get_report.data:
             # Если кнопка подтвержедения в навигационной форме была нажата,
             # то Создаем новую view
             logger.debug("Allow button was pressed in the report")
@@ -162,6 +162,10 @@ def index():
                         if station[0] == i:
                             report_param += " --gasname " + station[1]
                             break
+            if report_form.show_statistic.data:
+                report_param += " --statistic"
+            if report_form.show_table.data:
+                report_param += " --info"
             print(report_param)
             os.system("python " +
                       __file__.replace("web/app/routes.py", "main.py") +

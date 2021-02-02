@@ -33,13 +33,19 @@
                 </p>
                 {{ report_form.names(class="report_form names") }}
             </div>
-            <div class="report_form_container statistic">
+            <div class="report_form_container checkbox info">
                 <p class="report_form_label" style="display: inline;">
-                        {{ report_form.statistic.label }}
+                        {{ report_form.show_table.label }}
                 </p>
-                {{ report_form.statistic(class="report_form statistic") }}
+                {{ report_form.show_table(class="report_form checkbox info") }}
             </div>
-            {{ report_form.report_allow(class="report_form_button") }}
+            <div class="report_form_container checkbox">
+                <p class="report_form_label" style="display: inline;">
+                        {{ report_form.show_statistic.label }}
+                </p>
+                {{ report_form.show_statistic(class="report_form checkbox statistic") }}
+            </div>
+            {{ report_form.get_report(class="report_form_button") }}
         </form>
     </div>
 </div>
