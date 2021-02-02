@@ -14,30 +14,6 @@
             </tr>
         </thead>    
         <tbody>
-            {% for row in trans_data %}
-                <tr class="work_table_row num_{{ row[0] }}">
-                    <form action="{{ url_for('index') }}" method="POST" novalidate>
-                        {{ trans_row_form.hidden_tag() }}
-                        <td class="form_col">{{ trans_row_form.id(class="id") }}</td>
-                        <td class="form_col">{{ trans_row_form.date(size=10, class="date", onfocusout="validDateRow(this)") }}</td>
-                        <td class="form_col">{{ trans_row_form.odometer(size=7, class="odometer", onfocusout="validOdometerRow(this)") }}</td>
-                        <td class="form_col">{{ trans_row_form.fuel_station(class="station") }}</td>
-                        <td class="form_col">{{ trans_row_form.gallon_count(size=5, class="gallons") }}</td>
-                        <td class="form_col" style="text-align: end;">
-                            {{ trans_row_form.save_trans(class="button save", onclick="saveRow()")}}
-                        </td>
-                        {% for i in range(2, row|length) %}
-                            <td class="table_col">{{ row[i] }}</td>
-                        {% endfor %}
-                        <td class="table_col" style="text-align: end;">
-                            {{ trans_row_form.delete_trans(class="button delete", onclick="deleteRow(" + row[0]|string +")") }}
-                            <a class="button edit" onclick="editRow('trans', '{{ row[0] }}', '{{ row[1] }}')">
-                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
-                            </a>
-                        </td>
-                    </form>
-                </tr>
-            {% endfor %}
             <tr class="work_table_row new">
                 <form action="{{ url_for('index') }}" method="POST">
                     {{ trans_new_row_form.hidden_tag() }}
@@ -59,6 +35,30 @@
                     </a>
                 </td>
             </tr>
+            {% for row in trans_data %}
+                <tr class="work_table_row num_{{ row[0] }}">
+                    <form action="{{ url_for('index') }}" method="POST" novalidate>
+                        {{ trans_row_form.hidden_tag() }}
+                        <td class="form_col">{{ trans_row_form.id(class="id") }}</td>
+                        <td class="form_col">{{ trans_row_form.date(size=10, class="date", onfocusout="validDateRow(this)") }}</td>
+                        <td class="form_col">{{ trans_row_form.odometer(size=7, class="odometer", onfocusout="validOdometerRow(this)") }}</td>
+                        <td class="form_col">{{ trans_row_form.fuel_station(class="station") }}</td>
+                        <td class="form_col">{{ trans_row_form.gallon_count(size=5, class="gallons") }}</td>
+                        <td class="form_col" style="text-align: end;">
+                            {{ trans_row_form.save_trans(class="button save", style="display: inline;", onclick="saveRow()")}}
+                        </td>
+                        {% for i in range(2, row|length) %}
+                            <td class="table_col">{{ row[i] }}</td>
+                        {% endfor %}
+                        <td class="table_col" style="text-align: end;">
+                            {{ trans_row_form.delete_trans(class="button delete", style="display: inline;", onclick="deleteRow(" + row[0]|string +")") }}
+                            <a class="button edit" onclick="editRow('trans', '{{ row[0] }}', '{{ row[1] }}')">
+                                <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
+                            </a>
+                        </td>
+                    </form>
+                </tr>
+            {% endfor %}
         </tbody>
     </table>
 
@@ -72,6 +72,25 @@
             </tr>
         </thead>    
         <tbody>
+            <tr class="work_table_row new">
+                <form action="{{ url_for('index') }}" method="POST">
+                    {{ fuel_new_row_form.hidden_tag() }}
+                    <td class="form_col">
+                        {{ fuel_new_row_form.name(size=10, class="name") }}
+                    </td>
+                    <td class="form_col">
+                        {{ fuel_new_row_form.price(size=7, class="price") }}
+                    </td>
+                    <td class="form_col" style="text-align: end;">
+                        {{ fuel_new_row_form.add_fuel(class="button add", style="display: inline;") }}
+                    </td>
+                </form>
+                <td style="text-align: center;" class="table_col">
+                    <a class="button new" onclick="newRow()">
+                        New Row
+                    </a>
+                </td>
+            </tr>
             {% for row in fuel_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
                     <form action="{{ url_for('index') }}" method="POST" novalidate>
@@ -94,25 +113,6 @@
                     </form>
                 </tr>
             {% endfor %}
-            <tr class="work_table_row new">
-                <form action="{{ url_for('index') }}" method="POST">
-                    {{ fuel_new_row_form.hidden_tag() }}
-                    <td class="form_col">
-                        {{ fuel_new_row_form.name(size=10, class="name") }}
-                    </td>
-                    <td class="form_col">
-                        {{ fuel_new_row_form.price(size=7, class="price") }}
-                    </td>
-                    <td class="form_col" style="text-align: end;">
-                        {{ fuel_new_row_form.add_fuel(class="button add") }}
-                    </td>
-                </form>
-                <td style="text-align: center;" class="table_col">
-                    <a class="button new" onclick="newRow()">
-                        New Row
-                    </a>
-                </td>
-            </tr>
         </tbody>
     </table>
 </div>

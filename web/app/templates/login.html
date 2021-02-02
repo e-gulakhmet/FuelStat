@@ -7,27 +7,27 @@
             <form class="login_form" action="" method="POST">
                 {{ form.hidden_tag() }}
                 <div class="form_item">
-                    <p class="form_label">{{ form.username.label }}</p>
-                    <p class="form_username">{{ form.username(size=16) }}</p>
+                    <p class="form_label login">{{ form.username.label }}</p>
+                    {{ form.username(size=16, class="form login") }}
                     {% for error in form.username.errors %}
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                 </div>
                 <div class="form_item">
-                    <p class="form_label">{{ form.password.label }}</p>
-                    <p class="form_password">{{ form.password(size=16) }}</p>
+                    <p class="form_label login">{{ form.password.label }}</p>
+                    {{ form.password(size=16, class="form login") }}
                     {% for error in form.password.errors %}
                         <span style="color: red;">[{{ error }}]</span>
                     {% endfor %}
                 </div>
-                <div>
-                    <span class="form_remeber_label">{{ form.remember.label }}</span>
-                    <span class="form_remember">{{ form.remember }}</span>
+                <div class="form_container checkbox">
+                    <p class="form_label" style="display: inline;">
+                            {{ form.remember.label }}
+                    </p>
+                    {{ form.remember(class="form checkbox remember") }}
                 </div>
                 <div>
-                    <button class="form_button">
-                        {{ form.submit() }}
-                    </button>
+                    {{ form.submit(class="button") }}
                 </div>
             </form>
         </div>

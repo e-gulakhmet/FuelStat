@@ -230,8 +230,10 @@ function changeTable(table_name) {
     document.querySelector(".navig_inner." + tables[1]).style.display = "none"
     document.querySelector(".navig_inner." + tables[0]).style.display = "block"
 
-    document.querySelector(".navig_button." + tables[0]).backgroundColor = "#66ff66"
-    document.querySelector(".navig_button." + tables[1]).backgroundColor = "#c7c7ea"
+    document.querySelector(".button." + tables[0]).style.borderColor = "#009933"
+    document.querySelector(".button." + tables[0]).style.borderWidth = "3px"
+    document.querySelector(".button." + tables[1]).style.borderColor = "#2b2b73"
+    document.querySelector(".button." + tables[1]).style.borderWidth = "2px"
     document.querySelector(".table_name").value = table_name
     document.querySelector(".table_name").defaultValue = table_name
     console.log(document.querySelector(".table_name").value)
