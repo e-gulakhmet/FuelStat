@@ -7,6 +7,7 @@ import reporter
 
 
 # TODO: Добавить русский язык
+# TODO: Добавить информацию о пробеге, по которому подбирается таблица
 
 
 def main():
@@ -33,9 +34,9 @@ def main():
                         help="set gas id for the report")
     parser.add_argument("--endodometer", action="store", default=10000000,
                         help="set gas id for the report")
-    parser.add_argument("-i", "--info", action="store_true", default=True,
+    parser.add_argument("-i", "--info", action="store_true", default=False,
                         help="display information about refueling in a report")
-    parser.add_argument("--statistic", action="store_true", default=True,
+    parser.add_argument("--statistic", action="store_true", default=False,
                         help="display statistics about refueling in a report")
     args = parser.parse_args()
 

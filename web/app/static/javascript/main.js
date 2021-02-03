@@ -6,7 +6,7 @@ function editRow(table_name, row_id, station_id) {
     // и добавляет кнопку сохранения.
     // Paremetrs:
     // ---------
-    // table_name : str, int
+    // table_name : str
     //      Название таблицы, в строках которой нужно заменить элементы.
     // row_id : str
     //      Номер строки, элементы которой нужно заменить.
@@ -81,18 +81,10 @@ function saveRow() {
 }
 
 
-function deleteRow(row_id) {
+function deleteRow(table_name, row_id) {
     var result = confirm("Удалить строку?")
     if (result) {
-        var table = null
-        if (document.querySelector(".table_workspace.trans").style.display != "none") {
-            console.log("trans")
-            table = document.querySelector(".table_workspace.trans")
-        }
-        else if (document.querySelector(".table_workspace.fuel").style.display != "none") {
-            console.log("fuel")
-            table = document.querySelector(".table_workspace.fuel")
-        }
+        var table = document.querySelector(".table_workspace." + table_name)
         table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
         table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
     }

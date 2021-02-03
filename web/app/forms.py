@@ -22,8 +22,7 @@ class NavigationTransForm(FlaskForm):
                                   validators=[DataRequired()])                             
     end_odometer = IntegerField("End Odometer", default=1000000,
                                 validators=[DataRequired()])
-    names = SelectMultipleField("Stations Names",
-                                validators=[DataRequired()])
+    names = SelectMultipleField("Stations Names")
     trans_allow = SubmitField("Allow")
 
     def validate_start_date(form, field):
@@ -101,8 +100,7 @@ class ReportForm(FlaskForm):
                                   validators=[DataRequired()])                             
     end_odometer = IntegerField("End Odometer", default=1000000,
                                 validators=[DataRequired()])
-    names = SelectMultipleField("Stations Names",
-                                validators=[DataRequired()])
+    names = SelectMultipleField("Stations Names")
     show_table = BooleanField("Show Table", default=True)
     show_statistic = BooleanField("Show Statistic", default=True)
     get_report = SubmitField("Get Report")

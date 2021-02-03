@@ -315,7 +315,7 @@ class DataBase():
 
         if self.connected:
             try:
-                command = ("DELETE FROM" + table_name +
+                command = ("DELETE FROM " + table_name +
                            " WHERE " + condition)
                 self.logger.debug(command)
                 self.db.execute(command)
