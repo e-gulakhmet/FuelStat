@@ -166,7 +166,6 @@ def index():
                 report_param += " --statistic"
             if report_form.show_table.data:
                 report_param += " --info"
-            print(report_param)
             os.system("python " +
                       __file__.replace("web/app/routes.py", "main.py") +
                       report_param)
