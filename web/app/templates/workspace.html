@@ -10,7 +10,11 @@
                 <th>ODOMETER</th>
                 <th>STATION ID</th>
                 <th>GALLONS COUNT</th>
-                <th></th>
+                <th style="text-align: end; vertical-align: top;">
+                    <a class="button new" onclick="newRow('trans')">
+                        New Row
+                    </a>
+                </th>
             </tr>
         </thead>    
         <tbody>
@@ -29,15 +33,10 @@
                         {{ trans_new_row_form.add_trans(class="button add")}}
                     </td>
                 </form>
-                <td style="text-align: center;" class="table_col">
-                    <a class="button new" onclick="newRow()">
-                        New Row
-                    </a>
-                </td>
             </tr>
             {% for row in trans_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
-                    <form action="{{ url_for('index') }}" method="POST" novalidate>
+                    <form action="{{ url_for('index') }}" method="POST">
                         {{ trans_row_form.hidden_tag() }}
                         <td class="form_col">{{ trans_row_form.id(class="id") }}</td>
                         <td class="form_col">{{ trans_row_form.date(size=10, class="date", onfocusout="validDateRow(this)") }}</td>
@@ -68,7 +67,11 @@
             <tr>
                 <th>NAME</th>
                 <th>PRICE</th>
-                <th></th>
+                <th style="text-align: end; vertical-align: top;">
+                    <a class="button new" onclick="newRow('fuel')">
+                        New Row
+                    </a>
+                </th>
             </tr>
         </thead>    
         <tbody>
@@ -85,15 +88,10 @@
                         {{ fuel_new_row_form.add_fuel(class="button add", style="display: inline;") }}
                     </td>
                 </form>
-                <td style="text-align: center;" class="table_col">
-                    <a class="button new" onclick="newRow()">
-                        New Row
-                    </a>
-                </td>
             </tr>
             {% for row in fuel_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
-                    <form action="{{ url_for('index') }}" method="POST" novalidate>
+                    <form action="{{ url_for('index') }}" method="POST">
                         {{ fuel_row_form.hidden_tag() }}
                         <td class="form_col">{{ fuel_row_form.id(class="id") }}</td>
                         <td class="form_col">{{ fuel_row_form.name(size=10, class="name") }}</td>

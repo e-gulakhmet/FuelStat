@@ -289,7 +289,7 @@ class DataBase():
 
         if self.connected:
             try:
-                command = ("UPDATE" + table_name + "SET " + data +
+                command = ("UPDATE " + table_name + " SET " + data +
                            " WHERE " + condition)
                 self.logger.debug(command)
                 self.db.execute(command)
