@@ -1,13 +1,13 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError, Length, InputRequired
 from datetime import date
 import sqlite3
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired("FUCK")])
+    username = StringField('Username', validators=[DataRequired()])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField("Remember")
     submit = SubmitField('Sign In')
@@ -15,7 +15,7 @@ class LoginForm(FlaskForm):
 
 class NavigationTransForm(FlaskForm):
     start_date = DateField("Start Date", default=date(1000, 1, 1),
-                           validators=[DataRequired()], format='%Y-%m-%d')
+                           validators=[InputRequired()], format='%Y-%m-%d')
     end_date = DateField("End Date", default=date(9000, 12, 31),
                          validators=[DataRequired()], format='%Y-%m-%d')
     start_odometer = IntegerField("Start Odometer", default=1,
@@ -67,14 +67,16 @@ class TransTableNewRowForm(FlaskForm):
     gallon_count = FloatField("Gallons", validators=[DataRequired()])
     add_trans = SubmitField("Add")
     
-    def validate_odometer(form, field):
-        db = sqlite3.connect("../data/database.db")
-        min_value = list(db.execute("SELECT MAX(odometer) FROM trans WHERE dtime <= '" + str(form.date.data) + "'"))[0][0]
-        max_value = list(db.execute("SELECT MIN(odometer) FROM trans WHERE dtime >= '" + str(form.date.data) + "'"))[0][0]
-        if field.data < min_value:
-            raise ValidationError("Odometer must be greater than " + str(min_value))
-        if field.data > max_value:
-            raise ValidationError("Odometer must be less than " + str(max_value))
+    # def validate_odometer(form, field):
+    #     db = sqlite3.connect("../data/database.db")
+    #     min_value = list(db.execute("SELECT MAX(odometer) FROM trans WHERE dtime <= '" + str(form.date.data) + "'"))[0][0]
+    #     max_value = list(db.execute("SELECT MIN(odometer) FROM trans WHERE dtime >= '" + str(form.date.data) + "'"))[0][0]
+    #     print(min_value)
+    #     print(max_value)
+    #     if field.data < int(min_value):
+    #         raise ValidationError("Odometer must be greater than " + str(min_value))
+    #     if field.data > int(max_value):
+    #         raise ValidationError("Odometer must be less than " + str(max_value))
 
 
 class FuelTableRowForm(FlaskForm):
@@ -88,7 +90,7 @@ class FuelTableRowForm(FlaskForm):
 class FuelTableNewRowForm(FlaskForm):
     name = StringField("Name")
     price = StringField("Price")
-    add_fuel = SubmitField("Add")
+    add_fuel = SubmitField("Add", default=False)
 
 
 class ReportForm(FlaskForm):

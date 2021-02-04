@@ -60,6 +60,12 @@ def index():
        or fuel_new_row_form.validate_on_submit()
        or trans_new_row_form.validate_on_submit()):
         logger.debug("Index submit button was pressed")
+        print(fuel_row_form.validate_on_submit())
+        print(trans_row_form.validate_on_submit())
+        print(navig_fuel_form.validate_on_submit())
+        print(navig_trans_form.validate_on_submit())
+        print(fuel_new_row_form.validate_on_submit())
+        print(trans_new_row_form.validate_on_submit())
         # Проверяем какая кнопка была нажата
         if trans_row_form.save_trans.data:
             # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,

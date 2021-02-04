@@ -97,23 +97,22 @@ function newRow(table_name) {
     }
     else {
         // Строка где лежат формы для создания новой строки
-        var row = document.querySelector(".table_workspace." + table_name + ".work_table_row.new")
+        var row = document.querySelector(".table_workspace." + table_name + " .work_table_row.new")
         // Формы из полученной строки
         var form_cols = row.querySelectorAll(".form_col")
         // Данные о заправке, нужны для оптиций в select теге
         var fuel_data = document.querySelector(".index_container.navigation .form.names").querySelectorAll("option")
-        var table_col = row.querySelector(".table_col")
         
-        table_col.style.display = "none"
-        for (var i = 1; i < form_cols.length; i++) {
+        for (var i = 0; i < form_cols.length; i++) {
             form_cols[i].style.display = "table-cell"
         }
-
-        for (var i = 0; i < fuel_data.length; i++) {
-            var opt = document.createElement("option")
-            opt.value = fuel_data[i].value
-            opt.text = fuel_data[i].text
-            form_cols[2].querySelector(".station").add(opt)
+        if (table_name == "trans") {
+            for (var i = 0; i < fuel_data.length; i++) {
+                var opt = document.createElement("option")
+                opt.value = fuel_data[i].value
+                opt.text = fuel_data[i].text
+                form_cols[2].querySelector(".station").add(opt)
+            }
         }
         is_edit = true
         hide_buttons()
