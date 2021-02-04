@@ -85,6 +85,10 @@ function deleteRow(table_name, row_id) {
     var result = confirm("Удалить строку?")
     if (result) {
         var table = document.querySelector(".table_workspace." + table_name)
+        var forms = table.querySelectorAll("form")
+        for (var i = 0; i < forms.length; i++) {
+            forms[i].noValidate = true
+        }
         table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
         table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
     }
