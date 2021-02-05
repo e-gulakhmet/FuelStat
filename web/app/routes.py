@@ -55,7 +55,7 @@ def index():
     if request.method == "POST":
         print(navig_trans_form.validate_on_submit())
         print(navig_fuel_form.validate_on_submit())
-        print(trans_row_form.validate_on_submit())
+        print(trans_row_form.validate())
         print(fuel_row_form.validate_on_submit())
         print(trans_new_row_form.validate_on_submit())
         print(fuel_new_row_form.validate_on_submit())
