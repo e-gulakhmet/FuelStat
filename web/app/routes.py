@@ -16,7 +16,8 @@ from app.database import DataBase
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
-# TODO: Добавить валидацию для форм в таблице
+# TODO: Проверка введенных данных в js
+# TODO: Подсвечивание данных, которые введены не верно
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -305,7 +306,8 @@ def index():
     # Достаем данные о заправлках из базы данных
     logger.debug("Selecting data from trans view")
     trans_data = db.select("vtrans",
-                           "id, fuel_id, dtime, odometer, name, amount")
+                           "id, fuel_id, dtime, odometer, name, amount",
+                           order_by="dtime")
     logger.debug("Selecting data from fuel view")
     fuel_data = db.select("vfuel", "id, name, price")
 
