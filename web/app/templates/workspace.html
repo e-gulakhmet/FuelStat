@@ -39,7 +39,9 @@
                     <form action="{{ url_for('index') }}" method="POST">
                         {{ trans_row_form.hidden_tag() }}
                         <td class="form_col">{{ trans_row_form.id(class="id") }}</td>
-                        <td class="form_col">{{ trans_row_form.date(size=10, class="date") }}</td>
+                        <td class="form_col">
+                            {{ trans_row_form.date(size=10, class="date", onfocusout="validDateForm(this, 'trans')") }}
+                        </td>
                         <td class="form_col">{{ trans_row_form.odometer(size=7, class="odometer") }}</td>
                         <td class="form_col">{{ trans_row_form.fuel_station(class="station") }}</td>
                         <td class="form_col">{{ trans_row_form.gallon_count(size=5, class="gallons") }}</td>

@@ -1,31 +1,40 @@
-function validDateNewRow(date) {
-    var form_odometer = document.querySelector(".work_table_row.new .form_col .odometer").value
-    if (form_odometer != "") {
-        form_odometer = parseInt(form_odometer)
+// Проверка форм во время ввода данных
+
+
+function validDateForm(date_form) {
+    // Проверка введенной даты взависимости от введенного пробега.
+    // Введеная дата должна быть больше, чем самая большая дата,
+    // у которой пробег меньше, введенного нами.
+    // Введеная дата должна быть меньше, чем самая минимальная дата,
+    // у которой пробег больше, введенного нами
+    odometer_value = date_form.parentElement.parentElement.querySelector(".odometer").value
+    if (odometer_value != "") {
+        odometer_value = parseInt(odometer_value)
         var max_value = ""
         var min_value = ""
         var error = ""
-        rows = document.querySelectorAll(".work_table_row")
-        for (var i = 0; i < rows.length - 1; i++) {
+        rows = document.querySelectorAll(".table_workspace.trans .work_table_row")
+        console.log(rows)
+        for (var i = 1; i < rows.length - 1; i++) {
             table_cols = rows[i].querySelectorAll(".table_col")
-            if (parseInt(table_cols[1].innerHTML) < form_odometer && table_cols[0].innerHTML > min_value) {
+            if (parseInt(table_cols[1].innerHTML) < odometer_value && table_cols[0].innerHTML > min_value) {
                 min_value = table_cols[0].innerHTML
             }
-            if (parseInt(table_cols[1].innerHTML) > form_odometer) {
+            if (parseInt(table_cols[1].innerHTML) > odometer_value) {
                 max_value = table_cols[0].innerHTML
                 break
             }
         }
-        if (date.value <= min_value || date.value >= max_value) {
+        if (date_form.value <= min_value || date_form.value >= max_value) {
             error = "Date must be more than " + min_value + " and less than " + max_value
         }
         if (error != "") {
             document.querySelector(".error.new_row").innerHTML = "* " + error
-            date.style.borderColor = "red"
+            date_form.style.borderColor = "red"
         }
         else {
             document.querySelector(".error.new_row").innerHTML = ""
-            date.style.borderColor = "green"
+            date_form.style.borderColor = "green"
         }
     }
 }
