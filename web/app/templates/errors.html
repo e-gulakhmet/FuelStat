@@ -1,19 +1,5 @@
 <div class="index_container errors">
     <div class="error_inner">
-        {% for field in trans_new_row_form %}
-            {% for error in field.errors %}
-                    <p style="color: red;">[{{ error }}]</p>
-            {% endfor %}
-            {% for error in field.errors %}
-                <p style="color: red;">[{{ error }}]</p>
-            {% endfor %}
-            {% for error in field.errors %}
-                <p style="color: red;">[{{ error }}]</p>
-            {% endfor %}
-            {% for error in field.errors %}
-                <p style="color: red;">[{{ error }}]</p>
-            {% endfor %}
-        {% endfor %}
         <span class="error table_row"></span>
         <span class="error report"></span>
         <span class="error new_row"></span>
