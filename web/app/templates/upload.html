@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container upload">
+        <div class="upload_container fuel">
+            <p class="header">
+                Fuel Stations
+            </p>
+            <form action="" method="POST">
+                {{ upload_fuel_form.hidden_tag() }}
+                <div class="form_container">
+                    <p class="form_label upload">
+                        {{ upload_fuel_form.file_fuel.label}}
+                    </p>
+                    {{ upload_fuel_form.file_fuel(class="form file") }}
+                </div>
+                <div class="form_container">
+                    <p class="form_label upload">
+                        {{ upload_fuel_form.method_fuel.label }}
+                    </p>
+                    {{ upload_fuel_form.method_fuel(class="select upload") }}
+                </div>
+                {{ upload_fuel_form.upload_fuel(class="button upload") }}
+            </form>
+        </div>
+
+        <div class="upload_container trans">
+            <p class="header">
+                Transactions
+            </p>
+            <form action="" method="POST">
+                {{ upload_trans_form.hidden_tag() }}
+                <div class="form_container">
+                    <p class="form_label upload">
+                        {{ upload_trans_form.file_trans.label}}
+                    </p>
+                    {{ upload_trans_form.file_trans(class="form file") }}
+                </div>
+                <div class="form_container">
+                    <p class="form_label upload">
+                        {{ upload_trans_form.method_trans.label }}
+                    </p>
+                    {{ upload_trans_form.method_trans(class="select upload") }}
+                </div>
+                {{ upload_trans_form.upload_trans(class="button upload") }}
+            </form>
+        </div>
+    </div>
+{% endblock %}

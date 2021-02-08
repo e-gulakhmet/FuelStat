@@ -27,7 +27,7 @@
                     <td class="form_col">
                         {{ trans_new_row_form.odometer(size=7, class="odometer", onfocusout="validOdometerForm(this)") }}
                     </td>
-                    <td class="form_col">{{ trans_new_row_form.fuel_station(class="station") }}</td>
+                    <td class="form_col">{{ trans_new_row_form.fuel_station(class="select station") }}</td>
                     <td class="form_col">{{ trans_new_row_form.gallon_count(size=5, class="gallons") }}</td>
                     <td class="form_col" style="text-align: end;">
                         {{ trans_new_row_form.add_trans(class="button add")}}
@@ -45,7 +45,7 @@
                         <td class="form_col">
                             {{ trans_row_form.odometer(size=7, class="odometer", onfocusout="validOdometerForm(this)") }}
                         </td>
-                        <td class="form_col">{{ trans_row_form.fuel_station(class="station") }}</td>
+                        <td class="form_col">{{ trans_row_form.fuel_station(class="select station") }}</td>
                         <td class="form_col">{{ trans_row_form.gallon_count(size=5, class="gallons") }}</td>
                         <td class="form_col" style="text-align: end;">
                             {{ trans_row_form.save_trans(class="button save", style="display: inline;", onclick="saveRow()")}}

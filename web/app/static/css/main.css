@@ -96,6 +96,21 @@ body {
     display: flex;
     align-items: center;
 }
+.select {
+    cursor: pointer;
+    border-radius: 5px;
+    border: 2px solid gray;
+    padding: 2px 5px;
+    background-color: #ced1e4;
+}
+.select:after {
+    clip-path: polygon(100% 0%, 0 0%, 50% 100%);
+    background-color: #ced1e4;
+    cursor: pointer;
+}
+.select:focus{
+    border: 2px solid #9999ff;
+}
 
 
 
@@ -119,10 +134,15 @@ body {
     font-size: 20px;
     color: white;
 }
-.logout_button {
-    border-radius: 15px;
+.button.navbar {
+    font-size: 20px;
+    margin: 0px 10px;
+    border-radius: 10px;
     border: 3px solid white;
-    padding: 10px;
+    background-color: #4646b9;
+}
+.button.navbar:hover {
+    background-color: #313181;
 }
 .container_alert {
     background-color: rgba(112, 219, 112, 50%);
@@ -272,6 +292,45 @@ body {
 .button.new {
     font-size: 15px;
     padding: 0px 5px;
+}
+
+
+
+/* UPLOAD */
+.container.upload {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+.upload_container {
+    width: 700px;
+    height: 500px;
+    background-color: #d4d8e9;
+    border-radius: 10px;
+    padding: 20px 30px;
+    margin: 20px 80px;
+}
+.header {
+    font-size: 30px;
+}
+.select.upload {
+    font-size: 20px;
+    width: 150px;
+}
+.form_label.upload {
+    font-size: 25px;
+}
+.button.upload {
+    font-size: 18px;
+    margin-top: 20px;
+}
+.form.file {
+    border: 1px solid gray;
+    border-radius: 5px;
+    background-color: #abb1d3;
+    padding: 10px;
+    height: 200px;
+    font-size: 20px;
 }
 
 

@@ -27,9 +27,12 @@
 
                     <nav class="menu">
                         <ul class="menu_list">
+                            <li>
+                                <a class="button navbar" href="{{ url_for('upload') }}">UPLOAD FILES</a>
+                            </li>
                             {% if current_user.is_authenticated %}
                                 <li>
-                                    <a class="logout_button" href="{{ url_for('logout') }}">SIGN OUT</a>
+                                    <a class="button navbar" href="{{ url_for('logout') }}">SIGN OUT</a>
                                 </li>
                             {% endif %}
                         </ul> 

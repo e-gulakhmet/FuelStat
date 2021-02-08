@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField
+from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField, FileField
 from wtforms.validators import InputRequired, DataRequired, ValidationError
 from datetime import date
 import logging
@@ -154,3 +154,20 @@ class ReportForm(FlaskForm):
         if field.data < form.start_odometer.data:
             logger.warning("End odometer less than start odometer, Report")
             raise ValidationError()
+
+
+
+class UploadTransForm(FlaskForm):
+    file_trans = FileField('Upload File')
+    method_trans = SelectField("Upload Method",
+                               choices=["Add", "Replace"])
+    upload_trans = SubmitField("Upload")
+
+
+class UploadFuelForm(FlaskForm):
+    file_fuel = FileField('Upload File')
+    method_fuel = SelectField("Upload Method",
+                              choices=["Add", "Replace"])
+    upload_fuel = SubmitField("Upload")
+
+    # description   TextAreaField(u'Image Description')

@@ -10,12 +10,14 @@ import os
 from app import flsk
 from app.forms import LoginForm, NavigationTransForm, NavigationFuelForm
 from app.forms import TransTableRowForm, TransTableNewRowForm
+from app.forms import UploadFuelForm, UploadTransForm
 from app.forms import FuelTableNewRowForm, FuelTableRowForm, ReportForm
 from app.models import User
 from app.database import DataBase
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
+# TODO: Добавить подсветку свех форму при их изменении
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -199,6 +201,18 @@ def index():
                            fuel_new_row_form=fuel_new_row_form,
                            report_form=report_form,
                            table_name=table_name)
+
+
+
+@flsk.route("/upload", methods=["GET", "POST"])
+@login_required # Проверяем авторизовался ли пользователь
+def upload():
+    upload_trans_form = UploadTransForm()
+    upload_fuel_form = UploadFuelForm()
+
+    return render_template("upload.html",
+                           upload_trans_form=upload_trans_form,
+                           upload_fuel_form=upload_fuel_form)
 
 
 
