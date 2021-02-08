@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField, FileField
-from wtforms.validators import InputRequired, DataRequired, ValidationError
+from wtforms.validators import DataRequired, ValidationError
 from datetime import date
 import logging
 
@@ -160,14 +160,14 @@ class ReportForm(FlaskForm):
 class UploadTransForm(FlaskForm):
     file_trans = FileField('Upload File')
     method_trans = SelectField("Upload Method",
-                               choices=["Add", "Replace"])
+                               choices=[(0, "Add"),
+                                        (1, "Replace")])
     upload_trans = SubmitField("Upload")
 
 
 class UploadFuelForm(FlaskForm):
     file_fuel = FileField('Upload File')
     method_fuel = SelectField("Upload Method",
-                              choices=["Add", "Replace"])
+                              choices=[(0, "Add"),
+                                       (1, "Replace")])
     upload_fuel = SubmitField("Upload")
-
-    # description   TextAreaField(u'Image Description')

@@ -6,7 +6,7 @@
             <p class="header">
                 Fuel Stations
             </p>
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 {{ upload_fuel_form.hidden_tag() }}
                 <div class="form_container">
                     <p class="form_label upload">
@@ -28,7 +28,7 @@
             <p class="header">
                 Transactions
             </p>
-            <form action="" method="POST">
+            <form action="" method="POST" enctype="multipart/form-data">
                 {{ upload_trans_form.hidden_tag() }}
                 <div class="form_container">
                     <p class="form_label upload">

@@ -1,7 +1,6 @@
 import sqlite3
 import logging
 import os
-import csv
 
 
 # TODO: Добавить функцию отсуствия названия таблицы в select
@@ -348,22 +347,3 @@ class DataBase():
                 self.logger.warning(e)
         else:
             self.logger.warning("Not connected to database")
-        
-    
-    def csv_to_list(self, file_path):
-        if self.connected:
-            self.logger.debug("Converting csv file to list")
-            data = []
-            with open(file_path, newline="\n") as csv_file:
-                for row in csv.reader(csv_file, delimiter=","):
-                    lst = []
-                    for t in row:
-                        try:
-                            lst.append(int(t))
-                        except ValueError:
-                            lst.append(t)
-                            continue
-                    data.append(tuple(lst))
-            self.logger.info("File was converted")
-
-            return data

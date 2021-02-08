@@ -14,10 +14,13 @@ from app.forms import UploadFuelForm, UploadTransForm
 from app.forms import FuelTableNewRowForm, FuelTableRowForm, ReportForm
 from app.models import User
 from app.database import DataBase
+from app.utils import update_file
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
 # TODO: Добавить подсветку свех форму при их изменении
+# TODO: Сделать config файл
+# TODO: Добавить пути к папкам в конфиг
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -52,15 +55,6 @@ def index():
                    "t.id, t.fuel_id, t.dtime, t.odometer, f.name, t.amount",
                    "t.fuel_id = f.id", "t.dtime", re_create=True)
     db.create_view("vfuel", "fuel", "id, name, price", re_create=True)
-
-    if request.method == "POST":
-        print(navig_trans_form.validate_on_submit())
-        print(navig_fuel_form.validate_on_submit())
-        print(trans_row_form.validate())
-        print(fuel_row_form.validate_on_submit())
-        print(trans_new_row_form.validate_on_submit())
-        print(fuel_new_row_form.validate_on_submit())
-        print("\n")
 
     if request.method == "POST":
         # Проверяем, была ли нажата какая-то из submit кнопок в веб формах
@@ -178,6 +172,7 @@ def index():
             os.system("python " +
                       __file__.replace("web/app/routes.py", "main.py") +
                       report_param)
+            logger.info("Generate report was sent")
             return send_file(__file__.replace("web/app/routes.py", "data/report.pdf"), attachment_filename="report.pdf")
 
     # Достаем данные о заправлках из базы данных
@@ -207,13 +202,35 @@ def index():
 @flsk.route("/upload", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def upload():
+    logger = logging.getLogger("UPLOAD")
     upload_trans_form = UploadTransForm()
     upload_fuel_form = UploadFuelForm()
+
+    if upload_fuel_form.validate_on_submit() and upload_fuel_form.upload_fuel.data:
+        logger.debug("Upload fuel form button was pressed")
+        if upload_fuel_form.method_fuel.data == "0":
+            path = "app/uploads/" + str(upload_fuel_form.file_fuel.data.filename)
+            logger.debug("Saving file:" + str(upload_fuel_form.file_fuel.data.filename))
+            upload_fuel_form.file_fuel.data.save(path)
+            logger.info(str(upload_fuel_form.file_fuel.data.filename) +
+                        "file was saved")
+
+            update_file_path = "app/uploads/fuel2.csv"
+            logger.debug("Updating " + update_file_path)
+            update_file(path, update_file_path)
+            logger.info(update_file_path + "was updated by " + str(upload_fuel_form.file_fuel.data.filename))
+
+        elif upload_fuel_form.method_fuel.data == "0":
+            path_to_replace_file = "app/uploads/fuel2.csv"
+            logger.debug("Replacing " + path_to_replace_file +
+                         " on " + str(upload_fuel_form.file_fuel.data.filename))
+            upload_fuel_form.file_fuel.data.save(path)
+            logger.info(str(upload_fuel_form.file_fuel.data.filename) +
+                        "file was saved")
 
     return render_template("upload.html",
                            upload_trans_form=upload_trans_form,
                            upload_fuel_form=upload_fuel_form)
-
 
 
 @flsk.route("/", methods=["GET", "POST"])
