@@ -29,6 +29,7 @@ def replace_file(upload_file_data, path_to_old_file, logger):
     logger.debug("Replacing " + path_to_old_file +
                  " data on " + str(upload_file_data.filename) +
                  " data")
+    os.remove(path_to_old_file)
     upload_file_data.save(path_to_old_file)
     logger.info(str(upload_file_data.filename) +
                 "file was saved")

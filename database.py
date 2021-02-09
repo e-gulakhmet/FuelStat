@@ -310,6 +310,8 @@ class DataBase():
             data = []
             with open(file_path, newline="\n") as csv_file:
                 for row in csv.reader(csv_file, delimiter=","):
+                    if len(row) == 0:
+                        continue
                     lst = []
                     for t in row:
                         try:

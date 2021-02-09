@@ -60,20 +60,28 @@ def main():
 
     if args.load:
         # Вставляем данные из текстового файла в таблицу
-        db.insert_list("fuel", "name, price",
-                       db.csv_to_list(os.path.join(root_folder, "data/fuel.csv")))
-
-        # Получаем список значений из файла
+        logger.debug("Loading fuel.csv data to database")
         data = []
+        for row in db.csv_to_list(os.path.join(root_folder, "data/fuel.csv")):
+            data.append(tuple([row[0], row[1]]))
+        if len(data) != 0:
+            db.insert_list("fuel", "name, price", data)
+        # Получаем список значений из файла
+        logger.info("fuel.csv data was loaded to database")
+
+        data.clear()
+        logger.debug("Loading trans.csv data to database")
         for row in db.csv_to_list(os.path.join(root_folder, "data/trans.csv")):
             # Разбираем каждую строку
             # Получем id заправки из файла fuel.txt по названию заправки
-            fuel_id = db.select("fuel", "id", "name = '" + row[2] + "'").fetchone()
+            fuel_id = db.select("fuel", "id", "name = '" + str(row[2]) + "'").fetchone()
             if fuel_id is None:
                 logger.warning("Unknown gas name")
                 continue
             data.append(tuple([row[0], row[1], fuel_id[0], row[3]]))
-        db.insert_list("trans", "dtime, odometer, fuel_id, amount", data)
+        if len(data) != 0:
+            db.insert_list("trans", "dtime, odometer, fuel_id, amount", data)
+        logger.info("trans.csv data was loaded to database")
 
     db.commit()
     db.disconnect()
@@ -96,8 +104,8 @@ def recreate(database, args):
     database.create_table("trans",
                           """
                           id INTEGER PRIMARY KEY,
-                          dtime DATETIME DEFAULT CURRENT_TIMESTAMP,
-                          odometer INTEGER NOT NULL,
+                          dtime DATETIME NOT NULL,
+                          odometer INTEGER NOT NULL UNIQUE,
                           fuel_id INTEGER NOT NULL,
                           amount INTEGER NOT NULL,
                           FOREIGN KEY (fuel_id) REFERENCES fuel(id)
