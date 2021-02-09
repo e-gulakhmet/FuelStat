@@ -80,24 +80,6 @@ class TransTableRowForm(FlaskForm):
     save_trans = SubmitField("Save")
     delete_trans = SubmitField("Delete")
 
-        # if field.data > db.select("trans", "dtime", "dtime = MAX(dtime"):
-        #     logger.warning("Start date more than end date, TransRow")
-        #     raise ValidationError()
-    
-    # def validate_end_date(form, field):
-    #     if field.data < form.start_date.data:
-    #         logger.warning("End date less than start date, TransRow")
-    #         raise ValidationError()
-    
-    # def validate_start_odometer(form, field):
-    #     if field.data > form.end_odometer.data:
-    #         logger.warning("Start odometer more than end odometer, TransRow")
-    #         raise ValidationError()
-    
-    # def validate_end_odometer(form, field):
-    #     if field.data < form.start_odometer.data:
-    #         logger.warning("End odometer less than start odometer, TransRow")
-
 
 class TransTableNewRowForm(FlaskForm):
     date = DateField("Date", validators=[DataRequired()])

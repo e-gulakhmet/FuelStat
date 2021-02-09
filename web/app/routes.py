@@ -18,8 +18,6 @@ from app.funcs import update_file, replace_file, create_report
 
 
 # TODO: Убрать обновление страницы, если в этом нет нужды
-# TODO: Добавить подсветку свех форму при их изменении
-# TODO: Сделать config файл
 
 
 @flsk.route("/index", methods=["GET", "POST"])

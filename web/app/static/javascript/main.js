@@ -148,7 +148,6 @@ function changeTable(table_name) {
     document.querySelector(".button." + tables[1]).style.borderWidth = "2px"
     document.querySelector(".table_name").value = table_name
     document.querySelector(".table_name").defaultValue = table_name
-    console.log(document.querySelector(".table_name").value)
 }
 
 changeTable(document.querySelector(".table_name").innerHTML)

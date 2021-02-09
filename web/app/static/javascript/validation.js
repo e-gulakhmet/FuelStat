@@ -14,7 +14,6 @@ function validDateForm(date_form) {
         var min_value = ""
         var errors = []
         rows = document.querySelectorAll(".table_workspace.trans .work_table_row")
-        console.log(rows)
         for (var i = 1; i < rows.length; i++) {
             table_cols = rows[i].querySelectorAll(".table_col")
             if (parseInt(table_cols[1].innerHTML) < odometer_value && table_cols[0].innerHTML > min_value) {
@@ -54,7 +53,6 @@ function validOdometerForm(odometer_form) {
     var max_value = 0
     var min_value = 0
     var errors = []
-    console.log(date_value)
     rows = document.querySelectorAll(".table_workspace.trans .work_table_row")
     for (var i = 1; i < rows.length; i++) {
         var table_cols = rows[i].querySelectorAll(".table_col")
@@ -70,8 +68,6 @@ function validOdometerForm(odometer_form) {
             break
         }
     }
-    console.log("max_value: " + max_value + " min_value: " + min_value)
-    console.log("errors: " + errors)
     if (errors.length == 0) {
         if (odometer_form.value >= max_value) {
             errors.push("Odometer must be less than " + max_value)
@@ -89,4 +85,9 @@ function validOdometerForm(odometer_form) {
         return
     }
     odometer_form.style.borderColor = "green"
+}
+
+
+function validForm(form) {
+    form.style.borderColor = "green"
 }
