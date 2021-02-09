@@ -1,10 +1,10 @@
 from flask import Flask
 from flask_login import LoginManager
+from config import Config
 import logging
 
 flsk = Flask(__name__)
-flsk.config["SECRET_KEY"] = "pedaling"
-flsk.config["DEBUG"] = True
+flsk.config.from_object(Config)
 
 login = LoginManager(flsk)
 # Страница, которую получит пользователь, если не авторизуется,

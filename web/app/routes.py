@@ -208,25 +208,35 @@ def upload():
 
     if upload_fuel_form.validate_on_submit() and upload_fuel_form.upload_fuel.data:
         logger.debug("Upload fuel form button was pressed")
+        # Если был выбран метод добавление данных файлв к уже имеющимся
+        path_to_old_file = flsk.config["PROJECT_ROOT"] + "/../data/fuel.csv"
         if upload_fuel_form.method_fuel.data == "0":
-            path = "app/uploads/" + str(upload_fuel_form.file_fuel.data.filename)
+            # Сохраняем этот файл
+            path = os.path.join(flsk.config["UPLOAD_FOLDER"], upload_fuel_form.file_fuel.data.filename)
             logger.debug("Saving file:" + str(upload_fuel_form.file_fuel.data.filename))
             upload_fuel_form.file_fuel.data.save(path)
             logger.info(str(upload_fuel_form.file_fuel.data.filename) +
                         "file was saved")
+            # Добавяляем данные из нового файла в уже имеющийся
+            logger.debug("Updating " + path_to_old_file)
+            update_file(path, path_to_old_file)
+            logger.info(path_to_old_file + "was updated by " + str(upload_fuel_form.file_fuel.data.filename))
+            # Удаляем сохраненный файл
+            os.remove(path)
 
-            update_file_path = "app/uploads/fuel2.csv"
-            logger.debug("Updating " + update_file_path)
-            update_file(path, update_file_path)
-            logger.info(update_file_path + "was updated by " + str(upload_fuel_form.file_fuel.data.filename))
-
-        elif upload_fuel_form.method_fuel.data == "0":
-            path_to_replace_file = "app/uploads/fuel2.csv"
-            logger.debug("Replacing " + path_to_replace_file +
+        # Если был выбран режим замены старого файла новым
+        elif upload_fuel_form.method_fuel.data == "1":
+            # Сохраняем новый файл с название как у старого(fuel.csv)
+            # Тем самым заменяя его
+            logger.debug("Replacing " + path_to_old_file +
                          " on " + str(upload_fuel_form.file_fuel.data.filename))
-            upload_fuel_form.file_fuel.data.save(path)
+            upload_fuel_form.file_fuel.data.save(path_to_old_file)
             logger.info(str(upload_fuel_form.file_fuel.data.filename) +
                         "file was saved")
+        
+        # Говорим программе, которая создает репорт, обновить базу данных
+        os.system("python " + os.path.join(flsk.config["FUELSTAT_ROOT"], "main.py") +
+                  " --load")
 
     return render_template("upload.html",
                            upload_trans_form=upload_trans_form,
