@@ -1,5 +1,4 @@
 import logging
-import database
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
 from reportlab.lib import colors
@@ -7,10 +6,7 @@ from reportlab.platypus import Table, TableStyle, SimpleDocTemplate, Paragraph, 
 from reportlab.lib.styles import getSampleStyleSheet
 import os
 
-# TODO: Изменить таблицу статистики(строки перенести в столбцы)
-# TODO: Изменить информацию о статистике
-# TODO: Изменить числа с точкой
-
+import database
 
 
 class MyLine(Flowable):
@@ -29,7 +25,8 @@ class Reporter():
     Класс создания отчета
     """
 
-    def __init__(self, start_date="1000-00-00", end_date="9999-00-00",
+    def __init__(self, path_to_data_folder,
+                 start_date="1000-00-00", end_date="9999-00-00",
                  gas_name=None,
                  start_odometer=1, end_odometer=1000000,
                  file_name="report"):
@@ -69,11 +66,11 @@ class Reporter():
                           ", end_odometer[" + str(self.end_odometer) + "]" +
                           ", file_name[" + str(self.file_name) + ']')
     
-        self.db = database.DataBase(__file__.replace("reporter.py", "data/database.db"))
+        self.db = database.DataBase(os.path.join(path_to_data_folder, "database.db"))
     
         # Cоздаем документ, в котором будут содержать полученные данные
         self.logger.debug("Creating DocTemplate")
-        self.doc = SimpleDocTemplate(__file__.replace("reporter.py", "/data/" + file_name + ".pdf"),
+        self.doc = SimpleDocTemplate(os.path.join(path_to_data_folder, (file_name + ".pdf")),
                                      pagesize=[297 * mm, 210 * mm], # A4 Альбомная ориентация
                                      topMargin=5 * mm,
                                      bottomMargin=5 * mm,

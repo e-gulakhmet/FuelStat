@@ -1,6 +1,7 @@
 # from reportlab.pdfgen import canvas
 import logging
 import argparse
+import os
 
 import database
 import reporter
@@ -13,6 +14,8 @@ import reporter
 
 
 def main():
+    root_folder = os.path.abspath(os.path.dirname(__file__))
+
     parser = argparse.ArgumentParser(prog="fuel_stat",
                                      description="""Creating statistics 
                                                     based on generated tables""")
@@ -48,8 +51,7 @@ def main():
     logger = logging.getLogger("MAIN")
 
     # Создаем базу данных заправок
-    print(__file__.replace("main.py", "data/database.db"))
-    db = database.DataBase(__file__.replace("main.py", "data/database.db"), args.recreate)
+    db = database.DataBase(os.path.join(root_folder, "data/database.db"), args.recreate)
 
     if args.recreate:
         # Создаем таблицу запрвавок
@@ -58,11 +60,12 @@ def main():
 
     if args.load:
         # Вставляем данные из текстового файла в таблицу
-        db.insert_list("fuel", "name, price", db.csv_to_list(__file__.replace("main.py", "data/fuel.csv")))
+        db.insert_list("fuel", "name, price",
+                       db.csv_to_list(os.path.join(root_folder, "data/fuel.csv")))
 
         # Получаем список значений из файла
         data = []
-        for row in db.csv_to_list(__file__.replace("main.py", "data/trans.csv")):
+        for row in db.csv_to_list(os.path.join(root_folder, "data/trans.csv")):
             # Разбираем каждую строку
             # Получем id заправки из файла fuel.txt по названию заправки
             fuel_id = db.select("fuel", "id", "name = '" + row[2] + "'").fetchone()
@@ -76,7 +79,7 @@ def main():
     db.disconnect()
 
     if args.report is True:
-        r = reporter.Reporter(args.startdate, args.enddate, args.gasname,
+        r = reporter.Reporter(os.path.join(root_folder, "data"), args.startdate, args.enddate, args.gasname,
                               args.startodometer, args.endodometer, args.filename)
         r.create_report(args.info, args.statistic)
 
