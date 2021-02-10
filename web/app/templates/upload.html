@@ -9,6 +9,9 @@
             <form action="" method="POST" enctype="multipart/form-data">
                 {{ upload_fuel_form.hidden_tag() }}
                 <div class="form_container">
+                    {% for error in upload_fuel_form.file_fuel.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}
                     <p class="form_label upload">
                         {{ upload_fuel_form.file_fuel.label}}
                     </p>
@@ -31,6 +34,9 @@
             <form action="" method="POST" enctype="multipart/form-data">
                 {{ upload_trans_form.hidden_tag() }}
                 <div class="form_container">
+                    {% for error in upload_trans_form.file_trans.errors %}
+                        <span style="color: red;">{{ error }}</span>
+                    {% endfor %}
                     <p class="form_label upload">
                         {{ upload_trans_form.file_trans.label}}
                     </p>

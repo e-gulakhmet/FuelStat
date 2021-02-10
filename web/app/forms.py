@@ -3,6 +3,7 @@ from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField, FileField
 from wtforms.validators import DataRequired, ValidationError
 from datetime import date
+import re
 import logging
 
 from app.database import DataBase
@@ -146,6 +147,12 @@ class UploadTransForm(FlaskForm):
                                         (1, "Replace")])
     upload_trans = SubmitField("Upload")
 
+    def validate_file_trans(form, field):
+        if re.search("^.*.csv$", str(field.data.filename)) is None:
+            logger.warning("Invalid file extension: " + field.data.filename)
+            raise ValueError("Invalid file extension")
+
+
 
 class UploadFuelForm(FlaskForm):
     file_fuel = FileField('Upload File')
@@ -153,3 +160,8 @@ class UploadFuelForm(FlaskForm):
                               choices=[(0, "Add"),
                                        (1, "Replace")])
     upload_fuel = SubmitField("Upload")
+
+    def validate_file_fuel(form, field):
+        if re.search("^.*.csv$", str(field.data.filename)) is None:
+            logger.warning("Invalid file extension: " + field.data.filename)
+            raise ValueError("Invalid file extension")
