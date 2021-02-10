@@ -6,6 +6,6 @@ class Config(object):
 
     DEBUG = True
 
-    PROJECT_ROOT = os.path.abspath(os.path.dirname(__file__))
-    UPLOAD_FOLDER = os.path.join(PROJECT_ROOT, "app/uploads")
-    FUELSTAT_ROOT = os.path.join(PROJECT_ROOT, "../")
+    PROJECT_FOLDER = os.path.abspath(os.path.dirname(__file__))
+    UPLOAD_FOLDER = os.path.join(PROJECT_FOLDER, "app/uploads")
+    FUELSTAT_FOLDER = os.path.join(PROJECT_FOLDER, "../")

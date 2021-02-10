@@ -148,7 +148,7 @@ class UploadTransForm(FlaskForm):
     upload_trans = SubmitField("Upload")
 
     def validate_file_trans(form, field):
-        if re.search("^.*.csv$", str(field.data.filename)) is None:
+        if field.data and re.search("^.*.csv$", str(field.data.filename)) is None:
             logger.warning("Invalid file extension: " + field.data.filename)
             raise ValueError("Invalid file extension")
 
@@ -162,6 +162,6 @@ class UploadFuelForm(FlaskForm):
     upload_fuel = SubmitField("Upload")
 
     def validate_file_fuel(form, field):
-        if re.search("^.*.csv$", str(field.data.filename)) is None:
+        if field.data and re.search("^.*.csv$", str(field.data.filename)) is None:
             logger.warning("Invalid file extension: " + field.data.filename)
             raise ValueError("Invalid file extension")

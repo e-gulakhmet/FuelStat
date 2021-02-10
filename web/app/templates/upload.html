@@ -25,6 +25,17 @@
                 </div>
                 {{ upload_fuel_form.upload_fuel(class="button upload") }}
             </form>
+            <div class="block guide">
+                <p class="header guide">!!!IMPORTANT!!!</span>
+                <p class="label guide">
+                    File must contains: <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;gas station name, gallon price <br>
+                    <br>
+                    Example 'fuel.csv': <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;Shell, 60.1 <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;America, 59
+                </p>
+            </div>
         </div>
 
         <div class="upload_container trans">
@@ -50,6 +61,18 @@
                 </div>
                 {{ upload_trans_form.upload_trans(class="button upload") }}
             </form>
+            <div class="block guide">
+                <p class="header guide">!!!IMPORTANT!!!</span>
+                <p class="label guide">
+                    File must contains: <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;date, odometer value,
+                    gas station name, gallon count <br>
+                    <br>
+                    Example 'trans.csv': <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;2000-01-01, 3000, Shell, 6.3<br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;2000-01-03, 3121, America, 12<br>
+                </p>
+            </div>
         </div>
     </div>
 {% endblock %}

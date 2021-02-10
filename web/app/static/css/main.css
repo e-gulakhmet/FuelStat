@@ -113,7 +113,6 @@ body {
 }
 
 
-
 /* BASE */
 .header_inner {
     display: flex;
@@ -304,7 +303,7 @@ body {
 }
 .upload_container {
     width: 700px;
-    height: 500px;
+    height: 700px;
     background-color: #d4d8e9;
     border-radius: 10px;
     padding: 20px 30px;
@@ -332,7 +331,23 @@ body {
     height: 200px;
     font-size: 20px;
 }
-
+.block.guide {
+    width: 500px;
+    margin: 20px auto;
+    border-radius: 5px;
+    border: 2px solid #9999ff;
+    padding: 20px;
+    align-items: center;
+}
+.label.guide {
+    width: 400px;
+    font-size: 20px;
+}
+.header.guide {
+    font-size: 22px;
+    margin: 5px auto;
+    color: red;
+}
 
 
 /* LOGIN */
