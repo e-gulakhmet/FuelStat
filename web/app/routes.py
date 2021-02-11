@@ -19,6 +19,8 @@ from app.funcs import update_file, replace_file, create_report
 
 # TODO: Настроить изменение ширины объектов при сжатии страницы
 # TODO: Причесать код
+# TODO: Закончить валидацию форм
+# TODO: Поставить правильные названия в шаблоны страниц
 
 
 @flsk.route("/index", methods=["GET", "POST"])
@@ -30,7 +32,7 @@ def index():
     stations_info = list(db.select("fuel", "CAST(id as TEXT), name"))
 
     navig_trans_form = NavigationTransForm()
-    navig_trans_form.names.choices = stations_info
+    navig_trans_form.names_trans_navigation.choices = stations_info
 
     navig_fuel_form = NavigationFuelForm()
 
@@ -43,7 +45,7 @@ def index():
     fuel_new_row_form = FuelTableNewRowForm()
 
     report_form = ReportForm()
-    report_form.names.choices = stations_info
+    report_form.names_report.choices = stations_info
 
     table_name = "trans"
 
@@ -55,50 +57,50 @@ def index():
 
     if request.method == "POST":
         # Проверяем, была ли нажата какая-то из submit кнопок в веб формах
-        if navig_trans_form.validate() and navig_trans_form.trans_allow.data:
+        if navig_trans_form.validate() and navig_trans_form.allow_trans_navigation.data:
             # Если кнопка подтвержедения в навигационной форме была нажата,
             # то Создаем новую view
             logger.debug("Allow button was pressed in the trans navigation")
             condition = ("t.fuel_id = f.id" +
-                         " AND t.dtime > '" + str(navig_trans_form.start_date.data) + "'" +
-                         " AND t.dtime < '" + str(navig_trans_form.end_date.data) + "'" +
-                         " AND t.odometer > " + str(navig_trans_form.start_odometer.data) +
-                         " AND t.odometer < " + str(navig_trans_form.end_odometer.data))
-            if len(navig_trans_form.names.data) == 1:
-                condition += " AND t.fuel_id == " + str(navig_trans_form.names.data[0])
-            elif len(navig_trans_form.names.data) != 0:
-                condition += " AND t.fuel_id in " + str(tuple(navig_trans_form.names.data))
+                         " AND t.dtime > '" + str(navig_trans_form.start_date_trans_navigation.data) + "'" +
+                         " AND t.dtime < '" + str(navig_trans_form.end_date_trans_navigation.data) + "'" +
+                         " AND t.odometer > " + str(navig_trans_form.start_odometer_trans_navigation.data) +
+                         " AND t.odometer < " + str(navig_trans_form.end_odometer_trans_navigation.data))
+            if len(navig_trans_form.names_trans_navigation.data) == 1:
+                condition += " AND t.fuel_id == " + str(navig_trans_form.names_trans_navigation.data[0])
+            elif len(navig_trans_form.names_trans_navigation.data) != 0:
+                condition += " AND t.fuel_id in " + str(tuple(navig_trans_form.names_trans_navigation.data))
             db.create_view("vtrans", "trans t, fuel f",
                            "t.id,  t.fuel_id, t.dtime, t.odometer, f.name, t.amount",
                            condition, "dtime", re_create=True)
             db.commit()
             table_name = "trans"
 
-        elif navig_fuel_form.validate() and navig_fuel_form.fuel_allow.data:
+        elif navig_fuel_form.validate() and navig_fuel_form.allow_fuel_navigation.data:
             # Если кнопка подтвержедения в навигационной форму была нажата,
             # то создаем новую view
             logger.debug("Allow button was pressed in the fuel navigation")
             db.create_view("vfuel", "fuel", "id, name, price",
-                           ("price > " + str(navig_fuel_form.start_price.data) +
-                            " AND price < " + str(navig_fuel_form.end_price.data)),
+                           ("price > " + str(navig_fuel_form.start_price_fuel_navigation.data) +
+                            " AND price < " + str(navig_fuel_form.end_price_fuel_navigation.data)),
                            re_create=True)
             db.commit()
             table_name = "fuel"
 
-        elif trans_row_form.validate() and (trans_row_form.save_trans.data or trans_row_form.delete_trans.data):
-            if trans_row_form.save_trans.data:
+        elif trans_row_form.validate() and (trans_row_form.save_trans_row.data or trans_row_form.delete_trans_row.data):
+            if trans_row_form.save_trans_row.data:
                 # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
                 # подстваляя новые значения
                 logger.debug("Save button was pressed in the row of the trans table")
                 db.update("trans", 
-                          ("dtime = '" + str(trans_row_form.date.data) + "'" +
-                           ", odometer = " + str(trans_row_form.odometer.data) +
-                           ", fuel_id = " + str(trans_row_form.fuel_station.data) +
-                           ", amount = " + str(trans_row_form.gallon_count.data)),
-                          "id = " + str(trans_row_form.id.data))
+                          ("dtime = '" + str(trans_row_form.date_trans_row.data) + "'" +
+                           ", odometer = " + str(trans_row_form.odometer_trans_row.data) +
+                           ", fuel_id = " + str(trans_row_form.fuel_station_trans_row.data) +
+                           ", amount = " + str(trans_row_form.gallon_count_trans_row.data)),
+                          "id = " + str(trans_row_form.id_trans_row.data))
                 db.commit()
                 table_name = "trans"
-            elif trans_row_form.delete_trans.data:
+            elif trans_row_form.delete_trans_row.data:
                 # Если была нажата кнопка удаления в веб форме строки в таблицу,
                 # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
                 logger.debug("Delete button was pressed in the row of the trans table")
@@ -106,18 +108,18 @@ def index():
                 db.commit()
                 table_name = "trans"
         
-        elif fuel_row_form.validate() and (fuel_row_form.save_fuel.data or fuel_row_form.delete_fuel.data):
-            if fuel_row_form.save_fuel.data:
+        elif fuel_row_form.validate() and (fuel_row_form.save_fuel_row.data or fuel_row_form.delete_fuel_row.data):
+            if fuel_row_form.save_fuel_row.data:
                 # Если кнопка сохранения была нажата, то обновляем уже имеющуюся строку в таблице,
                 # подстваляя новые значения
                 logger.debug("Save button was pressed in the row of the fuel table")
                 db.update("fuel",
-                          ("name = '" + str(fuel_row_form.name.data) + "'" +
-                           ", price = " + str(fuel_row_form.price.data)),
-                          "id = " + str(fuel_row_form.id.data))
+                          ("name = '" + str(fuel_row_form.name_fuel_row.data) + "'" +
+                           ", price = " + str(fuel_row_form.price_fuel_row.data)),
+                          "id = " + str(fuel_row_form.id_fuel_row.data))
                 db.commit()
                 table_name = "fuel"
-            elif fuel_row_form.delete_fuel.data:
+            elif fuel_row_form.delete_fuel_row.data:
                 # Если была нажата кнопка удаления в веб форме строки в таблицу,
                 # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
                 logger.debug("Delete button was pressed in the row of the fuel table")
@@ -125,25 +127,25 @@ def index():
                 db.commit()
                 table_name = "fuel"
         
-        elif trans_new_row_form.validate() and trans_new_row_form.add_trans.data:
+        elif trans_new_row_form.validate() and trans_new_row_form.add_trans_new_row.data:
             # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
             logger.debug("Add button was pressed in the new row of the trans table")
             db.insert("trans", "dtime, odometer, fuel_id, amount",
-                      ("'" + str(trans_new_row_form.date.data) + "'" +
-                       ", " + str(trans_new_row_form.odometer.data) + 
-                       ", " + str(trans_new_row_form.fuel_station.data) +
-                       ", " + str(trans_new_row_form.gallon_count.data)))
+                      ("'" + str(trans_new_row_form.date_trans_new_row.data) + "'" +
+                       ", " + str(trans_new_row_form.odometer_trans_new_row.data) + 
+                       ", " + str(trans_new_row_form.fuel_station_trans_new_row.data) +
+                       ", " + str(trans_new_row_form.gallon_count_trans_new_row.data)))
             db.commit()
             table_name = "trans"
         
-        elif fuel_new_row_form.validate() and fuel_new_row_form.add_fuel.data:
+        elif fuel_new_row_form.validate() and fuel_new_row_form.add_fuel_new_row.data:
             # Если в веб форме новой строки, была нажата кнопка добавления,
             # добавляем новую строку с параментрами из веб форм
             logger.debug("Add button was pressed in the new row of the fuel table")
             db.insert("fuel", "name, price", 
-                      ("'" + str(fuel_new_row_form.name.data) + "'" +
-                       ", " + str(fuel_new_row_form.price.data)))
+                      ("'" + str(fuel_new_row_form.name_fuel_new_row.data) + "'" +
+                       ", " + str(fuel_new_row_form.price_fuel_new_row.data)))
             db.commit()
             table_name = "fuel"
         
@@ -152,13 +154,13 @@ def index():
             # то Создаем новую view
             logger.debug("Allow button was pressed in the report")
             create_report(os.path.join(flsk.config["FUELSTAT_FOLDER"], "main.py"),
-                          str(report_form.start_date.data),
-                          str(report_form.end_date.data),
-                          str(report_form.start_odometer.data),
-                          str(report_form.end_odometer.data),
-                          str(report_form.names.data),
-                          report_form.show_statistic.data,
-                          report_form.show_table.data,
+                          str(report_form.start_date_report.data),
+                          str(report_form.end_date_report.data),
+                          str(report_form.start_odometer_report.data),
+                          str(report_form.end_odometer_report.data),
+                          str(report_form.names_report.data),
+                          report_form.show_statistic_report.data,
+                          report_form.show_table_report.data,
                           stations_info, logger)
             return send_file(__file__.replace("web/app/routes.py", "data/report.pdf"), attachment_filename="report.pdf")
 

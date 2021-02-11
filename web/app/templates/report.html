@@ -5,45 +5,45 @@
             {{ report_form.hidden_tag() }}
             <div class="form_container">
                 <p class="form_label">
-                        {{ report_form.start_date.label }}
+                        {{ report_form.start_date_report.label }}
                 </p>
-                {{ report_form.start_date(size=10, class="form start_date") }}
+                {{ report_form.start_date_report(size=10, class="form start_date") }}
             </div>
             <div class="form_container">
                 <p class="form_label">
-                        {{ report_form.end_date.label }}
+                        {{ report_form.end_date_report.label }}
                 </p>
-                {{ report_form.end_date(size=10, class="form end_date") }}
+                {{ report_form.end_date_report(size=10, class="form end_date") }}
             </div>
             <div class="form_container">
                 <p class="form_label">
-                        {{ report_form.start_odometer.label }}
+                        {{ report_form.start_odometer_report.label }}
                 </p>
-                {{ report_form.start_odometer(size=10, class="form start_odometer") }}
+                {{ report_form.start_odometer_report(size=10, class="form start_odometer") }}
             </div>
             <div class="form_container">
                 <p class="form_label">
-                        {{ report_form.end_odometer.label }}
+                        {{ report_form.end_odometer_report.label }}
                 </p>
-                {{ report_form.end_odometer(size=10, class="form end_odometer") }}
+                {{ report_form.end_odometer_report(size=10, class="form end_odometer") }}
             </div>
             <div class="form_container">
                 <p class="form_label">
-                        {{ report_form.names.label }}
+                        {{ report_form.names_report.label }}
                 </p>
-                {{ report_form.names(class="form names") }}
+                {{ report_form.names_report(class="form names") }}
             </div>
             <div class="form_container checkbox info">
                 <p class="form_label" style="display: inline;">
-                        {{ report_form.show_table.label }}
+                        {{ report_form.show_table_report.label }}
                 </p>
-                {{ report_form.show_table(class="form checkbox info") }}
+                {{ report_form.show_table_report(class="form checkbox info") }}
             </div>
             <div class="form_container checkbox">
                 <p class="form_label" style="display: inline;">
-                        {{ report_form.show_statistic.label }}
+                        {{ report_form.show_statistic_report.label }}
                 </p>
-                {{ report_form.show_statistic(class="form checkbox statistic") }}
+                {{ report_form.show_statistic_report(class="form checkbox statistic") }}
             </div>
             {{ report_form.get_report(class="button report") }}
         </form>

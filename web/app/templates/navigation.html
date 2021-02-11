@@ -14,35 +14,35 @@
                         {{ navig_trans_form.hidden_tag() }}
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_trans_form.start_date.label }}
+                                        {{ navig_trans_form.start_date_trans_navigation.label }}
                                 </p>
-                                {{ navig_trans_form.start_date(size=10, class="form start_date") }}
+                                {{ navig_trans_form.start_date_trans_navigation(size=10, class="form start_date") }}
                         </div>
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_trans_form.end_date.label }}
+                                        {{ navig_trans_form.end_date_trans_navigation.label }}
                                 </p>
-                                {{ navig_trans_form.end_date(size=10, class="form end_date") }}
+                                {{ navig_trans_form.end_date_trans_navigation(size=10, class="form end_date") }}
                         </div>
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_trans_form.start_odometer.label }}
+                                        {{ navig_trans_form.start_odometer_trans_navigation.label }}
                                 </p>
-                                {{ navig_trans_form.start_odometer(size=10, class="form start_odometer") }}
+                                {{ navig_trans_form.start_odometer_trans_navigation(size=10, class="form start_odometer") }}
                         </div>
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_trans_form.end_odometer.label }}
+                                        {{ navig_trans_form.end_odometer_trans_navigation.label }}
                                 </p>
-                                {{ navig_trans_form.end_odometer(size=10, class="form end_odometer") }}
+                                {{ navig_trans_form.end_odometer_trans_navigation(size=10, class="form end_odometer") }}
                         </div>
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_trans_form.names.label }}
+                                        {{ navig_trans_form.names_trans_navigation.label }}
                                 </p>
-                                {{ navig_trans_form.names(class="form names") }}
+                                {{ navig_trans_form.names_trans_navigation(class="form names") }}
                         </div>
-                        {{ navig_trans_form.trans_allow(class="button navig") }}
+                        {{ navig_trans_form.allow_trans_navigation(class="button navig") }}
                 </form>
         </div>
         <div class="navig_inner fuel" style="display: none;">
@@ -50,17 +50,17 @@
                         {{ navig_fuel_form.hidden_tag() }}
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_fuel_form.start_price.label }}
+                                        {{ navig_fuel_form.start_price_fuel_navigation.label }}
                                 </p>
-                                {{ navig_fuel_form.start_price(size=10, class="form start_price") }}
+                                {{ navig_fuel_form.start_price_fuel_navigation(size=10, class="form start_price") }}
                         </div>
                         <div class="form_container">
                                 <p class="form_label">
-                                        {{ navig_fuel_form.end_price.label }}
+                                        {{ navig_fuel_form.end_price_fuel_navigation.label }}
                                 </p>
-                                {{ navig_fuel_form.end_price(size=10, class="form end_price") }}
+                                {{ navig_fuel_form.end_price_fuel_navigation(size=10, class="form end_price") }}
                         </div>
-                        {{ navig_fuel_form.fuel_allow(class="button navig") }}
+                        {{ navig_fuel_form.allow_fuel_navigation(class="button navig") }}
                 </form>
         </div>          
 </div>

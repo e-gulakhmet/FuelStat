@@ -22,15 +22,15 @@
                 <form action="{{ url_for('index') }}" method="POST">
                     {{ trans_new_row_form.hidden_tag() }}
                     <td class="form_col">
-                        {{ trans_new_row_form.date_trans(size=10, class="form date", onfocusout="validDateForm(this)") }}
+                        {{ trans_new_row_form.date_trans_new_row(size=10, class="form date", onfocusout="validDateForm(this)") }}
                     </td>
                     <td class="form_col">
-                        {{ trans_new_row_form.odometer(size=7, class="form odometer", onfocusout="validOdometerForm(this)") }}
+                        {{ trans_new_row_form.odometer_trans_new_row(size=7, class="form odometer", onfocusout="validOdometerForm(this)") }}
                     </td>
-                    <td class="form_col">{{ trans_new_row_form.fuel_station(class="form select station", onfocusout="validForm(this)") }}</td>
-                    <td class="form_col">{{ trans_new_row_form.gallon_count(size=5, class="form gallons", onfocusout="validForm(this)") }}</td>
+                    <td class="form_col">{{ trans_new_row_form.fuel_station_trans_new_row(class="form select station", onfocusout="validForm(this)") }}</td>
+                    <td class="form_col">{{ trans_new_row_form.gallon_count_trans_new_row(size=5, class="form gallons", onfocusout="validForm(this)") }}</td>
                     <td class="form_col" style="text-align: end;">
-                        {{ trans_new_row_form.add_trans(class="button add")}}
+                        {{ trans_new_row_form.add_trans_new_row(class="button add")}}
                     </td>
                 </form>
             </tr>
@@ -38,23 +38,23 @@
                 <tr class="work_table_row num_{{ row[0] }}">
                     <form action="{{ url_for('index') }}" method="POST">
                         {{ trans_row_form.hidden_tag() }}
-                        <td class="form_col">{{ trans_row_form.id(class="id") }}</td>
+                        <td class="form_col">{{ trans_row_form.id_trans_row(class="id") }}</td>
                         <td class="form_col">
-                            {{ trans_row_form.date(size=10, class="form date", onfocusout="validDateForm(this)") }}
+                            {{ trans_row_form.date_trans_row(size=10, class="form date", onfocusout="validDateForm(this)") }}
                         </td>
                         <td class="form_col">
-                            {{ trans_row_form.odometer(size=7, class="form odometer", onfocusout="validOdometerForm(this)") }}
+                            {{ trans_row_form.odometer_trans_row(size=7, class="form odometer", onfocusout="validOdometerForm(this)") }}
                         </td>
-                        <td class="form_col">{{ trans_row_form.fuel_station(class="form select station", onfocusout="validForm(this)") }}</td>
-                        <td class="form_col">{{ trans_row_form.gallon_count(size=5, class="form gallons", onfocusout="validForm(this)") }}</td>
+                        <td class="form_col">{{ trans_row_form.fuel_station_trans_row(class="form select station", onfocusout="validForm(this)") }}</td>
+                        <td class="form_col">{{ trans_row_form.gallon_count_trans_row(size=5, class="form gallons", onfocusout="validForm(this)") }}</td>
                         <td class="form_col" style="text-align: end;">
-                            {{ trans_row_form.save_trans(class="button save", style="display: inline;", onclick="saveRow()")}}
+                            {{ trans_row_form.save_trans_row(class="button save", style="display: inline;", onclick="saveRow()")}}
                         </td>
                         {% for i in range(2, row|length) %}
                             <td class="table_col">{{ row[i] }}</td>
                         {% endfor %}
                         <td class="table_col" style="text-align: end;">
-                            {{ trans_row_form.delete_trans(class="button delete", style="display: inline;", onclick="deleteRow('trans', " + row[0]|string +")") }}
+                            {{ trans_row_form.delete_trans_row(class="button delete", style="display: inline;", onclick="deleteRow('trans', " + row[0]|string +")") }}
                             <a class="button edit" onclick="editRow('trans', '{{ row[0] }}', '{{ row[1] }}')">
                                 <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
                             </a>
@@ -83,13 +83,13 @@
                 <form action="{{ url_for('index') }}" method="POST">
                     {{ fuel_new_row_form.hidden_tag() }}
                     <td class="form_col">
-                        {{ fuel_new_row_form.name(size=10, class="form name", onfocusout="validForm(this)") }}
+                        {{ fuel_new_row_form.name_fuel_new_row(size=10, class="form name", onfocusout="validForm(this)") }}
                     </td>
                     <td class="form_col">
-                        {{ fuel_new_row_form.price(size=7, class="form price", onfocusout="validForm(this)") }}
+                        {{ fuel_new_row_form.price_fuel_new_row(size=7, class="form price", onfocusout="validForm(this)") }}
                     </td>
                     <td class="form_col" style="text-align: end;">
-                        {{ fuel_new_row_form.add_fuel(class="button add") }}
+                        {{ fuel_new_row_form.add_fuel_new_row(class="button add") }}
                     </td>
                 </form>
             </tr>
@@ -97,17 +97,17 @@
                 <tr class="work_table_row num_{{ row[0] }}">
                     <form action="{{ url_for('index') }}" method="POST">
                         {{ fuel_row_form.hidden_tag() }}
-                        <td class="form_col">{{ fuel_row_form.id(class="id") }}</td>
-                        <td class="form_col">{{ fuel_row_form.name(size=10, class="form name", onfocusout="validForm(this)") }}</td>
-                        <td class="form_col">{{ fuel_row_form.price(size=7, class="form price", onfocusout="validForm(this)") }}</td>
+                        <td class="form_col">{{ fuel_row_form.id_fuel_row(class="id") }}</td>
+                        <td class="form_col">{{ fuel_row_form.name_fuel_row(size=10, class="form name", onfocusout="validForm(this)") }}</td>
+                        <td class="form_col">{{ fuel_row_form.price_fuel_row(size=7, class="form price", onfocusout="validForm(this)") }}</td>
                         <td class="form_col" style="text-align: end;">
-                            {{ fuel_row_form.save_fuel(class="button save", onclick="saveRow()")}}
+                            {{ fuel_row_form.save_fuel_row(class="button save", onclick="saveRow()")}}
                         </td>
                         {% for i in range(1, row|length) %}
                             <td class="table_col">{{ row[i] }}</td>
                         {% endfor %}
                         <td class="table_col" style="text-align: end;">
-                            {{ fuel_row_form.delete_fuel(class="button delete", onclick="deleteRow('fuel', " + row[0]|string +")") }}
+                            {{ fuel_row_form.delete_fuel_row(class="button delete", onclick="deleteRow('fuel', " + row[0]|string +")") }}
                             <a class="button edit" onclick="editRow('fuel', '{{ row[0] }}', '{{ row[1] }}')">
                                 <img src="{{ url_for('static', filename='images/draw.png') }}" alt="">
                             </a>
