@@ -22,7 +22,7 @@
                 <form action="{{ url_for('index') }}" method="POST">
                     {{ trans_new_row_form.hidden_tag() }}
                     <td class="form_col">
-                        {{ trans_new_row_form.date(size=10, class="form date", onfocusout="validDateForm(this)") }}
+                        {{ trans_new_row_form.date_trans(size=10, class="form date", onfocusout="validDateForm(this)") }}
                     </td>
                     <td class="form_col">
                         {{ trans_new_row_form.odometer(size=7, class="form odometer", onfocusout="validOdometerForm(this)") }}
