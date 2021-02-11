@@ -48,92 +48,83 @@ class NavigationTransForm(FlaskForm):
             raise ValidationError("Start must be less than end date")
     
     def validate_end_date_trans_navigation(form, field):
-        if field.data is None:
-            logger.warning("Invalid end, Navigation")
-            raise ValidationError("Invalid value")
         if field.data and form.start_date_trans_navigation.data and field.data < form.start_date_trans_navigation.data:
             logger.warning('End date less than start date, Navigation')
             raise ValidationError("End date must be more than start date")
     
     def validate_start_odometer_trans_navigation(form, field):
-        if field.data is None:
-            logger.warning("Invalid start odometer, Navigation")
-            raise ValidationError("Invalid value")
         if field.data and form.end_odometer_trans_navigation.data and field.data > form.end_odometer_trans_navigation.data:
             logger.warning('Start odometer more than end odometer, Navigation')
             raise ValidationError("Start odometer must be less than end odometer")
     
     def validate_end_odometer_trans_navigation(form, field):
-        if field.data is None:
-            logger.warning("Invalid value, Navigation")
-            raise ValidationError("Invalid value")
         if field.data and form.start_odometer_trans_navigation.data and field.data < form.start_odometer_trans_navigation.data:
             logger.warning('End odometer less than start odometer, Navigation')
             raise ValidationError("End odometer must be more than start odometer")
 
 
 class NavigationFuelForm(FlaskForm):
-    start_price_fuel_navigation = FloatField('Start Price', default=0,
+    start_price_fuel_navigation = FloatField('Start Price', default=10,
                                              validators=[DataRequired(), validate_value]) 
     end_price_fuel_navigation = FloatField('End Price', default=1000,
                                            validators=[DataRequired(), validate_value])
     allow_fuel_navigation = SubmitField('Allow')
 
     def validate_start_price_fuel_navigation(form, field):
-        if field.data is None:
-            logger.warning("Invalid value, Navigation")
-            raise ValidationError("Invalid value")
         if field.data and form.end_price_fuel_navigation.data and field.data > form.end_price_fuel_navigation.data:
             logger.warning('Start price more than end price, Navigation')
-            raise ValidationError()
+            raise ValidationError('Start price must be less than end price')
     
     def validate_end_price_fuel_navigation(form, field):
         if field.data and form.start_price_fuel_navigation.data and field.data < form.start_price_fuel_navigation.data:
             logger.warning('End price less than start price, Navigation')
-            raise ValidationError()
+            raise ValidationError('End price must be more than start price')
 
 
 class TransTableRowForm(FlaskForm):
-    id_trans_row = IntegerField('id')
-    date_trans_row = DateField('Date', format='%Y-%m-%d',
+    id_trans_row = StringField('id', default="-1")
+    date_trans_row = DateField('Date', format='%Y-%m-%d', default=date(1000, 1, 1),
                                validators=[DataRequired(), validate_value])
-    odometer_trans_row = IntegerField('Odometer',
+    odometer_trans_row = IntegerField('Odometer', default=10,
                                       validators=[DataRequired(), validate_value]) 
     fuel_station_trans_row = SelectField('Station', validate_choice=False)
-    gallon_count_trans_row = FloatField('Gallons',
+    gallon_count_trans_row = FloatField('Gallons', default=10.0,
                                         validators=[DataRequired(), validate_value])
     save_trans_row = SubmitField('Save')
     delete_trans_row = SubmitField('Delete')
 
 
 class TransTableNewRowForm(FlaskForm):
-    date_trans_new_row = DateField('Date', format='%Y-%m-%d',
+    date_trans_new_row = DateField('Date', format='%Y-%m-%d', default=date(1000, 1, 1),
                                    validators=[DataRequired(),
-                                               validate_value,
-                                               Regexp('^\d{4}-\d{2}-\d{2}$')])
-    odometer_trans_new_row = IntegerField('Odometer',
+                                               validate_value])
+    odometer_trans_new_row = IntegerField('Odometer', default=10,
                                           validators=[DataRequired(), validate_value]) 
     fuel_station_trans_new_row = SelectField('Station', validate_choice=False)
-    gallon_count_trans_new_row = FloatField('Gallons',
+    gallon_count_trans_new_row = FloatField('Gallons', default=10.0,
                                             validators=[DataRequired(), validate_value])
     add_trans_new_row = SubmitField('Add')
 
 
 class FuelTableRowForm(FlaskForm):
-    id_fuel_row = IntegerField('id')
-    name_fuel_row = StringField('Name', validators=[DataRequired(),
-                                                    validate_value,
-                                                    Regexp('^[A-Za-z]*$')])
-    price_fuel_row = FloatField('Price', validators=[DataRequired(), validate_value])
+    id_fuel_row = StringField('id', default="-1")
+    name_fuel_row = StringField('Name', default="Shell",
+                                validators=[DataRequired(),
+                                            validate_value,
+                                            Regexp('^[A-Za-z]*$')])
+    price_fuel_row = FloatField('Price', default=60.0,
+                                validators=[DataRequired(), validate_value])
     save_fuel_row = SubmitField('Save')
     delete_fuel_row = SubmitField('Delete')
 
 
 class FuelTableNewRowForm(FlaskForm):
-    name_fuel_new_row = StringField('Name', validators=[DataRequired(),
-                                                        validate_value,
-                                                        Regexp('^[A-Za-z]*$')])
-    price_fuel_new_row = FloatField('Price', validators=[DataRequired(), validate_value])
+    name_fuel_new_row = StringField('Name', default="Shell",
+                                    validators=[DataRequired(),
+                                                validate_value,
+                                                Regexp('^[A-Za-z]*$')])
+    price_fuel_new_row = FloatField('Price', default=60.0,
+                                    validators=[DataRequired(), validate_value])
     add_fuel_new_row = SubmitField('Add')
 
 
@@ -156,24 +147,24 @@ class ReportForm(FlaskForm):
     def validate_start_date_report(form, field):
         if field.data and form.end_date_report.data and field.data > form.end_date_report.data:
             logger.warning('Start date more than end date, Report')
-            raise ValidationError()
+            raise ValidationError("Start date must be less than end date")
 
 
     def validate_end_date_report(form, field):
         if field.data and form.start_date_report.data and field.data < form.start_date_report.data:
             logger.warning('End date less than start date, Report')
-            raise ValidationError()
+            raise ValidationError("End date must be more than start date")
 
     
     def validate_start_odometer_report(form, field):
         if field.data and form.end_odometer_report.data and field.data > form.end_odometer_report.data:
             logger.warning('Start odometer more than end odometer, Report')
-            raise ValidationError()
+            raise ValidationError("Start odometer must be less than end odometer")
     
     def validate_end_odometer_report(form, field):
         if field.data and form.start_odometer_report.data and field.data < form.start_odometer_report.data:
             logger.warning('End odometer less than start odometer, Report')
-            raise ValidationError()
+            raise ValidationError("End odometer must be more than start odometer")
 
 
 

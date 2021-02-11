@@ -89,8 +89,8 @@ function deleteRow(table_name, row_id) {
         for (var i = 0; i < forms.length; i++) {
             forms[i].noValidate = true
         }
-        table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id
-        table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id
+        table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").value = row_id.toString()
+        table.querySelector(".work_table_row.num_" + row_id).querySelectorAll(".form_col")[0].querySelector(".id").defaultValue = row_id.toString()
     }
 }
 
