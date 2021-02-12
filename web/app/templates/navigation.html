@@ -11,56 +11,44 @@
         </div>
         <div class="navig_inner trans">
                 <form action="" method="POST">
-                        {{ navig_trans_form.hidden_tag() }}
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_trans_form.start_date_trans_navigation.label }}
-                                </p>
-                                {{ navig_trans_form.start_date_trans_navigation(size=10, class="form start_date") }}
-                        </div>
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_trans_form.end_date_trans_navigation.label }}
-                                </p>
-                                {{ navig_trans_form.end_date_trans_navigation(size=10, class="form end_date") }}
-                        </div>
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_trans_form.start_odometer_trans_navigation.label }}
-                                </p>
-                                {{ navig_trans_form.start_odometer_trans_navigation(size=10, class="form start_odometer") }}
-                        </div>
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_trans_form.end_odometer_trans_navigation.label }}
-                                </p>
-                                {{ navig_trans_form.end_odometer_trans_navigation(size=10, class="form end_odometer") }}
-                        </div>
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_trans_form.names_trans_navigation.label }}
-                                </p>
-                                {{ navig_trans_form.names_trans_navigation(class="form names") }}
-                        </div>
-                        {{ navig_trans_form.allow_trans_navigation(class="button navig") }}
+                        {% for field in navig_trans_form %}
+                                {% if field() == navig_trans_form.hidden_tag() %}
+                                        {{ field() }}
+                                {% elif field() == navig_trans_form.allow_trans_navigation() %}
+                                        {{ field(size=10, class="button " + (field.name|string)|replace("_trans_navigation", "")) }}
+                                {% else %}
+                                <div class="form_container">
+                                        <p class="form_label">
+                                                {{ field.label }}
+                                        </p>
+                                        {{ field(size=10, class="form " + (field.name|string)|replace("_trans_navigation", "")) }}
+                                        {% for error in field.errors %}
+                                                <p style="color: red;">{{ error }}</p>
+                                        {% endfor %}
+                                </div>
+                                {% endif%}
+                        {% endfor %}
                 </form>
         </div>
         <div class="navig_inner fuel" style="display: none;">
                 <form action=""  method="POST">
-                        {{ navig_fuel_form.hidden_tag() }}
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_fuel_form.start_price_fuel_navigation.label }}
-                                </p>
-                                {{ navig_fuel_form.start_price_fuel_navigation(size=10, class="form start_price") }}
-                        </div>
-                        <div class="form_container">
-                                <p class="form_label">
-                                        {{ navig_fuel_form.end_price_fuel_navigation.label }}
-                                </p>
-                                {{ navig_fuel_form.end_price_fuel_navigation(size=10, class="form end_price") }}
-                        </div>
-                        {{ navig_fuel_form.allow_fuel_navigation(class="button navig") }}
+                        {% for field in navig_fuel_form %}
+                                {% if field() == navig_fuel_form.hidden_tag() %}
+                                        {{ field() }}
+                                {% elif field() == navig_fuel_form.allow_fuel_navigation() %}
+                                        {{ field(size=10, class="form " + (field.name|string)|replace("_fuel_navigation", "")) }}
+                                {% else %}
+                                <div class="form_container">
+                                        <p class="form_label">
+                                                {{ field.label }}
+                                        </p>
+                                        {{ field(size=10, class="form " + (field.name|string)|replace("_fuel_navigation", "")) }}
+                                        {% for error in field.errors %}
+                                                <p style="color: red;">{{ error }}</p>
+                                        {% endfor %}
+                                </div>
+                                {% endif%}
+                        {% endfor %}
                 </form>
         </div>          
 </div>

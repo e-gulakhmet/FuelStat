@@ -2,50 +2,30 @@
     <h1 class="header">Report</h1>
     <div class="report_inner">
         <form action="" method="POST">
-            {{ report_form.hidden_tag() }}
-            <div class="form_container">
-                <p class="form_label">
-                        {{ report_form.start_date_report.label }}
-                </p>
-                {{ report_form.start_date_report(size=10, class="form start_date") }}
-            </div>
-            <div class="form_container">
-                <p class="form_label">
-                        {{ report_form.end_date_report.label }}
-                </p>
-                {{ report_form.end_date_report(size=10, class="form end_date") }}
-            </div>
-            <div class="form_container">
-                <p class="form_label">
-                        {{ report_form.start_odometer_report.label }}
-                </p>
-                {{ report_form.start_odometer_report(size=10, class="form start_odometer") }}
-            </div>
-            <div class="form_container">
-                <p class="form_label">
-                        {{ report_form.end_odometer_report.label }}
-                </p>
-                {{ report_form.end_odometer_report(size=10, class="form end_odometer") }}
-            </div>
-            <div class="form_container">
-                <p class="form_label">
-                        {{ report_form.names_report.label }}
-                </p>
-                {{ report_form.names_report(class="form names") }}
-            </div>
-            <div class="form_container checkbox info">
-                <p class="form_label" style="display: inline;">
-                        {{ report_form.show_table_report.label }}
-                </p>
-                {{ report_form.show_table_report(class="form checkbox info") }}
-            </div>
-            <div class="form_container checkbox">
-                <p class="form_label" style="display: inline;">
-                        {{ report_form.show_statistic_report.label }}
-                </p>
-                {{ report_form.show_statistic_report(class="form checkbox statistic") }}
-            </div>
-            {{ report_form.get_report(class="button report") }}
+            {% for field in report_form %}
+                {% if field() == report_form.hidden_tag() %}
+                    {{ field() }}
+                {% elif field() == report_form.get_report() %}
+                    {{ field(size=10, class="button " + (field.name|string)|replace("_report", "")) }}
+                {% else %}
+                <div class="form_container">
+                    {% if field() == report_form.show_statistic_report() or field() == report_form.show_table_report() %}
+                        <p class="form_label" style="display: inline;">
+                            {{ field.label }}
+                        </p>
+                        {{ field(size=10, class="form checkbox " + (field.name|string)|replace("_report", "")) }}
+                    {% else %}
+                        <p class="form_label">
+                            {{ field.label }}
+                        </p>
+                        {{ field(size=10, class="form " + (field.name|string)|replace("_report", "")) }}
+                        {% for error in field.errors %}
+                            <p style="color: red;">{{ error }}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endif %}
+            {% endfor %}
         </form>
     </div>
 </div>

@@ -10,14 +10,14 @@
                     <p class="form_label login">{{ form.username.label }}</p>
                     {{ form.username(size=16, class="form login") }}
                     {% for error in form.username.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
+                        <span style="color: red;">{{ error }}</span>
                     {% endfor %}
                 </div>
                 <div class="form_item">
                     <p class="form_label login">{{ form.password.label }}</p>
                     {{ form.password(size=16, class="form login") }}
                     {% for error in form.password.errors %}
-                        <span style="color: red;">[{{ error }}]</span>
+                        <span style="color: red;">{{ error }}</span>
                     {% endfor %}
                 </div>
                 <div class="form_container checkbox">
