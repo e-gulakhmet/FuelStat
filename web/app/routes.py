@@ -19,8 +19,6 @@ from app.funcs import update_file, replace_file, create_report
 
 # TODO: Настроить изменение ширины объектов при сжатии страницы
 # TODO: Причесать код
-# TODO: Закончить валидацию форм
-# TODO: Добавить вывод ошибок у навиации и репорте
 
 
 @flsk.route("/index", methods=["GET", "POST"])
