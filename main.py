@@ -35,9 +35,9 @@ def main():
                         help="set the name of the report file")
     parser.add_argument("-g", "--gasname", action="append", default=None,
                         help="set gas names for the report")
-    parser.add_argument("--startodometer", action="store", default=1,
+    parser.add_argument("-S", "--startodometer", action="store", default=1,
                         help="set gas id for the report")
-    parser.add_argument("--endodometer", action="store", default=10000000,
+    parser.add_argument("-E", "--endodometer", action="store", default=10000000,
                         help="set gas id for the report")
     parser.add_argument("-i", "--info", action="store_true", default=False,
                         help="display information about refueling in a report")
