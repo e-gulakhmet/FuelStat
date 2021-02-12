@@ -22,23 +22,35 @@ def validate_value(form, field):
 
 
 class LoginForm(FlaskForm):
-    username = StringField('Username', validators=[DataRequired(), validate_value])
-    password = PasswordField('Password', validators=[DataRequired(), validate_value])
+    username = StringField('Username',
+                           validators=[DataRequired(),
+                                       validate_value])
+    password = PasswordField('Password',
+                             validators=[DataRequired(),
+                                         validate_value])
     remember = BooleanField('Remember')
     submit = SubmitField('Sign In')
 
 
 class NavigationTransForm(FlaskForm):
-    start_date_trans_navigation = DateField('Start Date', default=date(1000, 1, 1),
+    start_date_trans_navigation = DateField('Start Date',
+                                            default=date(1000, 1, 1),
                                             format='%Y-%m-%d',
-                                            validators=[DataRequired(), validate_value])
-    end_date_trans_navigation = DateField('End Date', default=date(9000, 12, 31),
+                                            validators=[DataRequired(),
+                                                        validate_value])
+    end_date_trans_navigation = DateField('End Date',
+                                          default=date(9000, 12, 31),
                                           format='%Y-%m-%d',
-                                          validators=[DataRequired(), validate_value])
-    start_odometer_trans_navigation = IntegerField('Start Odometer', default=1,
-                                                   validators=[DataRequired(), validate_value])                             
-    end_odometer_trans_navigation = IntegerField('End Odometer', default=1000000,
-                                                 validators=[DataRequired(), validate_value])
+                                          validators=[DataRequired(),
+                                                      validate_value])
+    start_odometer_trans_navigation = IntegerField('Start Odometer',
+                                                   default=1,
+                                                   validators=[DataRequired(),
+                                                               validate_value])                             
+    end_odometer_trans_navigation = IntegerField('End Odometer',
+                                                 default=1000000,
+                                                 validators=[DataRequired(),
+                                                             validate_value])
     names_trans_navigation = SelectMultipleField('Stations Names')
     allow_trans_navigation = SubmitField('Allow')
 
@@ -65,9 +77,11 @@ class NavigationTransForm(FlaskForm):
 
 class NavigationFuelForm(FlaskForm):
     start_price_fuel_navigation = FloatField('Start Price', default=10,
-                                             validators=[DataRequired(), validate_value]) 
+                                             validators=[DataRequired(),
+                                                         validate_value]) 
     end_price_fuel_navigation = FloatField('End Price', default=1000,
-                                           validators=[DataRequired(), validate_value])
+                                           validators=[DataRequired(),
+                                                       validate_value])
     allow_fuel_navigation = SubmitField('Allow')
 
     def validate_start_price_fuel_navigation(form, field):
@@ -83,26 +97,38 @@ class NavigationFuelForm(FlaskForm):
 
 class TransTableRowForm(FlaskForm):
     id_trans_row = StringField('id', default="-1")
-    date_trans_row = DateField('Date', format='%Y-%m-%d', default=date(1000, 1, 1),
-                               validators=[DataRequired(), validate_value])
+    date_trans_row = DateField('Date', format='%Y-%m-%d',
+                               default=date(1000, 1, 1),
+                               validators=[DataRequired(),
+                                           validate_value])
     odometer_trans_row = IntegerField('Odometer', default=10,
-                                      validators=[DataRequired(), validate_value]) 
-    fuel_station_trans_row = SelectField('Station', validate_choice=False)
+                                      validators=[DataRequired(),
+                                                  validate_value]) 
+    fuel_station_trans_row = SelectField('Station',
+                                         validate_choice=False)
     gallon_count_trans_row = FloatField('Gallons', default=10.0,
-                                        validators=[DataRequired(), validate_value])
+                                        validators=[DataRequired(),
+                                                    validate_value])
     save_trans_row = SubmitField('Save')
     delete_trans_row = SubmitField('Delete')
 
 
 class TransTableNewRowForm(FlaskForm):
-    date_trans_new_row = DateField('Date', format='%Y-%m-%d', default=date(1000, 1, 1),
+    date_trans_new_row = DateField('Date',
+                                   format='%Y-%m-%d',
+                                   default=date(1000, 1, 1),
                                    validators=[DataRequired(),
                                                validate_value])
-    odometer_trans_new_row = IntegerField('Odometer', default=10,
-                                          validators=[DataRequired(), validate_value]) 
-    fuel_station_trans_new_row = SelectField('Station', validate_choice=False)
-    gallon_count_trans_new_row = FloatField('Gallons', default=10.0,
-                                            validators=[DataRequired(), validate_value])
+    odometer_trans_new_row = IntegerField('Odometer',
+                                          default=10,
+                                          validators=[DataRequired(),
+                                                      validate_value]) 
+    fuel_station_trans_new_row = SelectField('Station',
+                                             validate_choice=False)
+    gallon_count_trans_new_row = FloatField('Gallons',
+                                            default=10.0,
+                                            validators=[DataRequired(),
+                                                        validate_value])
     add_trans_new_row = SubmitField('Add')
 
 
@@ -113,7 +139,8 @@ class FuelTableRowForm(FlaskForm):
                                             validate_value,
                                             Regexp('^[A-Za-z]*$')])
     price_fuel_row = FloatField('Price', default=60.0,
-                                validators=[DataRequired(), validate_value])
+                                validators=[DataRequired(),
+                                            validate_value])
     save_fuel_row = SubmitField('Save')
     delete_fuel_row = SubmitField('Delete')
 
@@ -124,21 +151,30 @@ class FuelTableNewRowForm(FlaskForm):
                                                 validate_value,
                                                 Regexp('^[A-Za-z]*$')])
     price_fuel_new_row = FloatField('Price', default=60.0,
-                                    validators=[DataRequired(), validate_value])
+                                    validators=[DataRequired(),
+                                                validate_value])
     add_fuel_new_row = SubmitField('Add')
 
 
 class ReportForm(FlaskForm):
-    start_date_report = DateField('Start Date', default=date(1000, 1, 1),
+    start_date_report = DateField('Start Date',
+                                  default=date(1000, 1, 1),
                                   format='%Y-%m-%d',
-                                  validators=[DataRequired(), validate_value])
-    end_date_report = DateField('End Date', default=date(9000, 12, 31),
+                                  validators=[DataRequired(),
+                                              validate_value])
+    end_date_report = DateField('End Date',
+                                default=date(9000, 12, 31),
                                 format='%Y-%m-%d',
-                                validators=[DataRequired(), validate_value])
-    start_odometer_report = IntegerField('Start Odometer', default=1,
-                                         validators=[DataRequired(), validate_value])                            
-    end_odometer_report = IntegerField('End Odometer', default=1000000,
-                                       validators=[DataRequired(), validate_value])
+                                validators=[DataRequired(),
+                                            validate_value])
+    start_odometer_report = IntegerField('Start Odometer',
+                                         default=1,
+                                         validators=[DataRequired(),
+                                                     validate_value])                            
+    end_odometer_report = IntegerField('End Odometer',
+                                       default=1000000,
+                                       validators=[DataRequired(),
+                                                   validate_value])
     names_report = SelectMultipleField('Stations Names')
     show_table_report = BooleanField('Show Table', default=True)
     show_statistic_report = BooleanField('Show Statistic', default=True)

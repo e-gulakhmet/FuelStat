@@ -81,7 +81,9 @@ class DataBase():
             self.logger.warning("Not connected to database")
     
 
-    def create_view(self, view_name, table_name, data='*', condition=None, order_by=None, limit=None, re_create=False): # Создать таблицу
+    def create_view(self, view_name, table_name, data='*',
+                    condition=None, order_by=None, limit=None,
+                    re_create=False): # Создать таблицу
         """
         Создает вид таблицы(объект созданный на основе другой таблицы)
         исходя из указанной информации.
