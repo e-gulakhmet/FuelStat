@@ -17,10 +17,6 @@ from app.database import DataBase
 from app.funcs import update_file, replace_file, create_report
 
 
-# TODO: Настроить изменение ширины объектов при сжатии страницы
-# TODO: Причесать код
-
-
 @flsk.route("/index", methods=["GET", "POST"])
 @login_required # Проверяем авторизовался ли пользователь
 def index():

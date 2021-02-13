@@ -7,14 +7,14 @@ function validDateForm(date_form) {
     // у которой пробег меньше, введенного нами.
     // Введеная дата должна быть меньше, чем самая минимальная дата,
     // у которой пробег больше, введенного нами
-    var odometer_value = date_form.parentElement.parentElement.querySelector(".odometer").value
+    let odometer_value = date_form.parentElement.parentElement.querySelector(".odometer").value
     if (odometer_value != "") {
         odometer_value = parseInt(odometer_value)
-        var max_value = ""
-        var min_value = ""
-        var errors = []
+        let max_value = ""
+        let min_value = ""
+        let errors = []
         rows = document.querySelectorAll(".table_workspace.trans .work_table_row")
-        for (var i = 1; i < rows.length; i++) {
+        for (let i = 1; i < rows.length; i++) {
             table_cols = rows[i].querySelectorAll(".table_col")
             if (parseInt(table_cols[1].innerHTML) < odometer_value && table_cols[0].innerHTML > min_value) {
                 min_value = table_cols[0].innerHTML
@@ -32,7 +32,7 @@ function validDateForm(date_form) {
         }
         document.querySelector(".error.table_row").innerHTML = ""
         if (errors.length != 0) {
-            for (var i = 0; i < errors.length; i++) {
+            for (let i = 0; i < errors.length; i++) {
                 document.querySelector(".error.table_row").innerHTML = "* " + errors[i] + "\n"
                 date_form.style.borderColor = "red"
             }
@@ -49,13 +49,13 @@ function validOdometerForm(odometer_form) {
     // А такж, если дата уже была введена, то пробег должен бьть:
     //  больше, чем пробег в предыдущей дате и 
     //  меньше чем пробег в следующей дате.
-    var date_value = odometer_form.parentElement.parentElement.querySelector(".date").value
-    var max_value = 0
-    var min_value = 0
-    var errors = []
+    let date_value = odometer_form.parentElement.parentElement.querySelector(".date").value
+    let max_value = 0
+    let min_value = 0
+    let errors = []
     rows = document.querySelectorAll(".table_workspace.trans .work_table_row")
-    for (var i = 1; i < rows.length; i++) {
-        var table_cols = rows[i].querySelectorAll(".table_col")
+    for (let i = 1; i < rows.length; i++) {
+        let table_cols = rows[i].querySelectorAll(".table_col")
         if (date_value != table_cols[0].innerHTML && odometer_form.value == table_cols[1].innerHTML) {
             errors.push("Odometer must be different from the existing one")
             break
@@ -69,16 +69,16 @@ function validOdometerForm(odometer_form) {
         }
     }
     if (errors.length == 0) {
-        if (odometer_form.value >= max_value) {
+        if (max_value && odometer_form.value >= max_value) {
             errors.push("Odometer must be less than " + max_value)
         }
-        if (odometer_form.value <= min_value) {
+        if (min_value && odometer_form.value <= min_value) {
             errors.push("Odometer must be more than " + min_value)
         }
     }
     document.querySelector(".error.table_row").innerHTML = ""
     if (errors.length != 0) {
-        for (var i = 0; i < errors.length; i++) {
+        for (let i = 0; i < errors.length; i++) {
             document.querySelector(".error.table_row").innerHTML = "* " + errors[i] + "\n"
             odometer_form.style.borderColor = "red"
         }
