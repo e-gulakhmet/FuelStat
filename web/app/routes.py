@@ -130,7 +130,7 @@ def index():
                 # Если была нажата кнопка удаления в веб форме строки в таблицу,
                 # то удаляем строку в которой id из таблицы будет совподать с id из веб формы
                 logger.debug("Delete button was pressed in the row of the fuel table")
-                if str(fuel_row_form.id_fuel_row.data) == "-1":
+                if str(fuel_row_form.id_fuel_row.data) != "-1":
                     db.delete("fuel", "id = " + str(fuel_row_form.id_fuel_row.data))
                     db.commit()
                 table_name = "fuel"
