@@ -1,7 +1,3 @@
 flask
 flask-wtf
 flask-login
-logging
-sqlite3
-os
-re
