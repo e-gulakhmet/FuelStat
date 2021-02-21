@@ -10,5 +10,6 @@ class Config(object):
     HOST = "0.0.0.0"
 
     PROJECT_FOLDER = os.path.abspath(os.path.dirname(__file__))
-    UPLOAD_FOLDER = os.path.join(PROJECT_FOLDER, "app/uploads")
+    UPLOAD_FOLDER = os.path.join(PROJECT_FOLDER, "app/uploads/")
     FUELSTAT_FOLDER = os.path.join(PROJECT_FOLDER, "../")
+    DATA_FOLDER = os.path.join(FUELSTAT_FOLDER, "data/")

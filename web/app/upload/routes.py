@@ -23,28 +23,29 @@ def upload():
     if upload_fuel_form.validate_on_submit() and upload_fuel_form.upload_fuel.data:
         logger.debug("Upload fuel form button was pressed")
         # Если был выбран метод добавление данных файлв к уже имеющимся
-        path_to_old_file = flsk.config["PROJECT_FOLDER"] + "/../data/fuel.csv"
+        path_to_old_file = os.path.join(flsk.config["DATA_FOLDER"], "fuel.csv")
         if upload_fuel_form.method_fuel.data == "0":
             update_file(upload_fuel_form.file_fuel.data, path_to_old_file,
-                        "fuel", logger)
+                        "^[A-Z].*[,]*\d$", logger)
         # Если был выбран режим замены старого файла новым
         elif upload_fuel_form.method_fuel.data == "1":
             replace_file(upload_fuel_form.file_fuel.data,
-                         path_to_old_file, "fuel", logger)
+                         path_to_old_file, "^[A-Z].*[,]*\d$",
+                         logger)
     
     if upload_trans_form.validate_on_submit() and upload_trans_form.upload_trans.data:
         logger.debug("Upload trans form button was pressed")
         # Если был выбран метод добавление данных файлв к уже имеющимся
-        path_to_old_file = flsk.config["PROJECT_FOLDER"] + "/../data/trans.csv"
+        path_to_old_file = os.path.join(flsk.config["DATA_FOLDER"], "trans.csv")
         if upload_trans_form.method_trans.data == "0":
             update_file(upload_trans_form.file_trans.data,
                         path_to_old_file,
-                        "trans", logger)
+                        "^\d{4}-\d{2}-\d{2},\d*,[A-Za-z]*,\d", logger)
         # Если был выбран режим замены старого файла новым
         elif upload_trans_form.method_trans.data == "1":
             replace_file(upload_trans_form.file_trans.data,
                          path_to_old_file,
-                         "trans", logger)
+                         "^\d{4}-\d{2}-\d{2},\d*,[A-Za-z]*,\d", logger)
         
         # Говорим программе, которая создает репорт, обновить базу данных
         os.system("python " +
