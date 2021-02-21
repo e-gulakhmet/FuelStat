@@ -19,7 +19,7 @@
         </thead>    
         <tbody>
             <tr class="work_table_row new">
-                <form action="{{ url_for('index') }}" method="POST">
+                <form action="" method="POST">
                     {{ trans_new_row_form.hidden_tag() }}
                     <td class="form_col">
                         {{ trans_new_row_form.date_trans_new_row(size=10, class="form date", onfocusout="validDateForm(this)") }}
@@ -36,7 +36,7 @@
             </tr>
             {% for row in trans_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
-                    <form action="{{ url_for('index') }}" method="POST">
+                    <form action="" method="POST">
                         {{ trans_row_form.hidden_tag() }}
                         <td class="form_col">{{ trans_row_form.id_trans_row(class="id") }}</td>
                         <td class="form_col">
@@ -80,7 +80,7 @@
         </thead>    
         <tbody>
             <tr class="work_table_row new">
-                <form action="{{ url_for('index') }}" method="POST">
+                <form action="" method="POST">
                     {{ fuel_new_row_form.hidden_tag() }}
                     <td class="form_col">
                         {{ fuel_new_row_form.name_fuel_new_row(size=10, class="form name", onfocusout="validForm(this)") }}
@@ -95,7 +95,7 @@
             </tr>
             {% for row in fuel_data %}
                 <tr class="work_table_row num_{{ row[0] }}">
-                    <form action="{{ url_for('index') }}" method="POST">
+                    <form action="" method="POST">
                         {{ fuel_row_form.hidden_tag() }}
                         <td class="form_col">{{ fuel_row_form.id_fuel_row(class="id") }}</td>
                         <td class="form_col">{{ fuel_row_form.name_fuel_row(size=10, class="form name", onfocusout="validForm(this)") }}</td>

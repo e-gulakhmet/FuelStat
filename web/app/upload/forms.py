@@ -1,29 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, SubmitField, BooleanField
-from wtforms import DateField, SelectMultipleField, IntegerField, FloatField, SelectField, FileField
-from wtforms.validators import DataRequired, ValidationError
-from datetime import date
+from wtforms import SelectField, FileField, SubmitField
+from wtforms.validators import ValidationError
 import logging
 import re
 
-logger = logging.getLogger('FORMS')
+logger = logging.getLogger('UPLOAD_FORMS')
 
 
 def validate_value(form, field):
     if field.data is None:
         logger.warning("Invalid " + field.name)
         raise ValidationError("Invalid value")
-
-
-class LoginForm(FlaskForm):
-    username = StringField('Username',
-                           validators=[DataRequired(),
-                                       validate_value])
-    password = PasswordField('Password',
-                             validators=[DataRequired(),
-                                         validate_value])
-    remember = BooleanField('Remember')
-    submit = SubmitField('Sign In')
 
 
 class UploadTransForm(FlaskForm):

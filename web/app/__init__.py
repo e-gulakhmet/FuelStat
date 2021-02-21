@@ -7,9 +7,6 @@ import os
 flsk = Flask(__name__)
 flsk.config.from_object(Config)
 
-from app.index import bp as index_bp
-flsk.register_blueprint(index_bp)
-
 login = LoginManager(flsk)
 # Страница, которую получит пользователь, если не авторизуется,
 # но захочет зайти на страницу для зарегистированных пользователей
@@ -20,4 +17,11 @@ logging.basicConfig(filename=os.path.join(flsk.config["PROJECT_FOLDER"], 'loggin
                     level=logging.DEBUG,
                     format="%(asctime)s %(name)s [%(levelname)s] : %(message)s, line %(lineno)d in %(filename)s'))")
 
-from app import routes
+from app.index import bp as index_bp
+flsk.register_blueprint(index_bp)
+
+from app.login import bp as login_bp
+flsk.register_blueprint(login_bp)
+
+from app.upload import bp as upload_bp
+flsk.register_blueprint(upload_bp)
