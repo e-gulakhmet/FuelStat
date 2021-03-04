@@ -1,0 +1,1 @@
+docker run --rm --name fuelstat --network=host -p 5000:5000 -v data:/usr/src/app/data fuelstat

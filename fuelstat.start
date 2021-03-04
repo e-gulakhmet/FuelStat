@@ -1,2 +1,0 @@
-##/bin/bash
-docker run --name fuelstat --network=host -p 5000:5000 fuelstat

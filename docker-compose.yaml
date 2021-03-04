@@ -1,0 +1,14 @@
+version: "3"
+
+volumes:
+  data:
+  
+services:
+  fuelstat:
+    build: .
+    # restart: always
+    volumes:
+      - data:/usr/src/app/data
+    ports:
+      - 5000:5000
+    network_mode: host
